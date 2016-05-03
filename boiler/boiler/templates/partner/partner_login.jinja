@@ -1,0 +1,142 @@
+{% extends "layout/partner_default_layout.jinja" %}
+{% block main_content %}
+  <img id="ad" src="/static/img/mob_app_add.png">
+  <div class="col-md-5 login" style="text-align:center;">
+    <a href="/partner"><img src="/static/img/sidebar-logotype.png"></a>
+    <div id="partner" class="col-md-8">
+      <form id="login_form" method="post" action="" >
+        <div class="form-group">
+          <label class="control-label" for="email">Email</label>
+          <input id="email" name="email" class="" type="email" placeholder="email">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="password">Password</label>
+          <input id="password" name="password" class="" type="password" placeholder="password">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="entLogin"></label>
+          <div class="row">
+            <div class="col-md-6 text-right">
+              <button  id="login_partner" type="button" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Logging In">Sign In</button>
+            </div>
+            <div class="col-md-6 text-left">
+              <button  id="register_partner" type="button" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Loading">Register</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <form id="signup_form" method="post" action="">
+        <div class="form-group">
+          <label class="control-label" for="email">Name</label>
+          <input id="name" name="name" class="" type="text" placeholder="Company Name" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email">Email</label>
+          <input id="email" name="email" class="" type="email" placeholder="email" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email">Tag</label>
+          <input id="tag" name="tag" class="" type="text" placeholder="A tag name not more than 5 characters" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email">Phone</label>
+          <input id="phone" name="phone" class="" type="text" placeholder="phone" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email">Password</label>
+          <input id="password" name="password" class="" type="password" placeholder="password" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="password">Confirm Password</label>
+          <input id="confirm-password" name="confirm-password" class="" type="password" placeholder="confirm password" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="entLogin"></label>
+          <button  id="signup_partner" type="button" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Loading">Sign Up</button>
+        </div>
+      </form>
+    </div> 
+  </div>
+{% endblock main_content %}
+
+{% block modal %}
+
+  <!-- login modal -->
+
+{% endblock modal %}
+
+{% block extra_js %}
+  <script type="text/javascript" charset="utf-8" async defer>
+    $(function(){
+
+      $('#partner #signup_form').css('display', 'none');
+
+      $('#partner #register_partner').click(function(e){
+        e.preventDefault();
+        $('#partner #signup_form').css('display', 'block');
+        $('#partner #login_form').css('display', 'none');
+      });
+
+      $('.login #login_partner').click(function(e){
+        e.preventDefault();
+        var submit_button = $("#login_partner").button('loading');
+        var data= $( "form#login_form" ).serializeArray();
+        var json = {};
+        $.ajax({
+            type: 'POST',
+            url: '/partner/validate_partner',
+            data: data,
+            dataType: 'json',
+            success: function(results) {
+              location.href="/partner/customer";
+            },
+            error: function(xhr, status, error){
+              Toast.show({
+                message: xhr.responseJSON.error,
+                duration: Toast.DURATION_LONG,
+              });
+              submit_button.button('reset');
+            }
+        });
+      });
+
+      $('.login #signup_partner').click(function(e){
+        e.preventDefault();
+        var submit_button = $("#signup_partner").button('loading');
+        var data= $( "form#signup_form" ).serializeArray();
+        var json = {};
+        if (data[4]['value'] == data[5]['value']){
+          $.ajax({
+              type: 'POST',
+              url: '/partner/register',
+              data: data,
+              dataType: 'json',
+              success: function(results) {
+                Toast.show({
+                  message: "Please Login",
+                  duration: Toast.DURATION_LONG,
+                });
+                location.href="/partner";
+              },
+              error: function(xhr, status, error){
+                submit_button.button('reset');
+                Toast.show({
+                  message: xhr.responseJSON.error,
+                  duration: Toast.DURATION_LONG,
+                });
+              }
+          });
+        }
+        else {
+          $('#password').val('');
+          $('#confirm-password').val('');
+          Toast.show({
+            message: "Please confirm password first",
+            duration: Toast.DURATION_LONG,
+          });
+        }
+      });
+    
+    })
+  </script>
+{% endblock %}

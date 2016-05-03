@@ -1,0 +1,24 @@
+{% import 'elements/macros.jinja' as html %}
+<ul class="list-unstyled js-ajax-replace-wrapper">
+    <li class="result-box">
+        <div class="row">
+            <div class="col-md-6">
+                {% include('profile/skill/skillbutton.jinja') %}
+            </div>
+            <div class="col-md-6">
+                <div class="img-connection pull-right">
+                    {% for x in skill.endorsers  %}
+                        {% if loop.index <= 5 %}
+                            {{ html.imageWithProfileUrl(skill.endorsers[x]) }}
+                        {% endif %}
+                    {% endfor %}
+                    {% if skill.endorsers_count and skill.endorsers_count > 5 %}
+                        <a href="#" class="btn btn-primary more-img more-img-small">
+                           {{ skill.endorsers_count }}+
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

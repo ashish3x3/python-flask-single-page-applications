@@ -1,0 +1,297 @@
+{% if not request.is_xhr %}
+	{% extends "layout/defaultlayout.jinja" %}
+{% else %}
+	{% extends "layout/ajax.jinja" %}
+{% endif %}
+
+{% block prescript %}
+_gaq.push(['_setCustomVar',1,'Banner Type','{{ "Orange" if current_banner == 1 else "Grey" }}',3]);
+{% endblock prescript %}
+
+{% block main_content %}
+	<div class="carousel">
+		<div class="carousel-inner">
+		{% if current_banner == 1 %}
+			<div class="item  {% if current_banner == 1 %} active {% endif %}">
+				<div  class="jumbotron land-banner land-banner-one">
+					<div class="container-fluid">
+						<div class="col-md-9">
+							<h1>
+								Explore the power of your Professional connections on Facebook
+							</h1>
+							<p class="subtext">
+								Your industry peers and prospective recruiters are already here!
+							</p>
+						</div>
+						<div class="col-md-3 banner-lady">
+							<div class="fb-btn clearfix">
+								{{ html.loginbutton('facebook',request, 'pull-center','BannerOrange') }}
+							</div>
+							<div class="text-center small-text pull-center">* MyParichay will not post information on your Facebook wall or extract your personal details without your permission.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="item {% if not current_banner or current_banner == 2 %} active {% endif %}">
+				<div class="jumbotron land-banner land-banner-two">
+					<div class="container-fluid">
+						<div class="col-md-9">
+							<h1>
+								Get in. Get noticed. Get hired!
+							</h1>
+							<p class="subtext">
+								<a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/landing'  | stringurlencode('next') }}" id="banner_message" class="hidden-xs">
+									<div class="jtm-image" title="Get Hired">&nbsp;</div>
+								</a>
+							</p>
+						</div>
+						<div class="col-md-3">
+							<div class="fb-btn clearfix">
+								{{ html.loginbutton('facebook',request, 'pull-center','BannerGrey') }}
+							</div>
+							<div class="text-center small-text">* MyParichay will not post information on your Facebook wall or extract your personal details without your permission.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		</div>
+	</div>
+
+	<div class="tickerwrap hidden-xs">
+		<div class="container">
+			<div class="ticker ticker-info">
+				<blockquote class="js-ticker" data-href="/ticker">&nbsp;</blockquote>
+			</div>
+		</div>
+	</div>
+
+	<p class="spacer hidden-xs">&nbsp;</p>
+
+	<div class="container top-employers hidden-xs">
+		<div class="row">
+			<div class="col-md-12 top-em-img">
+				<div class="col-sm-3 col-md-3 col-lg-2 top-em-head">
+					Top Employers
+				</div>
+				<div class="col-xs-9 col-md-9 col-lg-10">
+					<ul id="client-slider" class="jcarousel-skin-tango client-img list-unstyled js-carousel">
+						<li>
+							<a target="_blank" href="https://www.facebook.com/pages/247-India-Careers/529583037112134?id=529583037112134&amp;sk=app_180318772033681" class="js-track-events client3" data-category="Top Employers" data-action="click" data-labels="Image 24x7" title="Jobs at 24x7"></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.facebook.com/EvolveXl/app_180318772033681" class="js-track-events client1" data-category="Top Employers" data-action="click" data-labels="Image EvolveXl" title="Jobs at EvolveXl"></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.facebook.com/genpact.parichay/app_180318772033681" class="js-track-events client8" data-category="Top Employers" data-action="click" data-labels="Image Genpact" title="Jobs at Genpact"></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.facebook.com/Inside.HT.Media/app_180318772033681" class="js-track-events client12" data-category="Top Employers" data-action="click" data-labels="Image HT Media" title="Jobs at HT Media"></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.facebook.com/EXLServiceIndia/app_180318772033681" class="js-track-events client11" data-category="Top Employers" data-action="click" data-labels="Image EXl" title="Jobs at EXl"></a>
+						</li>
+						<li>
+							<a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=convergys'  | stringurlencode('next') }}" class="js-track-events client13" id="convergys_logo" data-category="Top Employers" data-action="click" data-labels="Image Convergys" title="Jobs at Convergys"></a>
+						</li>
+						<li>
+							<a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Pricewaterhouse'  | stringurlencode('next') }}" class="js-track-events client5" id="Pricewaterhouse_logo" data-category="Top Employers" data-action="click" data-labels="Image Pricewaterhouse " title="Jobs at Pricewaterhouse "></a>
+						</li>
+						<li>
+							<a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Aviva%20Life%20Insurance'  | stringurlencode('next') }}" class="js-track-events client10" id="Aviva_logo" data-category="Top Employers" data-action="click" data-labels="Image Aviva " title="Jobs at Aviva "></a>
+						</li>
+						<li>
+							<a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Firefly%20e-Ventures'  | stringurlencode('next') }}" class="js-track-events client6" id="firefly_logo" data-category="Top Employers" data-action="click" data-labels="Image Firefly " title="Jobs at Firefly "></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<p class="spacer">&nbsp;</p>
+
+	<div class="container box-say">
+		<div class="row">
+			<div class="col-md-6 col-sm-6">
+				<div class="row">
+					<div class="hidden-xs hidden-sm col-md-6 box-image-1">&nbsp;</div>
+					<div class="col-md-6 box-text">
+						Friends and Family are <br/><strong>more than likely to help you </strong><br/>find a job than your personal <br/>and social acquaintances.
+						<div class="clearfix">
+							<div class="pull-right">
+								<small>- Carnegie Mellon Research Study</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-sm-6">
+				<div class="row">
+					<div class="hidden-xs hidden-sm col-md-6 box-image-2">&nbsp;</div>
+					<div class="col-md-6 box-text">
+						<strong>Higher chance</strong><br/> if a connection can<br/> refer you to the job <br/>than if applied directly.<br />
+						<div class="clearfix">
+							<div class="pull-right">
+								<small>- ERE.NET</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{#<div class="col-xs-12 col-md-12 insights-link">
+				<a href="#" class="pull-right">Get More Insights</a>
+			</div>#}
+		</div>
+	</div>`
+
+	<p class="spacer">&nbsp;</p>
+
+	<div class="container how-it-works">
+		<div class="row">
+			<div class="col-md-8 how-it-works-wrap">
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-xs-12 howit-wrap">
+						<div class="col-md-12 col-xs-12 icon-head">
+							<div class="col-md-4 hidden-xs">
+								<div class="get-noticed-icon" title="Get Noticed" >&nbsp;</div>
+							</div>
+							<div class="col-md-8 icon-right-head">
+								<h4>Get Noticed</h4>
+								<div class="subtext">by recruiters and hiring managers</div>
+							</div>
+						</div>
+						<div class="col-md-12 howit-content">
+							<p>All the top companies and their recruiters are searching for talent on MyParichay. Build your MyParichay profile to showcase your skills and add your experience. Get them endorsed by your friends and increase your profile credibility. </p>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12 howit-wrap">
+						<div class="col-md-12 col-xs-12 icon-head">
+							<div class="col-md-4 hidden-xs">
+								<div class="dream-job-icon" title="Land in to your dream job" >&nbsp;</div>
+							</div>
+							<div class="col-md-8 icon-right-head">
+								<h4>Land your dream job</h4>
+								<div class="subtext">through your Facebook cennections</div>
+							</div>
+						</div>
+						<div class="col-md-12 howit-content">
+							<p>MyParichay virtually extracts jobs available on any protal and allows you to check if your Facebook friends or connections work in companies you express interest in applying. So don't just apply get appointed. </p>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12 howit-wrap">
+						<div class="col-md-12 col-xs-12 icon-head">
+							<div class="col-md-4 hidden-xs">
+								<div class="privacy-job-icon" title="Your Privacy" >&nbsp;</div>
+							</div>
+							<div class="col-md-8 icon-right-head">
+								<h4>Your Privacy</h4>
+								<div class="subtext">is our guarantee</div>
+							</div>
+						</div>
+						<div class="col-md-12 howit-content">
+							<p>We honour your privacy and never message your friends, post to your wall, share your activity or extract any personal information without your permission. </p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 dummy-video hidden-xs hidden-sm">
+				<div class="js-ajax-replace-wrapper">
+					<a class="js-ajax-replace-action play" href="/youtube/howworks" method="GET" onclick="return false;">
+						&nbsp;
+					</a>
+				</div>
+				<!---->
+			</div>
+		</div>
+	</div>
+
+	<p class="spacer">&nbsp;</p>
+
+	<div class="container signup-button-bottom">
+		<div class="tx-30">What are you waiting for? Join MyParichay now</div>
+		<div class="subtext">It's free and takes seconds.</div>
+		<div>
+			<div class="fb-btn clearfix">
+				{{ html.loginbutton('facebook',request, 'pull-center','login bottom') }}
+			</div>
+			<div class="text-center small-text pull-center">* MyParichay will not post information on your Facebook wall or<br /> extract your personal details without your permission.</div></div>
+	</div>
+	<br>
+	{% endblock main_content %}
+
+	{% block footer %}
+	<div class="container-full land-foot">
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4>Top Employers</h4>
+					<ul class="list-unstyled">
+						<li><a target="_blank" href="https://www.facebook.com/pages/247-India-Careers/529583037112134?id=529583037112134&amp;sk=app_180318772033681" class="js-track-events" data-category="Top Employers" data-action="click" data-labels="link 24x7">
+							Jobs at 24/7
+						</a></li>
+
+						<li><a target="_blank" href="https://www.facebook.com/EvolveXl/app_180318772033681" class="js-track-events" data-category="Top Employers" data-action="click" data-labels="link EvolveXl">
+							Jobs at Evolv XL
+						</a></li>
+
+						<li><a target="_blank" href="https://www.facebook.com/genpact.parichay/app_180318772033681" class="js-track-events" data-category="Top Employers" data-action="click" data-labels="link Genpact">
+							Jobs at Genpact
+						</a></li>
+
+						<li><a target="_blank" href="https://www.facebook.com/Inside.HT.Media/app_180318772033681" class="js-track-events" data-category="Top Employers" data-action="click" data-labels="link HT Media">
+							Jobs at HT Media
+						</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4>Top Employers</h4>
+					<ul class="list-unstyled">
+						<li><a target="_blank" href="https://www.facebook.com/EXLServiceIndia/app_180318772033681" class="js-track-events" data-category="Top Employers" data-action="click" data-labels="link EXl">
+							Jobs at EXL
+						</a></li>
+						<li><a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=convergys'  | stringurlencode('next') }}" class="js-track-events"  id="footer_convergys" data-category="Top Employers" data-action="click" data-labels="link Convergys">
+							Jobs at Convergys
+						</a></li>
+
+						<li><a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Firefly%20e-Ventures'  | stringurlencode('next') }}" class="js-track-events" id= "footer_firefly" data-category="Top Employers" data-action="click" data-labels="link Firefly">
+							Jobs at Firefly e Ventures
+						</a></li>
+
+						<li><a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Aviva%20Life%20Insurance'  | stringurlencode('next') }}" class="js-track-events" id="footer_aviva" data-category="Top Employers" data-action="click" data-labels="link Aviva">
+							Jobs at Aviva India
+						</a></li>
+						<li><a data-toggle="modal" href="#modal" aria-haspopup="true" data-remote="/popup/login?{{ '/jobs/search?company=Pricewaterhouse'  | stringurlencode('next') }}" class="js-track-events" id="footer_Pricewaterhouse" data-category="Top Employers" data-action="click" data-labels="link Pricewaterhouse">
+							Jobs at Pricewaterhouse Coopers
+						</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4> Employer Solutions</h4>
+					<ul class="list-unstyled">
+						<li><a target="_blank" href="https://www.myparichay.in/website/post-a-job-for-free/">Post a Job</a></li>
+						<li><a target="_blank" href="https://www.myparichay.in/website/social-retargeting/">Products</a></li>
+						<li><a target="_blank" href="https://www.myparichay.in/website/product/company-parichay/">Company Parichay</a></li>
+						<li><a target="_blank" href="https://www.myparichay.in/website/product/employee-parichay/">Employee Parichay</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4>About MyParichay</h4>
+					<ul class="list-unstyled">
+						<li><a target="_blank" href="/website/company/about-us/">About us</a></li>
+						<li><a target="_blank" href="/website/terms-of-service/">Terms &amp; Conditions</a></li>
+						<li><a target="_blank" href="/website/privacy-policy/">Privacy Policy</a></li>
+						<li><a target="_blank" href="/website/company/contact-us/">Contact Us</a></li>
+						<li><a target="_blank" href="/website/blog/">Blog</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock footer %}

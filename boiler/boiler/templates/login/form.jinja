@@ -1,0 +1,18 @@
+{% extends "layout/defaultlayout_login.jinja" %}
+{% block main_content %}
+          
+<img id="ad" src="/static/img/mob_app_add.png">
+<div class="col-md-5 login" style="text-align:center;">
+  <a href="/"><img src="/static/img/sidebar-logotype.png"></a>
+  <div class="fade-in">
+    <button data-ember-action="11" class="google"  onclick="g_login()"><span class="social-likes__icon social-likes__icon_plusone" style="left: 20px;"></span>Login with Google</button>
+  </div>
+  <div class="fade-in">
+    <button data-ember-action="12" class="facebook"  onclick="fb_Login()"><span class="social-likes__icon social-likes__icon_facebook" style="left: 20px;"></span>Login with Facebook</button>
+  </div>
+  <div>
+    <h4 style="Impact, Charcoal, sans-serif; color:#3399FF;">We do not post anything on your wall.</h4>
+    <h4 style="Impact, Charcoal, sans-serif; color:#3399FF;">For any help call 080-39591212 (8am-10pm)</h4>
+  </div>  
+</div>
+{% endblock main_content %}

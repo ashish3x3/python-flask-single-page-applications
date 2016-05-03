@@ -1,0 +1,15 @@
+<script>
+{# Facebook Ads Manager #}
+/* fb_param is defined in head */
+(function(){
+    var fb_param = {
+        'value'     : '{{ fb_param.value }}',
+        'pixel_id'  : '{{ fb_param.pixel_id }}'
+    };
+    var fpw = document.createElement('script');
+    fpw.async = true;
+    fpw.src = '//connect.facebook.net/en_US/fp.js';
+    var ref = document.getElementsByTagName('script')[0];
+    ref.parentNode.insertBefore(fpw, ref);
+})();
+</script>

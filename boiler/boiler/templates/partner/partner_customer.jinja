@@ -1,0 +1,164 @@
+{% extends "layout/partner_customer_layout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">
+    <img class="header_image_icon" src="/static/img/schedule_icon.png"><span>Schedule a wash</span>
+</div>
+{% endblock screen_name %}
+
+{% block main_content %}
+  <div class="col-md-8" id="partner-customers">
+      <div class="col-lg-8">
+        <input type="text" class="form-control" id='txt-partner-user-search' placeholder="Search email / phone">
+      </div>
+      <div class="col-lg-2">
+        <button type="button" class="primary" style="width:100%; padding:5px;" id="partner-user-search">Search</button>
+      </div>
+      <div class="col-lg-2">
+        <button type="button" class="primary" style="width:100%; padding:5px;" id="add-user-btn">Add User</button>
+      </div>
+  </div>
+  <br/>
+  <div class="col-md-8" id="partner-customers">
+    <table id="user-table" class="table clickable-table" style="table-layout: fixed;">
+      <thead>
+        <tr>
+          <th bgcolor='#A6A6A6'>Name</th>
+          <th bgcolor='#A6A6A6'>Email</th>
+          <th bgcolor='#A6A6A6'>Phone</th>
+          <th bgcolor='#A6A6A6'>Place Order</th>
+        </tr>
+      </thead>
+
+      <tbody id="tbdy-customer-details">
+        {% if user_list %}
+          {% for user in user_list %}
+            <tr>
+              <td style="word-wrap:break-word">
+                  {% if 'name' in user %}
+                    {{ user.name }}
+                  {% endif %}
+              </td>
+              <td style="word-wrap:break-word">
+                  {% if 'email' in user %}
+                    {{ user.email }}
+                  {% endif %}
+              </td>
+              <td style="word-wrap:break-word">
+                  {% if 'phone' in user %}
+                    {{ user.phone }}
+                  {% endif %}
+              </td>
+              <td>
+                <button type="button" class="btn btn-info pull-left btn-md place-order-btn" id='place-customer-order-btn' value='{{ user.user_id }}' style="margin-top: 1px;margin-bottom: 1px;border-right-width: 3 ;border-right-width: 9px; width: 100%" >Place Order</button>
+              </td>
+            </tr>
+          {% endfor %}
+      {% elif in_search %}
+            <tr>
+             <td colspan="4" style="text-align:center;">No users with given search, try adding new user by clicking on add user</td>
+            </tr>
+      {% else %}
+            <tr>
+             <td colspan="4" style="text-align:center;">............Oops, no users try adding new users...........</td>
+            </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+{% endblock main_content %}
+
+{% block misc_space %}
+<div class="modal fade confirm" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-body-heading"><img src="/static/img/big-icons.png"><span>Add User</span></h2>
+        <form id="submituser" method="post" action="/submitaddress">
+          <div class="input-group">
+            <input id='name' name="name" type="text" placeholder='Enter Customer Name' required>
+          </div>
+          <div class="input-group">
+            <input id="email" name="email" type="email" placeholder='Enter Customer Email ID' required>
+          </div>
+          <div class="input-group">
+            <input id="phone" name="phone" type="text" placeholder='Enter Customer Mobile Number' required>
+          </div>
+          <div class="row add-user-submit text-center">
+            <button type="button" id="save-user" name="add-user-save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving" class="primary" >Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock misc_space %}
+
+{% block extra_js %}
+  <script type="text/javascript" charset="utf-8" async defer>
+    $(function(){
+      
+      function resetUserForm(){
+        $('#user-modal #name').val('');
+        $('#user-modal #email').val('');
+        $('#user-modal #phone').val('');
+      }
+      
+      $('#add-user-btn').click(function(e){
+        e.preventDefault();
+        resetUserForm();
+        $("#user-modal").modal({
+          backdrop: 'static',
+          keyboard: false,
+          show: true
+        });
+      });
+
+      $("#user-modal #save-user").click(function(e){
+        e.preventDefault();
+        var submit_button = $("#user-modal #add-user-btn").button('loading');
+        var data = $( "form#submituser" ).serializeArray();
+        var json = {};
+        $.ajax({
+            type: 'POST',
+            url: '/partner/add/customer',
+            data: data,
+            dataType: 'json',
+            success: function(results) {
+              Toast.show({
+                message: results.message,
+                duration: Toast.DURATION_LONG,
+              });
+              setTimeout(function() {
+                        location.href="/partner/customer";
+              }, 1000);
+            },
+            error: function(xhr, status, error){
+              console.log(xhr);
+              Toast.show({
+                message: xhr.responseJSON.error,
+                duration: Toast.DURATION_LONG,
+              });
+            }
+        });
+      });
+
+      $("#partner-customers #partner-user-search").click(function(e){
+        e.preventDefault();
+        var json = {};
+        var data = [];
+        var search = $("#partner-customers #txt-partner-user-search").val();
+        location.href="/partner/customer/search/"+search;
+      });
+
+      $('#partner-customers #tbdy-customer-details #place-customer-order-btn').click(function(e){
+        var customer_id = this.value
+        location.href="/partner/customer/order/" + customer_id;
+      });
+
+    })
+  </script>
+{% endblock %}

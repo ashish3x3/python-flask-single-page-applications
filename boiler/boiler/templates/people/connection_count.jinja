@@ -1,0 +1,16 @@
+<div class="side-box">
+    <div class="sidebox-content">
+        <h4>Connections</h4>
+        <div class="list-group">
+            <a class="list-group-item active " href="/user/search?view=contacts&fbid={{ user.fb_id }}">
+                 Facebook Connections
+                <span class="pull-right"> {{ user.facebookconnection_count or 0 }} </span>
+            </a>
+            <a class="list-group-item " href="/linkedin/friends">
+                 Linkedin Connections
+                <span class="pull-right"> {{ user.linkedinconnection_count or 0 }} </span>
+            </a>
+        </div>
+    </div>
+</div>
+<p>&nbsp;</p>

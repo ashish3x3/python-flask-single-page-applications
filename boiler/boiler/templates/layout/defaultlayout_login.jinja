@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+
+<html class="js no-touch no-ipad no-iphone no-ipod no-appleios positionfixed no-touch">
+
+    {% include 'layout/head.jinja' %}
+
+<body  class="ember-application order"> 
+
+<div class="background_image_bottom"></div>
+
+
+    <div class="page-content inset">
+        <div class="row">
+
+            {% block main_content %}{% endblock %}
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+
+
+
+<script type="text/javascript">
+ 
+function g_logout()
+{
+    gapi.auth.signOut();
+    location.reload();
+    FB.logout(function(){document.location.reload();});
+
+}
+
+function g_login() 
+{
+  var myParams = {
+    'clientid' : '{{config.GOOGLE_ID}}',
+    'cookiepolicy' : 'single_host_origin',
+    'callback' : 'loginCallback',
+    'approvalprompt':'auto',
+    'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+  };
+  gapi.auth.signIn(myParams);
+}
+ 
+function loginCallback(result)
+{
+
+    var access_token_send = result.access_token;
+    if(access_token_send){
+      window.location.href="/googlelogin?access_token=" + access_token_send; 
+
+    }
+
+
+    if(result['status']['signed_in'])
+    {
+        var request = gapi.client.plus.people.get(
+        {
+            'userId': 'me'
+        });
+        request.execute(function (resp)
+        {
+            var email = '';
+            if(resp['emails'])
+            {
+                for(i = 0; i < resp['emails'].length; i++)
+                {
+                    if(resp['emails'][i]['type'] == 'account')
+                    {
+                        email = resp['emails'][i]['value'];
+                    }
+                }
+            }
+ 
+            // var str = "Name:" + resp['displayName'] + "<br>";
+            // str += "Image:" + resp['image']['url'] + "<br>";
+            // str += "<img src='" + resp['image']['url'] + "' /><br>";
+ 
+            // str += "URL:" + resp['url'] + "<br>";
+            // str += "Email:" + email + "<br>";
+            // console.log(str);   
+            // document.getElementById("profile").innerHTML = str;
+
+
+            var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            document.getElementById("logged-in-section-register").innerHTML = str;
+        });
+ 
+    }
+ 
+}
+function onLoadCallback()
+{
+    gapi.client.setApiKey('Xrg58bdAx08ElmN0OS2arfSl');
+    gapi.client.load('plus', 'v1',function(){});
+}
+ 
+    </script>
+
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ config.FB_APP_ID }}', // Set YOUR APP ID
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+    
+    
+    FB.Event.subscribe('auth.authResponseChange', function(response) 
+    {
+     if (response.status === 'connected') 
+    {
+        var access_token_send = response.authResponse['accessToken'];
+        window.location.href="/fblogin?access_token=" + access_token_send; 
+
+        //SUCCESS
+        
+    }    
+    else if (response.status === 'not_authorized') 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Failed to Connect";
+
+        //FAILED
+    } else 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Logged Out";
+
+        //UNKNOWN ERROR
+    }
+    }); 
+    
+    };
+    
+    function fb_Login()
+    {
+    
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {    
+                     var fb_access_token_send = response.authResponse.accessToken;
+
+                     window.location.href="/fblogin?access_token=" + fb_access_token_send; 
+                getUserInfo();
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,user_videos'});
+    
+    
+    }
+
+  function getUserInfo() {
+        FB.api('/me', function(response) {
+
+
+
+            // var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            // str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            // console.log(str);   
+            // document.getElementById("logged-in-section-register").innerHTML = str;'
+
+      var str="<li class='loggin-name item-with-ul'>" +response.username+ "</li>";
+          // str +="<b>Link: </b>"+response.link+"<br>";
+          // str +="<b>Username:</b> "+response.username+"<br>";
+          // str +="<b>id: </b>"+response.id+"<br>";
+          // str +="<b>Email:</b> "+response.email+"<br>";
+          // str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          // str +="<button class='btn btn-info' onclick='getPhoto();'>Get Photo</button>&nbsp;";
+          // str +="<button class='btn btn-primary'  onclick='Logout();'>Logout</button>";
+
+         
+
+
+         FB.api('/me/picture?type=normal', function(response) {
+
+          var str2= "<li class='loggin'>" + "<img src='" + response.data.url + "'str </li>";
+          var str3=str2;
+              str3+=str;
+
+          document.getElementById("logged-in-section-register").innerHTML=str3;
+            
+         });
+                
+    });
+    }
+    function getPhoto()
+    {
+      FB.api('/me/picture?type=normal', function(response) {
+
+          var str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          document.getElementById("status").innerHTML+=str;
+                
+    });
+    
+    }
+    function fb_logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+
+  // Load the SDK asynchronously
+  // (function(d){
+  //    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+  //    if (d.getElementById(id)) {return;}
+  //    js = d.createElement('script'); js.id = id; js.async = true;
+  //    js.src = "//connect.facebook.net/en_US/all.js";
+  //    ref.parentNode.insertBefore(js, ref);
+  //  }(document));
+
+</script>
+    <script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+    </script>
+</body>
+</html>
+

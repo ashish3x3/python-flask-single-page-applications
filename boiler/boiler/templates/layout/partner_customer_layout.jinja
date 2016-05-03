@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="js no-touch no-ipad no-iphone no-ipod no-appleios positionfixed no-touch">
+  {% include 'layout/head.jinja' %}
+  <body  class="ember-application order"> 
+    <!-- Google Tag Manager test-->
+
+    <noscript>
+      <iframe src="//www.googletagmanager.com/ns.html?id=GTM-K9PJX5" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-K9PJX5');
+    </script>
+     
+      {% include 'layout/partner_menu.jinja' %}
+      {% include 'layout/nav.jinja' %}
+
+    <div id="ember673" class="ember-view">
+      <nav class="navbar" role="navigation" data-bindattr-3="3">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="menu-toggle brand-toggle fa fa-bars" style="color:#fff; font-size: 25px;">
+              {% block screen_icon %}{% endblock %}
+            </a>
+            {% block screen_name %}{% endblock %}
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              {% if partner %}
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-id="{{partner.id}}">
+                    <span class="name">{{partner.name}}&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down fa-lg"></i></span>
+                  </a>
+              {% endif %}
+              <ul class="dropdown-menu">
+                <li><a id="ember689" class="ember-view" href="/partner/orders">Orders History</a></li>
+                <li><a id="ember711" class="ember-view" href="/partner/help">Help</a></li>
+                <li><a href="/partner/logout">Log Out</a></li>
+              </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="page-content inset">
+        {% block main_content_row %}
+        <div class="row">
+            {% block main_content %}{% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade confirm" id="editOrderCancel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-center-blue">Are you sure you want to cancel?</div>
+          <div class="modal-center-blue-small">Having queries??? Contact: 080-39591212 (8am-10pm)</div>
+        </div>
+        <div class="modal-footer">
+          <button id="partner-customer-order-cancel" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Canceling" data-ember-action="18" type="button" class="primary">Cancel Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Block space for child templates to work on -->
+  {% block misc_space %}{% endblock misc_space %}
+
+  
+{% block clothes_modal %}{% endblock %}
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/social-likes.min.js"></script>
+<script src="/static/js/toast.min.js"></script>
+<script src="/static/js/amsul/picker.js"></script>
+<script src="/static/js/amsul/picker.date.js"></script>
+<script type="text/javascript" src="/static/js/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
+<!-- Extra space for child js -->
+{% block extra_js %}{% endblock extra_js %}
+
+<script src="/static/js/mywash_5609a30595cf3473f8e29692.js"></script>
+<script src="/static/js/ajax_5613bae2fa1d8632f430b414.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 958398878;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/958398878/?value=0&amp;guid=ON&amp;script=0"/>
+</div>
+
+
+</noscript>
+
+
+
+ {% if partner %}
+
+<!-- Do nothing -->
+
+ {% else %}
+
+
+
+<script type="text/javascript">
+  (function() {
+   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+   po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+ })();
+</script>
+
+{% endif %}
+
+
+
+
+
+{% if config.DEBUG %}
+  {% if config.STAGING %}
+    <script type="text/javascript" src="//s3.amazonaws.com/scripts.hellobar.com/e61bf47078b23ad0c27b941f7f70255424cb7723.js"></script>
+  {% endif %}
+{% else %}
+<script type="text/javascript" src="//s3.amazonaws.com/scripts.hellobar.com/e61bf47078b23ad0c27b941f7f70255424cb7723.js"></script>
+<!-- webengage integration test-->
+<script id="_webengage_script_tag" type="text/javascript">
+
+  var _weq = _weq || {};
+
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "in") {
+    _weq['webengage.licenseCode'] = '~134106357';
+  }
+  else {
+    _weq['webengage.licenseCode'] = '~71680cad';
+
+  }
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "localhost") {
+    _weq['webengage.licenseCode'] = '~c2ab3813';
+  }
+
+  _weq['webengage.widgetVersion'] = "4.0";
+
+  (function(d){
+    var _we = d.createElement('script');
+    _we.type = 'text/javascript';
+    _we.async = true;
+    _we.src = (d.location.protocol == 'https:' ? "https://ssl.widgets.webengage.com" : "https://cdn.widgets.webengage.com") + "/js/widget/webengage-min-v-4.0.js";
+    var _sNode = d.getElementById('_webengage_script_tag');
+    _sNode.parentNode.insertBefore(_we, _sNode);
+  })(document);
+</script>
+
+<!-- live chat test-->
+<script type="text/javascript">
+var __lc = {};
+__lc.license = 5956231;
+
+(function() {
+    var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+})();
+</script>
+
+{% endif %}
+
+
+</body>
+</html>

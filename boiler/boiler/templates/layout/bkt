@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+
+<html class="js no-touch no-ipad no-iphone no-ipod no-appleios positionfixed no-touch">
+
+    {% include 'layout/head.jinja' %}
+
+<body  class="ember-application order"> 
+
+      
+        {% include 'layout/menu.jinja' %}
+        {% include 'layout/nav.jinja' %}
+
+
+        <div id="ember673" class="ember-view">
+
+        <nav class="navbar" role="navigation" data-bindattr-3="3">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle nav-settings" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <img class="cog" src="/static/img/dropdown-cog-blue@2x.png">
+              </button>
+              <a class="menu-toggle brand-toggle icon-menu">{% block screen_icon %}{% endblock %}</a>
+              {% block screen_name %}{% endblock %}
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav navbar-right">
+
+                    {% if user %}
+                <div id="credits"><span class="credits-text">CREDITS</span><span class="credits-number">{{user.credits}}</span></div>
+
+                <li class="dropdown">
+              
+
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-id="{{user.id}}">
+                      <span class="name"><img src="{{user.pictureUrl}}">{{user.name}}</span>
+                  </a>
+
+                    {% endif %}
+                  <ul class="dropdown-menu">
+                    <li><a id="ember689" class="ember-view" href="/orders">Orders History</a></li>
+                    <li><a id="ember710" class="ember-view" href="/referfriend">Share & Gift</a></li>
+                    <li><a id="ember712" class="ember-view" href="/coupons">Redeem Coupon</a></li>
+                    <li><a id="ember711" class="ember-view" href="/help">Help</a></li>
+
+                    <li><a href="/logout">Log Out</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+
+
+
+    <div class="page-content inset">
+        <div class="row">
+
+            {% block main_content %}{% endblock %}
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade confirm" id="editOrderCancel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <h2>Are you sure you want to cancel?</h2>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-cancel" data-ember-action="18" type="button" class="primary">Cancel Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Cancel Modal -->
+
+ {% if user %}
+
+<!-- Do nothing -->
+
+ {% else %}
+
+<!-- Login Modal -->
+<div class="modal fade confirm" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+        </div>
+        <div class="modal-body login-modal">
+
+           <div class="login-form-wrap-image"></div>
+
+          <div id="login-form-wrap">
+           
+            <img src="/static/img/sidebar-logotype.png">
+            <h4>Login into MyWash</h4>
+            <div class="fade-in">
+              <button data-ember-action="11" class="google" onclick="g_login()"><span class="social-likes__icon social-likes__icon_plusone" style="
+                left: 20px;"></span><span>Login with Google</span></button>
+              <button data-ember-action="12" class="facebook" onclick="fb_Login()"><span class="social-likes__icon social-likes__icon_facebook" style="
+                left: 20px;"></span><span style="margin-left: 20px;">Login with Facebook</span></button>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Cancel Modal -->
+{% endif %}
+
+
+
+
+  <!-- Add Address Modal -->
+  <div class="modal fade confirm" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <h2><img src="/static/img/big-icons.png">Add new location</h2>
+           <form id="submitaddress" method="post" action="/submitaddress">
+              <div class="input-group">
+                  <label class="control-label" for="apartment_number">Flat Number</label>
+                  <input id="editAccountLastname" name="apartment_number"  class="ember-view ember-text-field" placeholder="Flat number" type="text">
+              </div>
+
+              <div class="input-group">
+                <label class="control-label" for="address_1">Address</label>
+                <textarea  placeholder="Address" name="address_1"></textarea>
+              </div>
+
+              <div class="input-group">
+                <label class="control-label"for="address_2">Landmark</label>
+                <input id="editAccountLastname"  name="address_2" class="ember-view ember-text-field" placeholder="Landmark" type="text">
+              </div>
+
+         
+
+                 
+<!-- 
+               <div class="input-group">
+                <label class="control-label" for="locality">Locality</label>
+                <select id="locality" name="locality">  
+                  <option value="" disabled selected>Select your locality</option>
+                  <option value="Koramangala">Koramangala</option>
+                  <option value="HSR">HSR</option>
+                  <option value="BTM">BTM</option>
+                  <option value="Bellandur">Bellandur</option>
+                  <option value="Domlur">Domlur</option>
+                  <option value="Indiranagar">Indiranagar</option>
+                  <option value="Bannerghatta">Bannerghatta</option>
+                  <option value="Adugodi">Adugodi</option>
+                  <option value="Ejipura">Ejipura</option>
+                </select>              
+              </div> -->
+
+              <div class="input-group">
+                <label class="control-label" for="tag">Tag this location</label>
+                <input id="tag" name="tag"  placeholder="Tag this location" value="Home" type="text">
+              </div>
+
+              <div class="input-group ">
+                 <label class="control-label" for="editAccountPhone"></label>
+              <button id="address_submit" type="submit" data-ember-action="13" class="primary" value="Save">Save</button>
+            </div>
+
+           </form>
+        </div>
+       
+      </div>
+    </div>
+  </div><!-- Add Address Modal -->
+
+
+{% block clothes_modal %}{% endblock %}
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/social-likes.min.js"></script>
+<script src="http://amsul.ca/pickadate.js/lib/picker.js"></script>
+<script src="http://amsul.ca/pickadate.js/lib/picker.date.js"></script>
+<script src="http://amsul.ca/pickadate.js/lib/picker.time.js"></script>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment.js"></script>
+<script src="/static/js/mywash11.js"></script>
+<script src="/static/js/ajax11.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
+
+<script type="text/javascript">
+
+var enErrorDialogs = {
+    requiredFields : '*',
+};
+
+  $.validate({
+    language : enErrorDialogs
+  });
+
+var washtype = 0;
+
+$('#pickup_date').pickadate({
+    // An integer (positive/negative) sets it relative to today.
+
+    min: true,
+    // `true` sets it to today. `false` removes any limits.
+    // max: 30,
+    format: ' dd mmm, yyyy  (dddd)',
+    formatSubmit: 'yyyy/mm/dd',
+    disable: [
+        4, 5
+    ]
+});
+
+
+
+
+
+
+$('#schedule_date').pickadate({
+    // An integer (positive/negative) sets it relative to today.
+    min: +3,
+    // `true` sets it to today. `false` removes any limits.
+    max: 30,
+    format: ' dd mmm, yyyy  (dddd)',
+    formatSubmit: 'yyyy/mm/dd',
+});
+
+
+
+
+var from_$input = $('#pickup_date').pickadate(),
+    from_picker = from_$input.pickadate('picker')
+
+var to_$input = $('#schedule_date').pickadate(),
+    to_picker = to_$input.pickadate('picker')
+    
+
+
+
+
+// set('min', [2013,3,20])
+
+
+
+$('#washtype').change(function(){
+        washtype = $( "#washtype" ).val();
+        console.log(washtype);
+
+
+        if(washtype == 0){
+          var selected_date = from_picker.get('select', 'yyyy/mm/dd');
+          var moment_date = moment(selected_date).add(4, 'days').format('YYYY/MM/DD'); // February 28
+
+          console.log(selected_date);
+          console.log(moment_date);
+          to_picker.set('min', new Date(moment_date));
+          to_picker.clear();
+        }else{
+          var selected_date = from_picker.get('select', 'yyyy/mm/dd');
+          var moment_date = moment(selected_date).add(6, 'days').format('YYYY/MM/DD'); // February 28
+
+          console.log(selected_date);
+          console.log(moment_date);
+          to_picker.set('min', new Date(moment_date));
+          to_picker.clear();
+        }
+
+
+
+})
+
+
+// Check if there’s a “from” or “to” date to start with.
+
+
+// When something is selected, update the “from” and “to” limits.
+//http://codepen.io/amsul/pen/nGckA
+
+
+
+from_picker.on('set', function(event) {
+
+  if(washtype == 0){
+      var selected_date = from_picker.get('select', 'yyyy/mm/dd');
+      var moment_date = moment(selected_date).add(4, 'days').format('YYYY/MM/DD'); // February 28
+
+      console.log(selected_date);
+      console.log(moment_date);
+      to_picker.set('min', new Date(moment_date));
+      to_picker.clear();
+  }else{
+      var selected_date = from_picker.get('select', 'yyyy/mm/dd');
+      var moment_date = moment(selected_date).add(6, 'days').format('YYYY/MM/DD'); // February 28
+
+      console.log(selected_date);
+      console.log(moment_date);
+      to_picker.set('min', new Date(moment_date));
+      to_picker.clear();
+  }
+
+
+
+})
+ 
+
+</script>
+
+
+
+
+
+ {% if user %}
+
+<!-- Do nothing -->
+
+ {% else %}
+
+
+
+<script type="text/javascript">
+ 
+function g_logout()
+{
+    gapi.auth.signOut();
+    location.reload();
+    FB.logout(function(){document.location.reload();});
+
+}
+
+function g_login() 
+{
+  var myParams = {
+    'clientid' : '630971295845-ihjesvcrh0qduvc5dpv5i2r7ofn5rjig.apps.googleusercontent.com',
+    'cookiepolicy' : 'single_host_origin',
+    'callback' : 'loginCallback',
+    'approvalprompt':'auto',
+    'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+  };
+  gapi.auth.signIn(myParams);
+}
+ 
+function loginCallback(result)
+{
+
+    console.log(result);
+    var access_token_send = result.access_token;
+
+
+    if(access_token_send){
+
+      window.location.href="http://mywash.in/googlelogin?access_token=" + access_token_send; 
+
+    }
+
+
+    if(result['status']['signed_in'])
+    {
+        var request = gapi.client.plus.people.get(
+        {
+            'userId': 'me'
+        });
+        request.execute(function (resp)
+        {
+            var email = '';
+            if(resp['emails'])
+            {
+                for(i = 0; i < resp['emails'].length; i++)
+                {
+                    if(resp['emails'][i]['type'] == 'account')
+                    {
+                        email = resp['emails'][i]['value'];
+                    }
+                }
+            }
+ 
+            // var str = "Name:" + resp['displayName'] + "<br>";
+            // str += "Image:" + resp['image']['url'] + "<br>";
+            // str += "<img src='" + resp['image']['url'] + "' /><br>";
+ 
+            // str += "URL:" + resp['url'] + "<br>";
+            // str += "Email:" + email + "<br>";
+            // console.log(str);   
+            // document.getElementById("profile").innerHTML = str;
+
+
+            var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            console.log(str);   
+            document.getElementById("logged-in-section-register").innerHTML = str;
+        });
+ 
+    }
+ 
+}
+function onLoadCallback()
+{
+    gapi.client.setApiKey('Xrg58bdAx08ElmN0OS2arfSl');
+    gapi.client.load('plus', 'v1',function(){});
+}
+ 
+    </script>
+
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ config.FB_APP_ID }}', // Set YOUR APP ID
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+    
+    
+    FB.Event.subscribe('auth.authResponseChange', function(response) 
+    {
+     if (response.status === 'connected') 
+    {
+        var access_token_send = response.authResponse['accessToken'];
+        console.log(access_token_send);
+
+        window.location.href="/fblogin?access_token=" + access_token_send; 
+
+        //SUCCESS
+        
+    }    
+    else if (response.status === 'not_authorized') 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Failed to Connect";
+
+        //FAILED
+    } else 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Logged Out";
+
+        //UNKNOWN ERROR
+    }
+    }); 
+    
+    };
+    
+    function fb_Login()
+    {
+    
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {    
+                     var fb_access_token_send = response.authResponse.accessToken;
+                      console.log(fb_access_token_send);
+
+                     window.location.href="/fblogin?access_token=" + fb_access_token_send; 
+                getUserInfo();
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,user_videos'});
+    
+    
+    }
+
+  function getUserInfo() {
+        FB.api('/me', function(response) {
+
+
+
+            // var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            // str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            // console.log(str);   
+            // document.getElementById("logged-in-section-register").innerHTML = str;'
+
+      var str="<li class='loggin-name item-with-ul'>" +response.username+ "</li>";
+          // str +="<b>Link: </b>"+response.link+"<br>";
+          // str +="<b>Username:</b> "+response.username+"<br>";
+          // str +="<b>id: </b>"+response.id+"<br>";
+          // str +="<b>Email:</b> "+response.email+"<br>";
+          // str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          // str +="<button class='btn btn-info' onclick='getPhoto();'>Get Photo</button>&nbsp;";
+          // str +="<button class='btn btn-primary'  onclick='Logout();'>Logout</button>";
+
+         
+
+
+         FB.api('/me/picture?type=normal', function(response) {
+
+          var str2= "<li class='loggin'>" + "<img src='" + response.data.url + "'str </li>";
+          var str3=str2;
+              str3+=str;
+
+          document.getElementById("logged-in-section-register").innerHTML=str3;
+            
+         });
+                
+    });
+    }
+    function getPhoto()
+    {
+      FB.api('/me/picture?type=normal', function(response) {
+
+          var str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          document.getElementById("status").innerHTML+=str;
+                
+    });
+    
+    }
+    function fb_logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+
+  // Load the SDK asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+
+</script>
+
+<script type="text/javascript">
+  (function() {
+   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+   po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+ })();
+</script>
+
+
+{% endif %}
+
+
+<script type="text/javascript" src="//s3.amazonaws.com/scripts.hellobar.com/e61bf47078b23ad0c27b941f7f70255424cb7723.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,73 @@
+{% extends "layout/partner_customer_layout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">
+    <img class="header_image_icon" src="/static/img/schedule_icon.png"><span>Order History</span>
+</div>
+{% endblock screen_name %}
+
+{% block main_content %}
+
+  <div class="col-md-8 order-page pricing orderhistory">
+    {% if result %}
+      <table class="table" style="min-width: 150px;max-width: 750px;">
+        <thead>
+          <tr>
+            <th bgcolor='#A6A6A6'>Customer Details</th>
+            <th bgcolor='#A6A6A6'>Pickup Details</th>
+            <th bgcolor='#A6A6A6'>Delivery Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in result %}
+            <tr id="row-{{ order._id }}" style="min-width: 150px;max-width: 750px;background-color: #FFF;">
+                <td>
+                    <a href="/partner/getstatus/{{ order.user_id }}/{{ order.id }}" style="color: #A6AFA8;text-decoration: none;">
+                      <p style="font-size: 17px;">#{{order.order_id}}:&nbsp;&nbsp;{{order.status.replace('_', ' ')}}</p>
+                      <p style="font-size: 17px;">{{order.name}}</p>
+                      <p style="font-size: 17px;">{{order.phone}}</p>
+                      <p style="font-size: 17px;">{{order.email}}</p>
+                    </a>
+                </td>
+                <td>
+                    <a href="/partner/getstatus/{{ order.user_id }}/{{ order.id }}" style="color: #A6AFA8;text-decoration: none;">
+                      <p style="font-size: 17px;">Date: {{order.pickup_date}}</p>
+                      <p style="font-size: 17px;">Slot: {{order.pickup_time}}</p>
+                    </a>
+                </td>
+                <td>
+                    <a href="/partner/getstatus/{{ order.user_id }}/{{ order.id }}" style="color: #A6AFA8;text-decoration: none;">
+                      <p style="font-size: 17px;">Date: {{order.delivery_date}}</p>
+                      <p style="font-size: 17px;">Slot: {{order.delivery_time}}</p>
+                    </a>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div id="applyCoupon" class="col-md-8">
+        <div id="coupon-hero"><span class="icon-smiley-3"></span><h3>Uh Oh! looks like you never tried us before. </h3></div>
+        <form id="order-schedule-link" method="get" action="/partner/customer">
+          <div class="input-group margin_0">
+            <label class="control-label" for="editAccountPhone"></label>
+            <button id="" type="submit" data-ember-action="13" class="primary" value="Save">Place Order</button>
+          </div>
+        </form>
+      </div>
+   {% endif %}
+  </div>
+
+{% endblock main_content %}
+
+
+{% block misc_space %}
+
+{% endblock misc_space %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+  $(function(){});
+</script>
+
+{% endblock extra_js %}

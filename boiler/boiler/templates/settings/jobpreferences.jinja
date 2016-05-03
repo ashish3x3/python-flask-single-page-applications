@@ -1,0 +1,111 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "settings/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    <div class="col-md-12 js-row-each">
+        <div class="alert hide"></div>
+        <form method="post" class="form-horizontal js-update-append-form js-track-analytics" role="form" action="/settings/jobpreferences" onsubmit="return false;">
+            <fieldset>
+                {# KEYWORDS #}
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="jobpreference_keyword" title = "Keyword">
+                        Skill/Job Title:
+                    </label>
+                    <div class="col-md-6">
+                        <input class="form-control" type='text' placeholder="eg. Software Engineer" value="{{ preference.keyword }}" data-searchtype="keyword" id="jobpreference_keyword" name="keyword"  autofocus />
+                    </div>
+                </div>
+
+                {# COMPANY #}
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="jobpreference_company" title="company">
+                        Company:
+                    </label>
+                    <div class="col-md-6">
+                        <input class="form-control" type='text' placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.company }}" value="{{ preference.company }}" data-searchtype="company" id="jobpreference_company" name="company" />
+                    </div>
+                </div>
+
+                {# LOCATION #}
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="jobpreference_location" title="location">
+                        Location:
+                    </label>
+                    <div class="col-md-6">
+                        <input class="form-control" type='text'
+                        value="{{ preference.location }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.location  | escape  }}"  data-searchtype="location" id="jobpreference_location" name="location" />
+                    </div>
+                </div>
+
+                {# EXPERIENCE #}
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="jobpreference_experience" title = "Experience">
+                        Experience:
+                    </label >
+                    <div class="col-md-6">
+                        <select id ="jobpreference_experience"  name="experience_level" class="form-control">
+                            {% if facets %}
+                                {% for x in facets.experience %}
+                                    <option {{ "selected" if facets.experience[x].selected != false }} value = "{{ facets.experience[x].value }}" > {{ facets.experience[x].name }} </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                {# DIRECT JOBS #}
+                <div class="form-group">
+                    <label  class="col-md-2 control-label" for="jobpreference_directjobs" title = "Search Options">
+                        Jobs From:
+                    </label >
+                    <div class="col-md-6">
+                        <select name="company_jobs"class="form-control" id="jobpreference_directjobs">
+                            {% if facets %}
+                                {% for x in facets.company_jobs %}
+                                    <option {{ "selected" if facets.company_jobs[x].selected != false }} value="{{facets.company_jobs[x].value }}" > {{facets.company_jobs[x].name }} </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                {# NOTIFICATIONS #}
+                <div class="form-group">
+                    <label  class="col-md-2 control-label" for="jobpreference_recommended_job_notification" title ="Recommended Job Notifications">
+                        Job Notifications:
+                    </label >
+                    <div class="col-md-6 js-check-parent ">
+                        <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if preference.notification == 'YES' }} >
+                        <input type="hidden" class="js-check" value={{ 'yes' if preference.notification=="YES" else 'no'  }} name="notification" />
+                    </div>
+                    {#
+                    <div class="col-md-2 btn-group js-bs-btn-radio" data-toggle="buttons">
+                        <label class="btn btn-default {{ 'active' if preference.notification == 'YES' }}">
+                            <input type="radio" name="options" id="option1" value="YES" {{ 'checked' if preference.notification == 'YES' }} /> Yes
+                        </label>
+                        <label class="btn btn-default {{ 'active' if preference.notification == 'NO' }}">
+                            <input type="radio" name="options" id="option2"  value="NO" {{ 'checked' if preference.notification == 'NO' }} /> No
+                        </label>
+                        <input type="hidden" value="{{ preference.notification }}" class="js-bs-btn-radio-val" name="notification" />
+                    </div>#}
+                </div>
+
+                {# BUTTON #}
+                <div class="form-actions actionblock clearfix">
+                    <button type="submit" class="btn btn-primary js-submit-button"> Save </button>
+                    <a href="/landing" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link btn btn-default"> Cancel</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <script>
+        jQuery('.main-container').on('click','.js-bs-btn-radio .btn',function(){
+            var val = jQuery(this).find('input').val();
+            jQuery(this).parent().find('.js-bs-btn-radio-val').val(val);
+
+        });
+    </script>
+{% endblock search_result_block %}

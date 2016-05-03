@@ -1,0 +1,57 @@
+{% import 'elements/macros.jinja' as html %}
+<div class="col-md-12 js-result-box js-cluster-view">
+    {#winners list start#}
+    <div class="clearfix">
+        <div class="rs-make-head text-center">
+            Winners this week : <strong>{{ week_day }}</strong>
+        </div>
+        <div class="resume-make-scroll">
+            <ul class="jcarousel-skin-tango list-unstyled js-one-carousel">
+                {% for x in winnerslist %}
+                    {% if winnerslist[x].winners %}
+                        <li>
+                            {% if winnerslist[x].day  %}
+                                <div class="rs-make-day">
+                                    <strong>{{ winnerslist[x].day }}</strong>
+                                </div>
+                            {% endif %}
+                            <div class="img-connection">
+                                {% for y in winnerslist[x].winners %}
+                                    {{ html.imageWithProfileUrl(winnerslist[x].winners[y],show_link=false) }}
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li>
+                        <div class="winner_invite_btn text-center">
+                            <br>
+                            <p><strong>
+                                {% if is_winner == true %}
+                                    Continue the good work...
+                                {% else %}
+                                    Start inviting friends..
+                                {% endif %}
+                            </strong></p>
+                            <a onclick="window.open('{{ JCONSTANTS.FB_INVITE_URL }}','','width=500,height=500');" class="btn btn-primary"><b>Invite Friends</b></a><br>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {#winners list end#}
+    <div class="invite-promo-bot">
+        {% if people_won_count %}
+            <p class="pull-left">
+                {{ people_won_count  }} {% if people_won_count!=1 %} People have {% else %} person has {% endif %} won till date
+            </p>
+        {% endif %}
+       <p class= "pull-right">
+            <a class="js-close-cluster" href="javascript:void(0);">
+                <i class="sprite glyphicon glyphicon-clu-close" ></i>
+                List of winners
+            </a>
+        </p>
+    </div>
+</div>

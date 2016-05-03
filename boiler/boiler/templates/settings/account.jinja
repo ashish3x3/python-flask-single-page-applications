@@ -1,0 +1,11 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "settings/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    <div class="">
+            &nbsp;
+    </div>
+{% endblock search_result_block %}

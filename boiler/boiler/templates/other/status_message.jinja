@@ -1,0 +1,17 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block main_content %}
+    <div class="container" id="maincontainer">
+        <div class="col-md-8 clearfix pull-center-nowidth margintop40">
+        	<div class="col-md-12 alert alert-{{ messageType }}">
+        		{{ message }}
+        	</div>
+        	<p class="text-center">
+                <a href="{{ continueUrl }}" type="submit" class="btn btn-primary btn-lg">Continue</a>
+            </p>
+        	<br>
+        	<br>
+        	<br>
+        </div>
+	</div>
+{% endblock main_content  %}

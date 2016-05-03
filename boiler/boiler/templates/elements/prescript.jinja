@@ -1,0 +1,27 @@
+<script>
+    var UserFBId = '{{ user.fb_id if(user) else 0}}';
+    var LoaderHTML = '<span class="loader"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></span>';
+    var user_current_country = "{{ user.country if(user) else IN }}"
+    var MP_URL = "{{ config.MP_URL }}"
+    var _gaq = _gaq || [];
+    var fb_param = {};
+    var in_iframe = {
+            client : (window.top != window.self) ? true : false,
+            server: {% if (user and user.in_iframe) %} true {% else %} false {% endif %}
+    }
+    var FBRedirect   = {% if config.FBREDIRECT and not nofbredirect %} true {% else %} false {% endif %};
+    var RedirectUrl  = '{{ redirectUrl }}';
+    var FBAccessToken = '{{ config.ACCESS_TOKEN }}';
+</script>
+
+
+{% if config.DEBUG == false %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{% else %}
+    <script src="/static/js/lib/jquery.1.9.1.js"></script>
+{% endif %}
+
+<!--[if IE 8]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" ></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->

@@ -1,0 +1,67 @@
+{% extends "layout/ajax.jinja" %}
+
+{% block ajaxcontent %}
+    <div class="jd-open-bar js-replace-wrapper">
+        <a class="js-hide-link close popup-close introduce-list" href="#">×</a>
+        <div class="container">
+            <div class="row">
+                {% if target %}
+                    <div class="col-md-5">
+                        <div class="media big-media">
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(target) }}
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h3 class="media-heading">
+                                    <a href="{{ target.profileUrl }}"  target="_blank">{{ target.name  }}</a>
+                                </h3>
+                                <h4>{{ target.company.name if target.company }}</h4>
+                                <p>{{ target.position }}</p>
+                                {% if show and show.askreferral %}
+                                    <a href="/jobs/askreferral/{{ job.id }}/{{ target.fb_id }}?{{ target.params }}&{{ params }}" class="btn btn-primary">Contact about this job</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if contacts %}
+                        <div class="col-md-7">
+                            <h4>{{ target.name }} also knows these {{ job.company.name if job and job.company }} employees:</h4>
+                            <div class="jd-scroll-wrap">
+                                <div class="row jd-scroll">
+                                    <ul class="jcarousel-skin-tango list-unstyled js-carousel">
+                                        {% for x in contacts  %}
+                                            <li >
+                                                <div class="media sm-media">
+                                                    <div class="pull-left">
+                                                        <div class="logo-blk-img">
+                                                             {{ html.imageWithProfileUrl(contacts[x]) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading">
+                                                            <a href="{{ contacts[x].profileUrl }}" target="_blank">{{ contacts[x].name }}</a>
+                                                        </h4>
+                                                        <strong>{{ contacts[x].company.name }}</strong>
+                                                        <p class="text-muted">
+                                                            {{ contacts[x].position }}
+                                                        </p>
+                                                        <a href="/jobs/askintroduction/{{ job.id }}/{{ target.fb_id }}/{{ contacts[x].fb_id }}?{{ target.params }}&{{ params }}" class="btn btn-xs btn-primary">Get Introduced</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="text-center ">
+            <a class="js-hide-link" href="#">Collapse <i class="glyphicon glyphicon-chevron-up"></i></a>
+        </div>
+    </div>
+{% endblock %}

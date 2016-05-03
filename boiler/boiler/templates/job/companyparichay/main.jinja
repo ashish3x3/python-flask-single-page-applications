@@ -1,0 +1,26 @@
+{% if request.is_xhr %}
+    {% import 'elements/macros.jinja' as html %}
+{% else %}
+    {% extends "companyparichay/jobstab.jinja" %}
+{% endif %}
+
+{% block jobstabcontent %}
+    <div class="row">
+        {#--MAIN CONTENT---#}
+        <div class="{{ section.main }}_{{ section.sub }}">
+
+            {# RESULT PART #}
+            <div class="col-md-12">
+                <section class="panel panel-default">
+                    {#--HEADING PART-#}
+                    <header class="panel-heading">{% include('job/companyparichay/title.jinja') %}</header>
+                    <div id="subcontainer" class="panel-body panel-padding-muted resultbox-padding">
+                        {% block search_result_block %} {% endblock search_result_block %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock jobstabcontent %}
+
+

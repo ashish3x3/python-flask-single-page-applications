@@ -1,0 +1,22 @@
+{# profile_viewed #}
+{% extends "layout/ajax.jinja" %}
+{% block ajaxcontent %}
+    {% if profile_viewed | length %}
+        <b> Who's viewed your profile? </b>
+        <div class="img-connection">
+            {% for x in profile_viewed %}
+                {% if loop.index < 7 %}
+                    {{ html.imageWithProfileUrl(profile_viewed[x]) }}
+                {% endif %}
+            {% else %}
+                No Profile visitors in the last {{ time_period }}.
+            {% endfor %}
+            {% if (profile_viewed | length) > 1 %}
+                <!--<a target="_blank" href="#" class="btn btn-primary more-img more-img-small">
+                   {{ more_friends }}+
+                </a>-->
+            {% endif %}
+        </div>
+        <hr class="line1"></hr>
+    {% endif %}
+{% endblock ajaxcontent  %}

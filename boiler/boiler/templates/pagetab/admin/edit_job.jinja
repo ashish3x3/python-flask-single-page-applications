@@ -1,0 +1,21 @@
+{% extends "pagetab/admin/settings.jinja" %}
+
+{% block settings_content %}
+<div id="manage-jobs">
+    <div id="post-job">
+        <h3>Post a Job</h3>
+        <div class="div-clear-height"></div>
+        <div class="div-clear-height"></div>
+        <div class="alpha " id="post_a_job">
+            <div id="post_a_job_padding">
+                <form method="post" action="/pagetab/admin/jobs/{{ data.job.id}}">
+                    {% include 'pagetab/admin/job_form.jinja' %}
+                    <div class="form-actions clearfix">
+                        <input type="submit" name="post" value="Update Job" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock settings_content %}

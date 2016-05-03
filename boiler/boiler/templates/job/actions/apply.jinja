@@ -1,0 +1,274 @@
+{% if request.is_xhr  %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "job/native.jinja" %}
+{% endif %}
+
+{% block jobcontent %}
+	<div class="js-row-each">
+		{% set form_action_submit_fragment = 'apply' %}
+		{% if applyWithEmail %}
+			{% set form_action_submit_fragment = 'applywithemail' %}
+		{% endif %}
+		<form method="post" class="js-update-append-form form-horizontal js-track-analytics" action="/jobs/{{form_action_submit_fragment}}/{{ job.id }}?{{ request.query_string }}&{% if not request.args.get('location', false) %}location=jobdetail {% endif %} " role="form" data-hideonsuccess="true" data-scrollonresponse="true">
+			<legend class="text-center">{{ section.title }}</legend>
+			<div class="alert applyalert"></div>
+			<fieldset class="js-region">
+				<input type="hidden" name="referral" value="{% if request.args.get('referral') %}{{ request.args.get('referral') }}{% endif %}" />
+				{% if applyWithEmail %}
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_firstname">
+						First Name <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control" type="text"
+						required id="jobapply_firstname" name="firstname" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_lastname">
+						Last Name <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control" type="text"
+						required id="jobapply_lastname" name="lastname" />
+					</div>
+				</div>
+				{% endif %}
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_email">
+						Email <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control" type="email" value="{{ user.email }}"
+						required id="jobapply_email" name="email" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_tel">
+						Mobile No <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control" type='tel'  value="{{ user.tel }}" required id="jobapply_tel" name="tel" pattern='[0-9+-]{10,15}' data-patternmismatch="Enter a valid Mobile No." />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_location">
+						Current Location <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control" type='text' value="{{ user.location }}" required
+						id="jobapply_location" name="location" />
+					</div>
+				</div>
+
+				{% if show and show.experience %}
+					<div class="form-group">
+						<label class="col-md-3 col-xs-12 control-label" for="jobapply_experience">
+							Experience <span class="colon">:</span>
+						</label>
+						<div class="col-md-6 col-xs-12">
+							<div class="row">
+								<div class="col-md-6 col-xs-6">
+									<select class="form-control js-apply-exp" name="experience_year" required>
+										<option value="">-Year-</option>
+										{% for x in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 ] %}
+										<option value="{{ x }}" {% if user.experience and x == user.experience.years %} selected {% endif %}>
+											{{ x }} years
+										</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6 col-xs-6">
+									<select class="form-control js-apply-exp" name="experience_month" id="jobapply_experience" required>
+										<option value="">-Month-</option>
+										{% for x in [0,1,2,3,4,5,6,7,8,9,10,11] %}
+										<option value="{{ x }}" {% if  user.experience and x == user.experience.months %} selected {% endif %}>
+											{{ x }} months
+										</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+				{% if show and show.industry %}
+					<div class="form-group">
+						<label class="col-md-3 col-xs-12 control-label" for="jobapply_industry">
+							Industry <span class="colon">:</span>
+						</label>
+						<div class="col-md-6 col-xs-12">
+							<select class="form-control" name="industry" required id="jobapply_industry">
+								<option value="">-Industry-</option>
+								{% for x in industry %}
+								<option value="{{ industry[x].id }}"
+									{% if industry[x].id == user.industry %}selected{% else %}false{% endif %} "" >
+									{{ industry[x].name }}
+								</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				{% endif %}
+
+				{% if show and show.functional_area %}
+					<div class="form-group">
+						<label class="col-md-3 col-xs-12 control-label" for="jobapply_functional_area">
+							Functional Area <span class="colon">:</span>
+						</label>
+						<div class="col-md-6 col-xs-12">
+							<select class="form-control" name="functional_area" required id="jobapply_functional_area">
+								<option value="">-Functional Area-</option>
+								{% for x in functional_area %}
+								<option value="{{ functional_area[x].id }}"
+								  {% if functional_area[x].id == user.functional_area %} selected {% endif %} "" >
+									{{ functional_area[x].name }}
+								</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_current_company">
+						Current Company <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control js-apply-current-company" type='text' name="current_company"
+							value="{{ user.current_company }}" {{ 'required' if (not user.fresher) }} id="jobapply_current_company"/>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_preferred_location">
+						Preferred Location <span>:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<input class="form-control fb-autocomplete" data-searchtype="adcity"  type='text' name="preferred_location" value="{{ user.preferred_location }}" id="jobapply_preferred_location"
+						autocomplete="off" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label" for="jobapply_qualification_level">
+						Qualification level <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12">
+						<select class="form-control" name="qualification_level" required id="jobapply_qualification_level">
+							<option value="">-Qualification level-</option>
+							{% for x in qualification_level %}
+							<option value="{{ qualification_level[x].id }}"
+							  {% if qualification_level[x].id == user.qualification_level %} selected {% endif %} "" >
+								{{ qualification_level[x].name }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+						<label class="col-md-3 col-xs-12 control-label" for="jobapply_skills">
+							Skills <span class="colon">:</span>
+						</label>
+						<div class="col-md-6 col-xs-12">
+							<div class="form-control skillset bubble-input-box">
+								{% for x in user.skills %}
+								<span class="js-row-each label label-muted label-md right-action bubble">
+									<span class="bubble-text">{{ x.skill }}</span>
+									<button class="bubble-remove btn btn-link"  type="button">x</button>
+									<input type="hidden" value="{{ x.skill }}" name="skills" />
+								</span>
+								{% endfor %}
+								<input type='text' {{ 'required' if not user.skills  }}  id="jobapply_skills" class="transparent-input bubble-add  js-mp-autocomplete" data-searchtype="skill" name="skills"  data-seperator="," data-tmpl="tmpl_jd_skill"  autocomplete="off" />
+							</div>
+						</div>
+				</div>
+
+				{% if show and show.salary %}
+					<div class="form-group">
+						<label class="col-md-3 col-xs-12 control-label" for="jobapply_salary">
+							Current Salary <span class="colon">:</span>
+						</label>
+						<div class="col-md-6 col-xs-12">
+							<div class="row">
+								<div class="col-md-6 col-xs-6">
+									<select class="form-control js-apply-current-salary" name="salary_lakhs" {{ 'required' if (not user.fresher) }} id="jobapply_salary">
+										<option value="">-Lakhs-</option>
+										{% for x in range(0,101) %}
+											<option value="{{ x }}" {% if user.salary_lakhs and x == (user.salary_lakhs | int) %} selected {% endif %}>
+												{{ x }} {% if x == 1%}lakh{% else %}lakhs{% endif %}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6 col-xs-6">
+									<select class="form-control js-apply-current-salary" name="salary_thousands" {{ 'required' if (not user.fresher) }}>
+										<option value="">-Thousands-</option>
+										{% for x in range(0,100) %}
+										  <option value="{{ x }}" {% if user.salary_thousands and x == (user.salary_thousands | int) %} selected {% endif %}>
+										  	{{ x }} {% if x == 1%}thousand{% else %}thousands {% endif %}
+										  </option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="form-group">
+					<label class="col-md-3 col-xs-12 control-label">
+						Attach Your Résumé <span class="colon">:</span>
+					</label>
+					<div class="col-md-6 col-xs-12" >
+						<div class="row">
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<select class="form-control margin10" name="resume_id"  id="resume_block" {{ 'required' if resume_required }}>
+									<option value="">Select a Resume</option>
+									{% for x in resume %}
+										<option value="{{ resume[x].id }}">{{ resume[x].name }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="clearfix">
+									<iframe src="/resume/upload?type=apply" height="75" class="iframewidth" frameborder="0"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-actions actionblock text-center">
+					<button type="submit" value="Apply" class="btn btn-primary js-submit-button" >
+						Submit Your Application
+					</button>
+					<a href="/job/{{ job.id }}" class="btn btn-default">
+						Cancel
+					</a>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+
+	{% raw %}
+    <script id="tmpl_jd_skill" type="text/templates" >
+        <span class="js-row-each label label-muted label-md right-action bubble">
+			<span class="bubble-text">{{ name }}</span>
+			<button class="bubble-remove btn btn-link" type="button">x</button>
+			<input type="hidden" value="{{ name }}" name="skills" />
+		</span>
+    </script>
+    {% endraw %}
+
+
+{% endblock jobcontent  %}
+
+
+
+

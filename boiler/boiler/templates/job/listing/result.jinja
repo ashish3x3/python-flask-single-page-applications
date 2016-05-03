@@ -1,0 +1,151 @@
+{% if request.is_xhr  and request.args.get('sub','') == '1' %}
+    {% extends "layout/ajax.jinja" %}
+{% elif section.main == 'manage_career_tab' %}
+    {% extends "pagetab/main.jinja" %}
+{% else %}
+    {% extends "job/listing/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    {% for x in search_result.result %}
+        {% if search_result.result[x].job %}
+            {#--result part---#}
+            <div class="result-box js-row-each">
+                {# BUTTONS #}
+                <div class="pull-right media-rgt">
+                    <div class="save-btn savedbtn show-on-hover pull-right js-ajax-replace-wrapper">
+                        {% if section.sub == 'saved_jobs' %}
+                            <a class="btn btn-default js-remove-action js-track-analytics" role="link" href="/jobs/unsave/{{ search_result.result[x].job.id }}" data-warnmsg="Are you sure you want to remove this job from your Saved Jobs list ?">
+                               Unsave&nbsp; <i class="glyphicon glyphicon-times"></i>
+                           </a>
+                        {% elif section.sub == 'posted_jobs' %}
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    Options &nbsp; <span class="caret texttop"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu">
+                                        <li>
+                                            <a href="/jobs/edit/{{ search_result.result[x].job.id }}" class="js-track-analytics">
+                                                Edit &nbsp;
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/jobs/delete/{{ search_result.result[x].job.id }}" class="js-remove-action js-track-analytics" >
+                                                Delete &nbsp;
+                                            </a>
+                                        </li>
+                                </ul>
+                            </div>
+                        {% elif section.sub == 'manage_jobs' %}
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    Options &nbsp; <span class="caret texttop"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu">
+                                        {% if search_result.wall_share %}
+                                        <li>
+                                            <a href="/pagetab/autopost/{{ search_result.result[x].job.id }}" class="js-share-wall js-track-analytics" data-where="user">
+                                                Share on My Wall &nbsp;
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if search_result.page_wall_share %}
+                                        <li>
+                                            <a href="/pagetab/autopost/{{ search_result.result[x].job.id }}" class="js-share-wall js-track-analytics"  data-where="company">
+                                                Post on Company Wall &nbsp;
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if not search_result.result[x].job.type == 'API' %}
+                                        <li>
+                                            <a href="/pagetab/admin/jobs/{{ search_result.result[x].job.id }}/edit" class="">
+                                                Edit &nbsp;
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        <li>
+                                            <a href="/jobs/delete/{{ search_result.result[x].job.id }}" class="js-remove-action js-track-analytics" >
+                                                Delete &nbsp;
+                                            </a>
+                                        </li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            {% if  search_result.result[x].job.saved == true %}
+                                    <button class="btn disabled btn-success pull-right ">
+                                       Saved &nbsp; <i class="glyphicon glyphicon-check"></i>
+                                   </button>
+                            {% else %}
+                                <a class="btn btn-default js-ajax-replace-action pull-right js-track-analytics" role="link" href="/jobs/save/{{ search_result.result[x].job.id }}">
+                                       Save &nbsp; <i class="glyphicon glyphicon-plus"></i>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    &nbsp;
+                </div>
+
+                <div class="media">
+                    <div class="pull-left">
+                        {# Logo Of the Companies #}
+                        {% if search_result.result[x].job.company %}
+                            {{ html.companyLogo(search_result.result[x].job.company) }}
+                        {% endif %}
+                    </div>
+
+                    {# List of companies #}
+                    <div class="media-body">
+
+                        {# TITLE #}
+                        <h4 class="media-heading">
+                            <a href="/job/{{ search_result.result[x].job.id }}?{{ request.url | stringurlencode('searchurl') }}" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link js-popout-link {{ 'js-focus' if loop.index == 1 }}" role="link" target="{{ '_blank' if (user.in_iframe) }}"> {{ search_result.result[x].job.title }} </a>
+                        </h4>
+                        <p class="tx-14">
+                            {% if search_result.result[x].job.company %} {{ search_result.result[x].job.company.name }} {% endif %}
+                            {% if search_result.result[x].job.company and search_result.result[x].job.company.name and search_result.result[x].job.location %} , {% endif %}
+                            <span>{{ search_result.result[x].job.location }}</span>
+                        </p>
+
+
+
+                        {# DESCRIPTION #}
+                        {{ search_result.result[x].job.description | striptags | truncate(150)}}
+
+
+                        {# CONNECTIONS #}
+                        {% if show and show.connection != false %}
+                            <div class="js-autofill"  href="/jobs/miniconnectionlist?jobid={{ search_result.result[x].job.id }}&company={{ search_result.result[x].job.company.name }}&{{ request.url | stringurlencode('searchurl') }}" id="job-search-mini-connection-{{ search_result.result[x].job.id }}" data-replace-selector="#job-search-mini-connection-{{ search_result.result[x].job.id }}" data-loading-selector="none" data-replace-type = "withouthistory">
+                                <div class="loader-sm text-left"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+       <div class="row result-empty" >
+            {% if section.sub == 'saved_jobs' %}
+                <b> You have not saved any jobs. Try a</b> <a href="/jobs/search" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link">job search</a>
+            {% elif section.sub == 'posted_jobs' %}
+                <b> You have not posted any jobs. </b> <a href="/jobs/edit/0" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link" id="try_posting_job" >Try Posting a Job</a>
+            {% elif section.sub == 'job_recommended' %}
+                <b>You have not any recommended jobs. Update </b><a href="/profile/{{ user.fb_id }}" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link"> your profile </a> <b>to see jobs.</b>
+            {% elif section.sub == 'applied_jobs' %}
+                <b>You have not applied to any jobs. Try a</b> <a href="/jobs/search" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link" >job search</a></b>
+            {% else %}
+                <b>You don't have any jobs.</b>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    {#---PAGINATION---#}
+    {% if show and show.pagination != false %}
+        {% if 'page' in pagination and 'total_results' in pagination  and (pagination.total_results | int ) > 1 %}
+            <div class="row">
+                <div class="pagination-centered">
+                    {{ html.pagination(pagination.auxparams, pagination.total_results, pagination.page, request.path,results_on_page=50) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock search_result_block %}

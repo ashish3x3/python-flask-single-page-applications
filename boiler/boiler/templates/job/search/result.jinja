@@ -1,0 +1,152 @@
+{% if request.is_xhr  and request.args.get('sub','') == '1' %}
+    {% extends "layout/ajax.jinja" %}
+{% elif section.sub == "recentsearches" %}
+    {% extends "job/recentsearches.jinja" %}
+{% else %}
+    {% extends "job/search/main.jinja" %}
+{% endif %}
+
+
+{% block facebookPixel %}
+    {% if pagination and pagination.auxparams %}
+        <iframe src="/trackingpixel?pixel_id=jobsearch" width="1" height="1"  class="hide"></iframe>
+    {% endif %}
+{% endblock facebookPixel %}
+
+{% block search_result_block %}
+    {% for x in search_result.result %}
+        {% if search_result.result[x].job %}
+            {#--result part---#}
+            <div class="result-box js-result-box js-row-each" id="job-result-{{ search_result.result[x].job.id }}" >
+
+                <div class="pull-right media-rgt">
+                    <ul class="list-unstyled options">
+                        {% if search_result.result[x].job.date %}
+                        <li class="text-muted text-right">
+                            <small>
+                                 &nbsp;{{ search_result.result[x].job.date | days_ago(search_result.result[x].job.date) }}
+                            </small>
+                        </li>
+                        {% endif %}
+
+                        {# REFERRAL AMOUNT #}
+                        {% if show.referral_amount == true and search_result.result[x].job.referral_amount %}
+                            <li class="text-right">
+                                &nbsp;
+                                <a href="/jobs/referlist/{{ search_result.result[x].job.id }}">
+                                    <div class="refer-earn-box text-center">
+                                        <div class="refer-amt">
+                                            <p class="tx-16">
+                                                <i class="glyphicon glyphicon-{{ search_result.result[x].job.referral_amount.currency | lower }}"></i>
+                                                <strong>{{ search_result.result[x].job.referral_amount.amount }}</strong>
+                                            </p>
+                                        </div>
+                                        <div class="label label-info">Refer &amp; Earn</div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% if  search_result.result[x].job.saved == true %}
+                            <li class="save-btn">
+                                &nbsp;
+                                <p class="savedbtn show-on-hover pull-right">
+                                    <button class="btn disabled btn-success">
+                                       Saved &nbsp; <i class="glyphicon glyphicon-check"></i>
+                                    </button>
+                                </p>
+                            </li>
+                        {% else %}
+                            <li class="save-btn text-right">
+                                &nbsp;
+                                <p class="show-on-hover pull-right  js-ajax-replace-wrapper">
+                                    <a class="btn btn-default js-replace-action js-track-analytics" role="button" href="/jobs/save/{{ search_result.result[x].job.id }}">
+                                       Save &nbsp; &nbsp; <i class="glyphicon glyphicon-plus"></i>
+                                   </a>
+                               </p>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="media" >
+                    <div class="pull-left">
+                        {% if search_result.result[x].job.company %}
+                            {{ html.companyLogo(search_result.result[x].job.company) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a href="/job/{{ search_result.result[x].job.id }}?{{ request.url | stringurlencode('searchurl') }}" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link js-popout-link" role="link" target="{{ '_blank' if (user.in_iframe) }}" >{{ search_result.result[x].job.title }} </a>
+                        </h4>
+                        <p class="tx-14 clearfix">
+                            {% if search_result.result[x].job.company %}
+                               {{ search_result.result[x].job.company.name }}
+                            {% endif %}
+                            {% if search_result.result[x].job.location %}
+                                <span>in {{ search_result.result[x].job.location }}</span>
+                            {% endif %}
+                        </p>
+                        <div class="clearfix">
+                            {{ search_result.result[x].job.description | truncate(145) }}
+                        </div>
+
+
+                        {# CONNECTIONS #}
+                        {% if show and show.connection != false %}
+                            <div class="js-autofill"  href="/jobs/miniconnectionlist?jobid={{ search_result.result[x].job.id }}&company={{ search_result.result[x].job.company.name }}&{{ request.url | stringurlencode('searchurl') }}&clusterview=1" id="job-search-mini-connection-{{ search_result.result[x].job.id }}"  data-loading-selector="none" data-replace-type= "withouthistory" >
+                                <div class="loader-sm text-left"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                            </div>
+                        {% endif %}
+
+                       {# CLUSTER #}
+                        {% if search_result.result[x].cluster and search_result.result[x].cluster != false %}
+                            <div class="clearfix">
+                                <a href="{{ ('/jobs/search?' + search_result.result[x].job.company.name | stringurlencode('companyname') + '&' + pagination.auxparams) | remove_query_string('view,clusterview') }}&view=minicluster&sub=1&clusterview=1" class="link-blue js-cluster-open" role="link"><i class="sprite glyphicon glyphicon-cluster" ></i>
+                                    Show {{ search_result.result[x].clustered_results_count or '0' }} similar jobs from
+                                    {% if search_result.result[x].job.company %} {{ search_result.result[x].job.company.name }} {% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="row result-empty" >
+           <b> No jobs found matching your criteria.</b>
+           {% if section.sub == 'job_recommended' %}
+                Update your <a href="/settings/jobpreferences" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link">Job Preferences</a>
+           {% endif %}
+        </div>
+    {% endfor %}
+
+    {% if request.args.get('view') != "minicluster" and request.args.get('view') != "mini" and search_result.result  %}
+        <div class="clearfix">
+            <div class="pull-right ">
+                <small id="indeed_at">
+                    <a href="http://www.indeed.com/">Some jobs  by</a>
+                    <a href="http://www.indeed.com/" title="Job Search">
+                        <img src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;" alt="Indeed job search">
+                    </a>
+                </small>
+            </div>
+        </div>
+    {% endif %}
+
+
+    {#---PAGINATION---#}
+    {% if show and show.pagination != false %}
+        {% if 'page' in pagination and 'total_results' in pagination  and (pagination.total_results | int ) > 1 %}
+            <div class="row">
+                <div class="pagination-centered">
+                    {{ html.pagination(pagination.auxparams, pagination.total_results, pagination.page, request.path, results_on_page=50) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock search_result_block %}
+
+
+

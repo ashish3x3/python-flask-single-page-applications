@@ -1,0 +1,13 @@
+{% extends "layout/error.jinja" %}
+
+{% block content %}
+	<h1>Bad Request <span frown>:(</span></h1>
+	<div>
+	<p  class="center">
+		Our engineers will looking into this
+	</p>
+	</div>
+	<div class="center">
+		<a href="{{ config.APP_URL }}landing" target="_top">Go back to Home</a>
+	</div>
+{% endblock content %}

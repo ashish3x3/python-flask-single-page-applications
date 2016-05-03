@@ -1,0 +1,86 @@
+{% extends 'layout/blank.jinja' %}
+{% block content %}
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 invite-search-wrap">
+                 <!--<form role="form">-->
+                <label for="exampleInputEmail1" class="tx-14">Have someone in mind?</label>
+                <input type="text" class="form-control js-filter-friends" placeholder="Friend's name" />
+            </div>
+        </div>
+        <br>
+        <ul class="row invite-result-wrap list-unstyled" style="overflow-y: scroll; height: 260px;">
+            {% set counter = 0 %}
+            {% for item in friends %}
+                    {% set counter = counter + 1 %}
+                    <li class="col-md-6 col-sm-6 js-friends {{ 'show' if item.company  else 'hide' }}" data-name="{{ item.name }}" id="{{ item.fb_id }}">
+                        <div class="media sm-media result-box">
+                            {# PICTURE #}
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(item) }}
+                                </div>
+                            </div>
+
+                            {# DETAILS #}
+                            <div class="media-body">
+                                <div class="pull-right">
+                                    {% set sendmsglink = config.MP_URL +'?invite=1&from=' ~ user.fb_id ~ '&friendcount='+ user.friendCount  ~ '&mp_src=mpapp_u&mp_src1=install_dialog&mp_src2=' ~ user.fb_id  %}
+                                    <a onclick = "window.open('{{ JCONSTANTS.FB_SENDMESSAGE_URL }}%26divclass%3Djs-{{ item.fb_id }}%26to%3D{{ item.fb_id }}&to={{ item.fb_id }}&{{ sendmsglink |  stringurlencode('link')}}','', 'width=500,height=250');" id="js-{{ item.fb_id }}"
+                                     class="js-invite btn {% if item.fb_id in invited %} btn-success {% else %} btn-default {% endif %}">
+                                        {% if item.fb_id in invited %}
+                                            Remind
+                                        {% else %}
+                                            Invite
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="">
+                                    <h4 class="media-heading">
+                                        <a role="link" href="{{ item.profileUrl }}" target="_blank"data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link">
+                                            {{ item.name }}
+                                        </a>
+                                    </h4>
+                                    <strong>{{ item.position }}</strong>
+                                    <div>
+                                      {{ item.company.name }}<br>{{ item.location }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% if loop.index == (friends | length) and counter == 0 %}
+                    No friends to invite..Try a search..
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var friends = {};
+        jQuery(".js-friends").each(function(){
+            var friend_fbid = jQuery(this).attr("id");
+            friends[friend_fbid] = jQuery(this).attr("data-name");
+        });
+
+        /*jQuery(".js-invite").on('click',function(){
+            jQuery(this).toggleClass("btn-success btn-default").html("Invited");
+        });*/
+
+        jQuery(".js-filter-friends").on('change,  blur, keyup',function(){
+            var friend_name = jQuery(this).val();
+            if(friend_name != ''){
+                for (frined in friends) {
+                   if(friends[frined].search(new RegExp(friend_name, "i")) < 0){
+                        jQuery("#"+frined).addClass('hide').removeClass('show');
+                   }
+                   else{
+                        jQuery("#"+frined).addClass('show').removeClass('hide');
+                   }
+                }
+            }
+            else{
+                $("li.js-friends").show();
+            }
+        });
+    </script>
+{% endblock content %}

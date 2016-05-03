@@ -1,0 +1,70 @@
+<form method="post" class="form-horizontal js-education-form js-track-analytics js-replace-form js-write-permission" onsubmit="return false;"  action="/profile/education/edit/{{ ID }}" data-getperm="{% if user.write_permission == false %}true{% endif %}">
+	<fieldset>
+		{% if restrict.organisation != False %}
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="education_organization_{{ id }}">
+				Name:
+			</label>
+			<div class="col-md-9">
+				<input  class="form-control" type='text'
+					value="{{ education.organization }}" required data-searchtype="page"
+					id="education_organization_{{ ID }}" name="organization" />
+				<input type="hidden" name="organization_id" class="prefill"/>
+			</div>
+		</div>
+		{% endif %}
+		
+		{% if restrict.degree != False %}
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="education_location_{{ ID }}">
+				Degree:
+			</label>
+			<div class="col-md-9">
+				<input  class="form-control" type='text'
+					value="{{ education.degree }}" required data-searchtype="adcollegemajor"
+					id="education_degree_{{ ID }}" name="degree" />
+				<input type="hidden" name="degree_id" class="prefill"/>
+			</div>
+		</div>
+		{% endif %}
+		
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="education_location_{{ ID }}">
+				Location:
+			</label>
+			<div class="col-md-9">
+				<input  class="form-control" type='text'
+					value="{{ education.location }}" required  data-searchtype="adcity"
+					id="education_location_{{ ID }}" name="location" />
+				<input type="hidden" name="location_id" class="prefill"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="batch_{{ ID }}">
+				Batch:
+			</label>
+			<div class="col-md-9">
+				<span class="start-date">
+					<select  class="form-control" name="batch" id="batch_{{ ID }}"  required>
+						<option value="">Year</option>
+						{% for x in range(1940, 2015) | reverse %}
+						<option value="{{ x }}" {% if x == education.batch %} selected {% endif %}>
+							{{ x }}
+						</option>
+						{% endfor %}
+					</select>
+				</span>
+			</div>
+		</div>
+
+
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" >Save</button> &nbsp;&nbsp;
+			<a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-write-permission','','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Save</a>
+			<button type="button" class="btn js-landing-cancel">Cancel</button>
+		</div>
+	</fieldset>
+</form>

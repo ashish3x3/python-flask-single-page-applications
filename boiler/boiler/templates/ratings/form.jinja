@@ -1,0 +1,39 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+
+{% block screen_name %}
+  <div class="navbar-brand " href=""><img class="header_image_icon header_star" src="/static/img/star.png">Rate us</div>
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+    <div class="col-md-8 order-page" id="ratings">
+
+
+        <div id="applyCoupon" class="col-md-8">
+
+        <div id="coupon-hero">
+<!--        <img class="header_image_icon header_star" src="/static/img/star-large.png"> -->
+          <h2 style="
+              margin-top: 50px; font-weight:300; color:#697476
+          ">How did you like our service?</h2>
+          <div>
+          <span class="stars icon-star stars-click" data-star="1"></span>
+          <span class="stars icon-star stars-click" data-star="1" ></span>
+          <span class="stars icon-star stars-click" data-star="2"></span>
+          <span class="stars icon-star stars-click" data-star="3"></span>
+          <span class="stars icon-star stars-click" data-star="3"></span>
+          </div>
+        
+          <div class="emotion"></div>
+</div>
+
+
+        </div>  
+      
+    </div>
+
+{% endblock main_content %}

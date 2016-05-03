@@ -1,0 +1,18 @@
+{% import 'elements/macros.jinja' as html %}
+{% if connectors.users %}
+    <hr class="line-sm"></hr>
+    <strong class="text-muted">Appeared Through</strong class="text-muted">
+    <div class="img-connection">
+            {% for y in connectors.users %}
+                {% if loop.index <= 5 %}
+                    {{ html.imageWithProfileUrl(connectors.users[y]) }}
+                {% endif %}
+            {% endfor %}
+        {% if connectors.count > 5 %}
+            <a href="/user/search?view=contacts&fbid={{ more_id }}{{ '&facet_connectionlevel=sharedcontacts' if section.sub == 'people_search' }}" class="btn btn-primary more-img more-img-small">
+               {{ connectors.count  }}+
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+

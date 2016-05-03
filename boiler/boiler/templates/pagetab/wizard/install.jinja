@@ -1,0 +1,22 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block facebookPixel %}
+	{% if pagetab_installed == true %}
+    	<iframe src="/trackingpixel?pixel_id=careertabinstall&value=pagetab_install" width="1" height="1" class="hide"></iframe>	    
+	{% endif %}
+{% endblock facebookPixel %}
+
+{% block content %}
+    <section class="panel panel-default">
+        <header class="panel-heading">
+            <div class="pull-left">
+                <strong>
+                    Add a Careers section to your Page
+                </strong>
+            </div>
+        </header>
+        <div class="panel-body">
+            {% block step_content %}{% endblock step_content %}
+        </div>
+    </section>
+{% endblock content %}

@@ -1,0 +1,128 @@
+{% extends 'layout/ajax.jinja' %}
+
+{% block ajaxcontent %}
+<div class="col-box prof-connectivity">
+    <div id="home_professional_connection">
+
+        <div class="col-box-heading">
+            <strong>Your Professional Connectivity </strong>
+        </div>
+        {# stats #}
+        {% if (prof_connections | int) != 0 %}
+            <div class="row prof-con-row1">
+                <div class="col-md-6">
+                    <div class="pull-left"><big><a href="/user/search?view=contacts&fbid={{ user.fb_id }}&professionalconnections=1">{{ prof_connections }}</a></big> </div>
+                    <div class="pull-left"><small>Professional <br>
+                    Connections</small></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="pull-left"><big><a href="/user/search?view=contacts&fbid={{ user.fb_id }}">{{ company_stats }}</a></big></div>
+                    <div class="pull-left"><small>Companies</small></div>
+                </div>
+            </div>
+        {% endif %}
+
+        {# percentage #}
+        <div class="row">
+            <div class=" col-xs-4 col-md-4">
+                <div class="progess-wrap">
+                    <div class="progress progress-circle">
+                        <div class="white-circle">{{ percentage }}%</div>
+                        {# Non Ie #}
+                        <div class="slice {{ 'gt50' if percentage > 50 }}" role="progressbar" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            {% if percentage > 50 %}
+                                <div class="pie   js-circle"  data-degree="360"></div>
+                            {% endif %}
+                            <div class="pie fill js-circle" data-degree="{{ ((percentage) * 3.6 ) +180 - 1 }}"></div>
+                        </div>
+                    </div>
+                    <span class="glyphicon-stack glyphicon-lg glyphicon-fb color-fb">
+                        <i class="glyphicon glyphicon-circle glyphicon-stack-2x"></i>
+                        <i class="glyphicon glyphicon-facebook glyphicon-stack-1x glyphicon-inverse"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class=" col-xs-8 col-md-8">
+                <p>You have only tapped {{ percentage }}% of your Professional <br> Network on Facebook. Invite your friends to  expand <br> your Professional Connections and move up in your career.
+                </p>
+                <p>
+                    <a data-toggle="modal" href="#modal" data-remote="/invitefriends?{{ ('/landing') | stringurlencode('next') }}"  class="btn btn-primary js-track-analytics" id="professional-connection-invite">Invite Friends</a>&nbsp;
+                    {% if connected_account and connected_account.linkedin == 'not_connected' %}
+                        <a href="/linkedin/login?{{ searchurl | stringurlencode('linkedin_redirect_uri') }}" class="btn btn-info js-inapp-link" target="_top"><b>Connect Linkedin</b></a>
+                    {% endif %}
+                </p>
+                <!--<p><a href="#" >Connect your <i class="sprite icon-linkedin-accout"></i> Account </a></p>-->
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="line1"></hr>
+
+{% if invited | length != 0 %}
+    <div class="col-box">
+            <div class="col-box-heading">
+                <strong>Your Top {% if invited | length > 1 %}{{ invited | length }} {% endif %} Most Professionally Connected Friends </strong>
+            </div>
+            {# INVITED #}
+            <div class="row  top-connections">
+                <div class="col-md-12 img-connection">
+                    {% for x in invited %}
+                        <a href="{{ invited[x].profileUrl }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link js-scrolltop-link">
+                            <img title="{{ invited[x].name }}" alt="{{ invited[x].name }}" src="{{ invited[x].pictureUrl }}" class=" {{ 'first-connection' if (loop.index == 1)  }}" >
+                            <span class="score-text">
+                                <small>
+                                    {{ invited[x].score }} 
+                                    <span class="hidden-inline-xs hidden-inline-sm">{{ 'Professional connections' if (loop.index == 1)  }}</span>
+                                </small>
+                            </span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+    <hr class="line1"></hr>
+{% endif %}
+
+
+{# INVITE #}
+{% if invite %}
+    <div class="col-box">
+        <div class="row">
+            <div class="col-md-12 invite-connections">
+                <strong> Invite Your Friends and Move Up </strong>
+                {% for x in invite %}
+                    <div class="media result-box sm-media">
+                        {# PICTURE #}
+                        <div class="pull-left">
+                            <div class="logo-blk-img">
+                                {{ html.imageWithProfileUrl(invite[x]) }}
+                            </div>
+                        </div>
+
+                        {# DETAILS #}
+                        <div class="media-body">
+                            <div class="pull-right">
+                                {% set sendmsglink = config.MP_URL +'?invite=1&from=' ~ user.fb_id ~ '&friendcount='+ user.friendCount  ~ '&mp_src=mpapp_u&mp_src1=install_dialog&mp_src2=' ~ user.fb_id  %}
+                                <a onclick="window.open('{{JCONSTANTS.FB_SENDMESSAGE_URL}}%26to%3D{{ invite[x].fb_id  }}&to={{ invite[x].fb_id }}&{{ sendmsglink |  stringurlencode('link')}}','','width=500,height=250');" class="btn btn-default js-track-event" role="button" data-category="Invite" data-labels="PCI">Invite</a>
+                            </div>
+                            <div class="">
+                                <h4 class="media-heading">
+                                    <a role="link" href="{{ invite[x].profileUrl }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link">
+                                        {{ invite[x].name }}
+                                    </a>
+                                </h4>
+                                <strong>{{ invite[x].position }}</strong>
+                                <div>
+                                  {% if invite[x].company %}{{ invite[x].company.name }}{% endif %}<br>{{ invite[x].location }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock ajaxcontent %}

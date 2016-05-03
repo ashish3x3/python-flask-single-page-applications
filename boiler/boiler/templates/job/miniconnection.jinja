@@ -1,0 +1,38 @@
+{% import 'elements/macros.jinja' as html %}
+<div class="img-connection">
+    {% for y in candidate %}
+        {% if candidate[y] %}
+            {% if loop.index <= 6 %}
+               {{ html.imageWithProfileUrl(candidate[y], '_blank') }}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if show_invite == true %}
+            <div class="clearfix">
+                {% if connected_account and connected_account.linkedin == 'connected' %}
+                    <a data-toggle="modal" href="#modal" data-remote="/invitefriends?{{ ('/landing') | stringurlencode('next') }}">
+                        <span class="glyphicon-stack glyphicon-1x">
+                            <i class="glyphicon glyphicon-circle glyphicon-stack-2x"></i>
+                            <i class="glyphicon glyphicon-facebook glyphicon-stack-1x glyphicon-inverse"></i>
+                        </span>
+                        Invite friends to find connections.
+                    </a>
+                {% else %}
+                    <a href="/linkedin/login?{{ searchurl | stringurlencode('linkedin_redirect_uri') }}" role="link" target="_top">
+                        <span class="glyphicon-stack glyphicon-1x">
+                            <i class="glyphicon glyphicon-circle glyphicon-stack-2x"></i>
+                            <i class="glyphicon glyphicon-linkedin glyphicon-stack-1x glyphicon-inverse"></i>
+                        </span>
+                        Connect Linkedin.
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% if candidate_count and candidate_count > 6 %}
+        <a href="/job/{{ jobID }}?{{ request.url | stringurlencode('searchurl') }}" class="btn btn-primary more-img more-img-small js-popout-link" {{ "target='_blank'" if jobstab}}>
+           {{ candidate_count }}+
+        </a>
+    {% endif %}
+
+</div>

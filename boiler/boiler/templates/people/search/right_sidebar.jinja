@@ -1,0 +1,113 @@
+{% macro facetlist(facet_list, facet_name ) %}
+    {% for x in facet_list %}
+        {% if loop.index <= constants.MP_FACET_HARD_LIMIT %}
+            <label class="checkbox" title = "{{ facet_list[x].name }}" >
+                <span class="chk-value grayimg">
+                    {% if facet_list[x].icon_url %}
+                        <img src="{{ facet_list[x].icon_url }}" width="13" height="13"></img>
+                    {% else %}
+                        <span class="glyphicon glyphicon-{{ facet_list[x].icon }} tx-15"></span>
+                    {% endif %}
+                    {{ facet_list[x].count }}{{ '+' if facet_list[x].selected == false and request.args.get(facet_name,false) }}
+                </span>
+                {% if facet_list[x].selected == true %}
+                    <a class="remove_facet text-inverse" href="/user/search?{{ pagination.auxparams | replace_custom( facet_name, facet_list[x].value , '') }}">X</a>
+                    <input type="hidden" value="{{ facet_list[x].value }}"  name="{{ facet_name }}" />
+                {% else %}
+                    <input type="checkbox" value="{{ facet_list[x].value }}"  name="{{ facet_name }}" />
+                {% endif %}
+                {{ facet_list[x].name  }}
+            </label>
+        {% endif %}
+    {% endfor %}
+
+    {# SHOW MORE #}
+    <div class="hide">
+        <a href="#" class="js-facet-showmore">Show More</a>
+    </div>
+{% endmacro %}
+
+<form action="/user/search?{{ pagination.searchparams }}&facetswitch=1" method="GET"  class="js-right-form">
+
+    <header class="panel-heading">
+        <div class="pull-left">
+            <strong>
+                <span class="main-connection-count">Filters</span>
+            </strong>
+        </div>
+        <div class="pull-right hide js-facet-main-submit">
+            <div class="checkbox checkbox-inline margin-muted">
+                <a class="js-facet-cancel">Cancel </a>
+            </div>
+            <button class="btn btn-primary btn-sm" type="submit"> Submit</button>
+        </div>
+    </header>
+
+    {# COMPANY #}
+    {% if "profile" in search_result.facets and (search_result.facets.profile | length ) > 0 %}
+    <div class="side-box">
+        <div class="sidebox-content form-sidebar hidefacet">
+            {{ facetlist(search_result.facets.profile, 'facet_profile') }}
+        </div>
+    </div>
+    {% endif %}
+
+    {# COMPANY #}
+    {% if "company" in search_result.facets and (search_result.facets.company | length ) > 0 %}
+        <div class="side-box">
+            <div class="sidebox-content form-sidebar hidefacet">
+                <h4>Company</h4>
+                {{ facetlist(search_result.facets.company, 'facet_company') }}
+            </div>
+        </div>
+    {% endif %}
+
+    {# LOCATION #}
+    {% if "location" in search_result.facets and (search_result.facets.location | length ) > 0 %}
+        <div class="side-box">
+            <div class="sidebox-content form-sidebar hidefacet">
+                <h4>Location</h4>
+                {{ facetlist(search_result.facets.location, 'facet_location') }}
+            </div>
+        </div>
+    {% endif %}
+
+    {# SCHOOL #}
+    {% if "school" in search_result.facets and (search_result.facets.school | length ) > 0 %}
+        <div class="side-box">
+            <div class="sidebox-content form-sidebar hidefacet">
+                <h4>School</h4>
+                {{ facetlist(search_result.facets.school, 'facet_school') }}
+            </div>
+        </div>
+    {% endif %}
+
+    {% for fields in get_params.keys() %}
+        {%if get_params[fields] %}
+            <input type="hidden" name="{{ fields }}" value="{{ get_params[fields] | escape  }}" />
+        {% endif %}
+    {% endfor %}
+
+    {% if request.args.getlist('fbid') %}
+        {% for x in request.args.getlist('fbid') %}
+            <input type="hidden" name="fbid" value="{{ x }}" />
+        {% endfor %}
+    {% endif %}
+
+    <footer class="side-box">
+        <div class="clearfix">
+            <div class="pull-right hide js-facet-main-submit">
+                <div class="checkbox checkbox-inline margin-muted">
+                    <a href="/user/search?{{ fbid_url }}">Cancel </a>
+                </div>
+                <button class="btn btn-primary btn-sm"  type="submit"> Submit</button>
+            </div>
+        </div>
+        <p></p>
+    </footer>
+</form>
+
+
+
+
+

@@ -1,0 +1,364 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">Profile</div>
+{% endblock screen_name %}
+
+
+{% block main_content_row %}
+<div class="row">
+    <div class="col-md-8 col-sm-8" align="center">
+        <div class="btn-group btn-group-justified" data-toggle="buttons" style="width:300px;">
+            <label class="btn mywash-btn">
+                <input class="radio" type="radio" name="personalDetails" id="personalDetails" autocomplete="off" checked> Personal Details
+            </label>
+            <label class="btn mywash-btn active">
+                <input class="radio" type="radio" name="addressDetails" id="addressDetails" autocomplete="off"> Address
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- edit profile div -->
+<div class="row">
+    <div class="personal col-md-8" id="editProfile" style="display: none;">
+        <form id="editprofileform" method="post" action="" >
+
+            {% if user %}
+            <div class="form-group">
+                <label class="control-label">&nbsp; &nbsp; Name</label>
+                <input id="user-name" name="name" data-validation="required" class="profilename" placeholder="Full Name" value="{{ name }}" type="text">
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="control-label">&nbsp; &nbsp; Phone number</label>
+                <input id="user-phone" name="phone" data-validation="required" class="validate-phone" placeholder="Phone number" value="{{ phone }}" type="text" disabled="disabled">
+                {% if phone_is_valid %}
+                    <i class="fa fa-check-circle fa-2x" style="color: green"></i>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">&nbsp; &nbsp; Email ID</label>
+                <input id="user-email" disabled="disabled" name="email" data-validation="required" class="profileemailid" placeholder="Email ID" value="{{ email }}" type="text">
+            </div>
+
+            <div class="form-group margin_0">
+                <label class="control-label"></label>
+                <button id="editProfileSubmit" type="button" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- edit address div #48D1EE-->
+    <input id="count" name="address_count" value='{{ address_list|count }}' type="hidden">
+
+    <div class="containerAddress personal">
+        <div class="addressTable" id="editAddress">
+            <div class="col-md-8">
+                <div class='row'>
+                    <div class="col-md-4">
+                        <div class="panel panel-info" style="border:1px solid #dadada;">
+                            <header class="panel-heading" style="border-bottom: 1px dotted #dadada;">
+                                <div class="row">
+                                    <div class="col-md-10" style="font-weight:bolder;">Add Address</div>
+                                </div>
+                            </header>
+                            <div class="panel-body text-center" style="min-height: 150px;">
+                                <a class="edit-address" data-toggle="modal" style="cursor:pointer; color:#adadad;" title="Add Address">
+                                    <i class="fa fa-plus fa-5x"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% for address_index in address_list %}
+                    <div class='col-md-4'>
+                        <div class="panel panel-info" style="border:1px solid #dadada" index="{{ address_list[address_index]._id }}">
+                            <header class="panel-heading" style="border-bottom: 1px dotted #dadada">
+                                <div class="row">
+                                    <div class="col-md-9 col-xs-9" style="font-weight:bolder;">{{ address_list[address_index].tag }}</div>
+                                    <div class="col-md-3 col-xs-3 text-right">
+                                        {% set target_other = "#Address" + address_index|string %}
+                                        <a  class="edit-address" data-toggle="modal" style="cursor:pointer;" title="Edit Address">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="panel-body" style="min-height: 150px;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p style="font-size: 14px;">
+                                            <b>Landmark:</b> {{ address_list[address_index].address_2 }}
+                                        </p>
+                                        <p style="font-size: 14px;" title="{{ address_list[address_index].apartment_number }}, {{ address_list[address_index].address_1 }}">
+                                            <b>Address:</b>{{ address_list[address_index].apartment_number }},  {{ address_list[address_index].address_1|slice_string(15) }}
+                                        </p>
+                                        {% if address_list[address_index].locality %}
+                                            <p style="font-size: 14px;" title="{{ address_list[address_index].locality.map_string }}"><b>Locality:</b> {{ address_list[address_index].locality.map_string|slice_string(20) }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock main_content_row %}
+
+{% block misc_space %}
+<!-- Add Address Modal -->
+<div class="modal fade confirm" id="address-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-body-heading"><img src="/static/img/big-icons.png"><span>Add new location</span></h2>
+                <form id="submitaddress" method="post" action="/submitaddress">
+                    <div class="input-group">
+                        <label class="control-label" for="tag">Tag this location</label>
+                        <input name="tag" type="text">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="control-label" for="apartment_number">Flat Number</label>
+                        <input name="apartment_number"  class="ember-view ember-text-field" type="text">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="control-label" for="address_2">Landmark</label>
+                        <input name="address_2" class="ember-view ember-text-field" type="text">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="control-label" for="locality">Locality</label>
+                        <input name="locality" class="ember-view ember-text-field" type="text" placeholder="e.g. Koramangala">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="control-label" for="address_1">Address</label>
+                        <textarea name="address_1"></textarea>
+                    </div>
+
+                    
+                    <div class="row add-address-submit text-center">
+                        <button type="button" name="add-address-save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving" class="primary">Save</button>
+                    </div>
+                    <div class="row edit-address-submit hidden-xs hidden-sm">
+                        <div class="col-md-6 col-sm-6 text-right">
+                            <button type="button" name="edit-address-save" class="btn primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+                        </div>
+                        <div class="col-md-6 col-sm-6 text-left">
+                            <button type="button" name="edit-address-delete" class="btn btn-danger" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Deleting">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row edit-address-submit hidden-lg hidden-md">
+                        <div class="col-sm-6 col-xs-6 text-right">
+                            <button type="button" name="edit-address-save" class="btn primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+                        </div>
+                        <div class="col-sm-6 col-xs-6 text-left">
+                            <button type="button" name="edit-address-delete" class="btn btn-danger" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Deleting">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add Address Modal -->
+
+{% endblock misc_space %}
+
+
+{% block extra_js %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&sensor=false"></script>
+<script type="text/javascript">
+    
+    $(function () {
+        $("#editProfileSubmit").click(function(){
+            $(this).button("loading");
+            $.ajax({
+                url: "/editprofile",
+                type: 'post',
+                dataType: 'json',
+                context: this,
+                data: {
+                    name: $("#user-name").val()
+                },
+                success: function(data){
+                    $(this).button("reset");
+                },
+                error: function(){
+                    $(this).button("reset");
+                }
+            })
+        })
+        
+        $('#editAddress').show();
+        $(".radio").change(function () {
+            if (this.id == "personalDetails") {
+                $('#editAddress').stop(true,true).hide();
+                $('#editProfile').stop(true,true).show();
+            } else {
+                $('#editAddress').stop(true,true).show();
+                $('#editProfile').stop(true,true).hide();
+            }
+        });
+
+        var locality_info = null;
+        var northEast = new google.maps.LatLng(13.094677, 77.794881);
+        var southWest = new google.maps.LatLng(12.788851, 77.405553);
+        var bounds = new google.maps.LatLngBounds(southWest, northEast);
+        var options = {
+            bounds: bounds,
+            regions: ['sublocality'],
+            // types: ['(cities)'],
+            componentRestrictions: {country: 'in'}
+        }
+        var places = new google.maps.places.Autocomplete($('#submitaddress input[name="locality"]')[0], options);
+        google.maps.event.addListener(places, 'place_changed', function() {
+            var place = places.getPlace();
+            locality_info = {
+                'map_string': place.formatted_address, 
+                'lat': place.geometry.location.lat(),
+                'lng': place.geometry.location.lng(),
+            }
+            console.log(locality_info)
+        });
+
+        function resetAddressForm(){
+            $('#submitaddress input[name="tag"]').val(''),
+            $('#submitaddress input[name="apartment_number"]').val(''),
+            $('#submitaddress input[name="address_2"]').val(''),
+            $('#submitaddress textarea[name="address_1"]').val('')
+            $('#submitaddress textarea[name="locality"]').val('')
+            if (locality_info) locality_info = null;
+        }
+
+        var win_width = $(window).width();
+
+        $(".edit-address").click(function(){
+            var address_index = $(this).parents(".panel").attr('index');
+            if (win_width < 768) {
+                if (address_index) {
+                    window.location = "/address/" + address_index;
+                }else{
+                    window.location = "/address";
+                }
+                
+                return;
+            };
+            resetAddressForm();
+            if (address_index) {
+                $("#address-modal .add-address-submit").hide();
+                $("#address-modal .edit-address-submit").show();
+                $.ajax({
+                    url: "/dashboard/address/" + address_index,
+                    type: 'get',
+                    dataType: 'json',
+                    context: this,
+                    success: function(data){
+                        $('#submitaddress input[name="tag"]').val(data.data[0].tag);
+                        $('#submitaddress input[name="apartment_number"]').val(data.data[0].apartment_number);
+                        $('#submitaddress input[name="address_2"]').val(data.data[0].address_2);
+                        $('#submitaddress textarea[name="address_1"]').val(data.data[0].address_1);
+                        $('#submitaddress input[name="locality"]').val(data.data[0].locality.map_string);
+                        locality_info = data.data[0].locality;
+                    },
+                    error: function(xhr){
+                        Toast.show({
+                            message: xhr.responseJSON.error,
+                            duration: Toast.DURATION_LONG,
+                        });
+                    }
+                })
+                $("#address-modal").attr('index', address_index);
+                $("#address-modal .modal-body-heading span").text("Edit location")
+                $("#address-modal").modal("show")
+            }else{
+                $("#address-modal").attr('index', '');
+                $("#address-modal .add-address-submit").show();
+                $("#address-modal .edit-address-submit").hide();
+                $("#address-modal .modal-body-heading span").text("Add new location")
+                $("#address-modal").modal("show")
+            }
+        })
+
+        // Add new address/ Edit address
+        $('#submitaddress button[name="add-address-save"], #submitaddress button[name="edit-address-save"]').click(function(event){
+            var address_index = $(this).parents(".modal").attr('index');
+            var url = "/dashboard/address", type = 'post';
+
+            if (address_index) {
+                url = "/dashboard/address/" + address_index;
+                type = 'put';
+            }
+            $(this).button('loading');
+            $.ajax({
+                url: url,
+                type: type,
+                dataType: 'json',
+                context: this,
+                data: {
+                    tag: $('#submitaddress input[name="tag"]').val(),
+                    apartment_number: $('#submitaddress input[name="apartment_number"]').val(),
+                    address_2: $('#submitaddress input[name="address_2"]').val(),
+                    address_1: $('#submitaddress textarea[name="address_1"]').val(),
+                    locality: JSON.stringify(locality_info),
+                    user_id: "{{user_id}}",
+                },
+                success: function(data){
+                    location.reload();
+                },
+                error: function(xhr){
+                    Toast.show({
+                        message: xhr.responseJSON.error,
+                        duration: Toast.DURATION_LONG,
+                    });
+                    $(this).button('reset');
+                }
+            })
+        })
+        
+        // Add new address
+        $('#submitaddress button[name="edit-address-delete"]').click(function(){
+            var address_index = $(this).parents(".modal").attr('index');
+            $(this).button('loading');
+            $.ajax({
+                url: "/dashboard/address/" + address_index,
+                type: 'delete',
+                dataType: 'json',
+                success: function(data){
+                    location.reload();
+                },
+                error: function(xhr){
+                    Toast.show({
+                        message: xhr.responseJSON.error,
+                        duration: Toast.DURATION_LONG,
+                    });
+                    $(this).button('reset');
+                }
+            })
+        })
+
+        if($("#editAddress .panel").length == 1) {
+            $("a.edit-address").trigger('click');
+        }
+
+
+    });
+
+
+
+</script>
+{% endblock extra_js %}

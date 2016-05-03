@@ -1,0 +1,43 @@
+<ul class="nav navbar-nav" id="main-menu">
+    <li {% if section and section.main =='Home'%} class ="active" {% endif %}><a href="/landing">Home</a></li>
+    <li {% if section and section.main =='jobs' %} class ="active" {% endif %}><a href="/jobs/recommended/0">Jobs</a></li>
+    <li {% if section and section.main =='people' %} class ="active" {% endif %}><a href="/user/search?fbid={{ user.fb_id }}">People</a></li>
+    <li {% if section and section.main =='profile'%} class ="active" {% endif %}><a href="/profile/{{ user.fb_id }}">Profile</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown">
+		<a role="button" data-toggle="dropdown" class="dropdown-toggle js-user-dropdown" id="dropdown_user_pictureurl">
+			{{ user.name }} &nbsp;
+			<img src="{{ user.pictureUrl }}" alt="{{ user.name }}" title="{{ user.name }}" height="25" />
+			<b class="caret"></b>
+		</a>
+
+		<ul class="dropdown-menu" role="menu" >
+			<li><a href="/jobs/saved" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link">
+				My Jobs
+			</a></li>
+			<li><a href="/user/saved/0" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link">
+				Saved Profiles
+			</a></li>
+			<li><a href="/settings/jobpreferences" class="js-main-container-link">
+				Settings
+			</a></li>
+			<li><a href="/messages/notifications" class="js-main-container-link">
+				Messages
+			</a></li>
+			{% if user.incentivise_and_win %}
+				<li><a href="/introductions">
+					Introductions
+				</a></li>
+			{% endif %}
+			{% if user.pagetab %}
+				<li><a href="/pagetab/admin/jobs">
+					Hiring Dashboard
+				</a></li>
+			{% endif %}
+			<li><a href="/logout">
+				Logout
+			</a></li>
+		</ul>
+	</li>
+</ul>

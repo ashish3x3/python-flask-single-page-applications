@@ -1,0 +1,707 @@
+{% extends "layout/partner_customer_layout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">
+    <img class="header_image_icon" src="/static/img/schedule_icon.png"><span>Schedule a wash</span>
+</div>
+{% endblock screen_name %}
+
+
+
+{% block main_content %}
+<div class="col-md-8 partner-customer-order-page">
+    <div id="partnerCustomerOrderSchedule" class="col-md-8">
+        <h4 style="width: 100%; color: #B3B3B3">&nbsp; &nbsp; Schedule order for {{customer.name}}</h4>
+        <form id="place_partner_customer_order" method="post" action="" >
+            <div class="form-group">
+                <label class="control-label" for="service-type" >&nbsp; &nbsp; Service type</label>
+                <div id="service-type" class="btn-group" data-toggle="buttons" style="width:53%;">
+                    <label class="btn btn-primary mywash-btn active"  value="regular" style="width:46%" >
+                        <input  type="radio" name="service" value="regular" id="" > Regular
+                    </label>
+                    <label class="btn btn-primary mywash-btn" value="express" style="width:47%" data-toggle="modal" id=""> 
+                        <input type="radio" name="service" value="express" id=""> Express
+                    </label>
+                </div>
+            </div>
+            {% if address_list %}
+            <div class="form-group">
+                <label class="control-label" for="editAccountFirstname">&nbsp; &nbsp; Pick up location</label>
+                <select id="address_id" name="address_id" rel="popover" data-validation="required">
+                    {% for x in address_list %}
+                        {% set address_id = "address_"+x|string %}
+                        {% if x == 0 %}
+                            <option id="{{ address_id }}" value="{{address_list[x]._id}}" class="address-popover" {% if address_list[x].assigned_hub %}hub_assigned="true"{% endif %} index="{{x}}">
+                                {{address_list[x].tag}}
+                            </option>
+                        {% else %}
+                            <option id="{{ address_id }}" value="{{address_list[x]._id}}" class="address-popover" 
+                            {% if address_list[x].assigned_hub %}hub_assigned="true"{% endif %} index="{{x}}">
+                                {{address_list[x].tag}}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="popover fade right in hidden-xs add_popup">
+                    <div class="arrow" style="top:34%;"></div>
+                    <h3 class="popover-title"></h3>
+                    <div class="popover-content"></div>
+                </div>
+                <a class="add_address_mob" href="/partner/customer/profile/{{customer_id}}"><img src="/static/img/add-location-mobile.png"></a>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label class="control-label" for="editPickUpLocation">&nbsp; &nbsp; Pick up location</label>
+                <select id="address_id" name="address_id" data-validation="required" disabled="disabled">
+                    <option value="">Add your Location</option>
+                </select>
+                <a class="add_address" id="add_new_location" href="/partner/customer/profile/{{customer_id}}">+ Add new location</a>
+                <a class="add_address_mob" href="/partner/customer/profile/{{customer_id}}"><img src="/static/img/add-location-mobile.png"></a>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="control-label" for="washtype">&nbsp; &nbsp; Wash type</label>
+                <div id="washtype" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary mywash-btn active exp_btn" value="laundry">
+                        <input id="wash" type="checkbox"> Wash &amp; Iron
+                    </label>
+                    <label id="dry_clean" class="btn btn-primary mywash-btn" value="dryclean">
+                        <input type="checkbox" id="dry_clean"> Dry Cleaning
+                    </label>
+                    <label id="iron" class="btn btn-primary mywash-btn exp_btn" value="iron">
+                        <input type="checkbox"> Iron
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="editAccountLastname">&nbsp; &nbsp; Pickup Date</label>
+                <input id="pickup_date" name="pickup_date" class="ember-view ember-text-field datepicker" placeholder="Pick a date" type="text">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="editAccountEmail">&nbsp; &nbsp; Pickup Time Slot</label>
+                <select id="pickup_time" name="pickup_time" data-validation="required"></select>
+            </div>
+            <div class="form-group" style="position:relative">
+                <label class="control-label" for="editAccountLastname">&nbsp; &nbsp; Delivery Date</label>
+                <input id="schedule_date" name="schedule_date" data-validation="required" class="ember-view ember-text-field deliverydatepicker" placeholder="Pick a delivery date" type="text">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="editAccountEmail">&nbsp; &nbsp; Delivery Time</label>
+                <select id="schedule_time" name="schedule_time" data-validation="required">
+                </select>
+            </div>
+            <div class="form-group margin_0">
+                <label class="control-label" for="editAccountPhone"></label>
+                <button  id="partner_customer_order_submit" type="submit" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Reviewing Order">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="partnerCustomerApplyCoupon" class="col-md-8" style="display:none">
+        <div id="coupon-hero" class="hidden-xs">
+            <h3>&nbsp;</h3>
+        </div>
+
+        <div id="reviewOrder">
+            <div class="panel">
+                <div class="panel-body" style="background-color: rgb(249, 249, 249);padding: 10px 20px;border: 1px solid #E5E5E5;border-radius: 2%;">
+                    <div class="row">
+                        <div class="pickup-drop-block col-md-4 pickup-drop-block-dot-border" style="border:0;" id= "review_form_pick_up">
+                        </div>
+
+                        <div class="pickup-drop-block col-md-4 pickup-drop-block-dot-border" style="border:0;" id= "review_form_delivery_details">
+                        </div>
+                        <div class="pickup-drop-block col-md-4" style="border:0;" id="review_form_address_details">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <form id="partner_customer_verifycoupon" method="post" action="">
+                    <div class="form-group">
+                        <label class="control-label text-center" for="addCoupon"><h4>Coupon</h4></label>
+                        <input id="partner_customer_coupon" name="partner_customer_coupon" class="" type="text" placeholder="Optional" style="border:1px solid #000000">
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6 col-xs-6 col-sm-6 text-right">
+                            <button id="partner_customer_edit_order" type="button" data-ember-action="13" class="primary col-md-10 col-xs-10 col-sm-10" style="position:relative;" value="" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Edit order">Edit Order</button>
+                        </div>
+                        <div class="col-md-6 col-xs-6 col-sm-6">
+                            <button  id="partner_customer_validate_coupon" type="button" data-ember-action="13" class="primary col-md-10 col-xs-10 col-sm-10" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Placing order">Place Order</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+</div>
+
+{% endblock main_content %}
+
+
+{% block misc_space %}
+{% if customer %}
+<div class="modal fade confirm" id="express-conditions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-body-heading"><span>Express Service (T&amp;C)</span></h2>
+                <div>
+                    <p>Detailed tnc available <a href="/terms#express" target="_blank">here</a>.</p>
+                    <ul>
+                        <li>
+                            <p>Express Wash price = 2x Regular Wash Price</p>
+                        </li>
+
+                        <li>
+                            <p>We will be delivering clothes in 24 Hours at the best case.</p>
+                        </li>
+                        <li>
+                            <p>Offers running for "Regular" are not applicable for "Express".</p>
+                        </li>
+                    </ul> 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="partner_customer_order_submit" type="submit" class="primary" style="position:relative;" value="accept" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade confirm" id="ask-locality" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"></div>
+            <div class="modal-body">
+                <h2><img src="/static/img/big-icons.png">Locality</h2>
+                <div class="input-group">
+                    <input type="text" style="width:100%;" id="schedule-page-pick-locality" placeholder="Enter location e.g. Koramangala">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button style="width: 150px; padding:5px 10px;" id="save-locality" type="button" data-ember-action="13" class="btn btn-md primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade confirm" id="coupon-conditions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div id="coupon_terms_conditions">
+            <form id="coupon_terms" method="post" action="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="modal-body-heading"><span>Terms &amp; Conditions</span></h2>
+                        <div>
+                            <ul id="terms_list">
+
+                            </ul> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="decline_terms" type="button" class="primary" style="position:relative;" value="decline" data-dismiss="modal">Decline</button>
+                        <button id="partner_customer_accept_terms" type="button" class="primary" style="position:relative;" value="accept" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Placing order">Accept</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock misc_space %}
+
+
+{% block extra_js %}
+
+<script type="text/javascript">
+    var partner_customer_order_form_data = {};
+    var address_list = {{address_list|tojson}};
+    function changeAddressPopup(){
+        var index = parseInt($("#address_id").find("option:selected").attr('index'));        
+
+        var data = address_list[index];
+        if (!data) return;
+        var landmark = $("<p>").append("<b>Landmark-</b> " + data.address_2);
+        
+        var address = $("<p>").append("<b>Address-</b> " + data.apartment_number + ", " + data.address_1);
+        var locality_local = $("<p>");
+        if (data.locality) locality_local.append("<b>Locality-</b> " + data.locality.map_string);
+
+        var content = $("<div>").append(landmark).append(address)
+        if (data.locality) content.append(locality_local);
+        $('#place_partner_customer_order .popover').css({'left': $("#address_id").position().left + $("#address_id").outerWidth()});
+        $('#place_partner_customer_order .popover').show();
+        $('#place_partner_customer_order .popover .popover-title').text(data.tag);
+        $('#place_partner_customer_order .popover .popover-content').html(content);
+    }
+
+
+    function selectService(event){
+        var value = $(event.currentTarget).attr('value');
+        if (value == 'regular') {
+            selectedServiceType = 'regular';
+            enableDryClean();
+            resetButtonWidth();
+            pickupDateChange();
+
+        } else if (value == 'express') {
+            selectedServiceType = 'express';
+            disableDryClean();
+            changeButtonWidth();
+            resetDryClean();
+            pickupDateChange();
+        }
+        
+    }
+
+    function adjustWashtype(){
+        var win_width = $(window).width();
+        if (win_width < 768) {
+            $("#washtype").addClass("btn-group-justified").css({'width': '95%'});
+            $("#service-type").addClass("btn-group-justified").css({'width': '95%'});
+            $("#address_id").parent().removeClass('form-group').addClass('input-group');
+        } else if (win_width >= 768 && win_width < 992){
+            $("#washtype").css({'width': '54%'});
+            $("#service-type").css({'width': '54%'});
+            $("#address_id").parent().removeClass('input-group').addClass('form-group');
+        } else if (win_width >= 992 && win_width < 1200){
+            $("#washtype").css({'width': '54%'});
+            $("#service-type").css({'width': '54%'});
+            $("#address_id").parent().removeClass('input-group').addClass('form-group');
+        }else {
+            $("#washtype").css({'width': '54%'});
+            $("#service-type").css({'width': '54%'});
+            $("#address_id").parent().removeClass('input-group').addClass('form-group');
+        }
+    }
+
+    var timeslot_defer = $.ajax({
+        url: "/timeslots",
+        type: 'get',
+        dataType: 'json'
+    });
+
+    $(function(){
+        if (moment().format("YYYY-MM-DD") == '2015-09-26') {
+            $('#service-type').parents('.form-group').hide();
+        };
+        adjustWashtype();
+        changeAddressPopup();
+
+        $("#service-type label").change(selectService);
+
+        $("#address_id").change(function(){
+            changeAddressPopup()
+        })
+
+        $('#service-type label[value="express"]').click(function(){
+            $("#express-conditions").modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+        })
+
+        $("#partner_customer_coupon").keydown(function(event){
+            if (event.keyCode == 13)
+                return false;
+        })
+
+        $("#address_id").change(function(){
+            if (!$('#address_id').is(":disabled")){
+                if (!checkLocationHubAssigned()) {
+                    $("#ask-locality").modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true
+                    });
+                }
+            }
+        })
+
+        $("#address_id").change();
+
+        var locality_info = null;
+        var northEast = new google.maps.LatLng(13.094677, 77.794881);
+        var southWest = new google.maps.LatLng(12.788851, 77.405553);
+        var bounds = new google.maps.LatLngBounds(southWest, northEast);
+        var options = {
+            bounds: bounds,
+            regions: ['sublocality'],
+            componentRestrictions: {country: 'in'}
+        }
+        var places = new google.maps.places.Autocomplete($('#schedule-page-pick-locality')[0], options);
+        google.maps.event.addListener(places, 'place_changed', function() {
+            var place = places.getPlace();
+            locality_info = {
+                'map_string': place.formatted_address, 
+                'lat': place.geometry.location.lat(),
+                'lng': place.geometry.location.lng(),
+            }
+        });
+
+        $("#save-locality").click(function(event){
+            if (!locality_info) return false;
+            $(this).button('loading');
+            $.ajax({
+                url: "/dashboard/address/" + $("#address_id").val(),
+                type: 'put',
+                dataType: 'json',
+                context: this,
+                data: {
+                    'locality': JSON.stringify(locality_info)
+                },
+                success: function(data){
+                    $("#address_id option:selected").attr('hub_assigned', "true");
+                    var index = parseInt($("#address_id option:selected").attr('index'));
+                    address_list[index]['locality'] = locality_info;
+                    $('#schedule-page-pick-locality').val('');
+                    $(this).button('reset');
+                    $("#ask-locality").modal("hide");
+                },
+                error: function(xhr, status, error){
+                    $(this).button('reset');
+                }
+            })
+
+        })
+
+        var active_timeslots = [];
+
+        timeslot_defer.done(function(data){
+            all_timeslots = data;
+            $.each(data.data, function(index, value){
+                active_timeslots.push(value);
+            })
+
+            $("#schedule_date").change(deliveryDateChange);
+            $("#pickup_time").change(setTurnAroundTime);
+
+            // Event when a washtype is selected
+            $("#washtype label").click(washtypeLabelChange)
+
+            $("#pickup_date").change(pickupDateChange);
+
+            $('#service-type label[value="regular"]').trigger('click');
+            if (from_picker){
+                from_picker.set('select', moment().toDate());
+                $("#pickup_time").change();
+            }
+        })
+    });
+
+    function disableDryClean(){
+        $("#dry_clean").addClass("hide");
+    }  
+
+    function enableDryClean(){
+        $("#dry_clean").removeClass("hide");
+    }
+
+    function changeButtonWidth(){
+        $('#washtype').children().eq(0).css("width", "46%");
+        $('#washtype').children().eq(2).css("width", "47%");
+    }
+
+    function resetButtonWidth(){
+        $('#washtype').children().eq(0).css("width", "30.5%");
+        $('#washtype').children().eq(1).css("width", "30.5%");
+        $('#washtype').children().eq(2).css("width", "32.5%");
+    }
+    function resetDryClean(){
+        $('#washtype').children().eq(1).removeClass('active'); 
+
+    }
+
+    function checkLocationHubAssigned(){
+        return $("#address_id option:selected").attr('hub_assigned') == 'true'  ? true : false;
+    }
+
+</script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&sensor=false"></script>
+
+<!-- Functionality scripts -->
+  <script type="text/javascript" charset="utf-8" async defer>
+    $(function(){
+
+      $('#partner_customer_order_submit').click(function(e){
+        console.log('partner_user_order_submit');
+        e.preventDefault();
+        var submit_button = $("#partner_customer_order_submit").button('loading');
+        var coupon_field = $("#partner_customer_coupon").val();
+        var data = $( "form#place_partner_customer_order" ).serializeArray();
+
+        var _pickupSelect = document.getElementById("pickup_time");
+        var pickup_time_slot = _pickupSelect.options[_pickupSelect.selectedIndex].text;
+
+        var _scheduleSelect = document.getElementById("schedule_time");
+        var schedule_time_slot = _scheduleSelect.options[_scheduleSelect.selectedIndex].text;
+
+        partner_customer_order_form_data['_pickup_time_slot'] = pickup_time_slot;
+        partner_customer_order_form_data['_schedule_time_slot'] = schedule_time_slot;
+        var _addressId = document.getElementById("address_id");
+        var address_select = _addressId.options[_addressId.selectedIndex].index;
+
+        var json = {}, washtypes = [];
+        $("#washtype label.active").each(function(index, element){
+            washtypes.push($(element).attr("value"));
+        });
+
+        $.each(data, function(index, value) {
+            json[this.name] = this.value || '';
+        });
+
+        //console.log(json);
+        //alert(json);
+
+        data.push({
+            name: "washtypes",
+            value: washtypes
+        })
+        data.push({
+            name: "schedule_time",
+            value: $("#schedule_time").val()
+        })
+
+        $.each(data, function(index, value) {
+            json[this.name] = this.value || '';
+        });
+        data.push({
+            name:'customer_id',
+            value: '{{customer_id}}'
+        })
+
+        console.log(data)
+
+        $.ajax({
+            type: 'POST',
+            url: '/partner/customer/ordersubmit',
+            data: data,
+            dataType: 'json',
+
+            success: function(results) {
+                console.log('results');
+                console.log(results);
+                order_data = results.order_form_data;
+                console.log('order_data');
+                console.log(order_data);
+
+                $.each(order_data, function(index,val){
+                    partner_customer_order_form_data[index] = val;
+                })
+                
+                $("#partnerCustomerOrderSchedule").css("visibility","hide");
+                $("#partnerCustomerOrderSchedule").hide('slow');
+                $("#partnerCustomerApplyCoupon").show('slow');
+
+                $("#review_form_pick_up").empty();
+                $("#review_form_pick_up").append("<h4>Pick up</h4>");
+                $("#review_form_pick_up").append("<p>"+partner_customer_order_form_data['pickup_date']+"</p>");
+                $("#review_form_pick_up").append("<p>"+partner_customer_order_form_data['_pickup_time_slot']+"</p>");
+
+                $("#review_form_delivery_details").empty();
+                $("#review_form_delivery_details").append("<h4>Delivery</h4>");
+                $("#review_form_delivery_details").append("<p>"+partner_customer_order_form_data['schedule_date']+"</p>")
+                $("#review_form_delivery_details").append("<p>"+partner_customer_order_form_data['_schedule_time_slot']+"</p>");
+                $("#review_form_address_details").empty();
+                $("#review_form_address_details").append("<h4>Pickup/Delivery Address</h4>");
+                $("#review_form_address_details").append("<p>"+address_list[address_select]['apartment_number']+", "+address_list[address_select]['address_1']+"</p>");
+                $("#review_form_address_details").append("<p>"+address_list[address_select]['locality']['map_string']+"</p></br>");
+                
+                $("#review_form_address_details").append("<p>"+partner_customer_order_form_data['washtypes'].toUpperCase().bold()+"</p>");
+                $("#review_form_address_details").append("<p>"+partner_customer_order_form_data['service'].toUpperCase().bold()+"</p>");
+                
+                submit_button.button('reset');
+
+            },
+            error: function(xhr, status, error){
+                console.log('Something went wrong');
+                console.log(error);
+                Toast.show({
+                          message  : xhr.responseJSON.error,
+                          duration    : Toast.DURATION_LONG,
+                         // background:'#428bca',
+                        }); 
+                    submit_button.button('reset');
+                    $( "form#place_partner_customer_order span.loader_circle" ).hide();
+                    $("#partner_customer_coupon").val("");
+            }
+        });
+    });
+
+    
+    $('#partner_customer_edit_order').click(function(e){
+        $("#partnerCustomerApplyCoupon").hide('slow');
+        $("#partnerCustomerOrderSchedule").show('slow');
+    });
+
+    $('#partner_customer_validate_coupon').click(function(e){
+        e.preventDefault();
+        var submit_button = $("#partner_customer_validate_coupon").button('loading');
+        var coupon_field = $("#partner_customer_coupon").val();
+        var data = $( "form#partner_customer_verifycoupon" ).serializeArray();
+
+        
+        var json = {}, washtypes = [];
+        $("#washtype label.active").each(function(index, element){
+            washtypes.push($(element).attr("value"));
+        });
+
+        $.each(data, function(index, value) {
+            json[this.name] = this.value || '';
+        });
+
+        //console.log(json);
+        //alert(json);
+
+        data.push(
+            {order_value: net_amount}
+        );
+        data.push({
+            name: "washtypes",
+            value: washtypes
+        });
+        $.each( partner_customer_order_form_data, function(index,val){
+            data.push({
+                name: index,
+                value: val
+            });
+        });
+
+        data.push({
+            name:'customer_id',
+            value: '{{customer_id}}'
+        })
+
+        console.log(data)
+        if (coupon_field){
+            $.ajax({
+                type: 'POST',
+                url: '/partner/couponverify',
+                data: data,
+                dataType: 'json',
+
+                success: function(results) {
+
+                    $("#terms_list").html('');
+                    $.each(results.terms, function(i, field){
+                        $("#terms_list").append("<li><p>"+field+"</p></li>")
+                    });
+                    
+                    $("#coupon-conditions").modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true
+                    });
+                    submit_button.button('reset')
+
+                },
+                error: function(xhr, status, error){
+                    console.log('Something went wrong');
+                    console.log(xhr);
+                    Toast.show({
+                              message  : xhr.responseJSON.error,
+                              duration    : Toast.DURATION_LONG,
+                             // background:'#428bca',
+                            }); 
+                    submit_button.button('reset');
+                    $( "form#partner_customer_verifycoupon span.loader_circle" ).hide();
+                    $("#partner_customer_coupon").val("");
+
+                }
+            });
+        }else{
+            submit_button = $("#partner_customer_validate_coupon").button('loading');
+            //alert("completing order");
+            $.ajax({
+            type: 'POST',
+            url: '/partner/completeorder',
+            data: data,
+            dataType: 'json',
+
+            success: function(results) {
+                    var order_id = results.order.id;
+                    if(clothes_added == 1){
+                        self.postOrderItems(order_id);
+                    }
+
+                    // initializes and invokes show immediately
+                    setTimeout(function() {
+                        location.href="/partner/getorder/{{customer_id}}/" + order_id;
+                    }, 1000);                      
+
+            },
+            error: function(xhr, status, error){
+                 Toast.show({
+                          message  : xhr.responseJSON.error,
+                          duration    : Toast.DURATION_LONG,
+                         // background: '#428bca',
+                        }); 
+                console.log('Something went wrong');
+                submit_button.button('reset');
+                $( "form#partner_customer_verifycoupon span.loader_circle" ).hide();
+                $("#partner_customer_coupon").val("");
+
+            }
+        });
+        }
+    });
+
+    $('#partner_customer_accept_terms').click(function(e){
+        var submit_button = $("#partner_customer_accept_terms").button('loading');
+        var coupon_field = $("#partner_customer_coupon").val();
+        var data = $( "form#partner_customer_verifycoupon" ).serializeArray();
+
+        $.each( partner_customer_order_form_data, function(index,val){
+            data.push({
+                name: index,
+                value: val
+            });
+        });
+
+        order_form_data = {};
+        $.ajax({
+            type: 'POST',
+            url: '/partner/completeorder',
+            data: data,
+            dataType: 'json',
+            success: function(results) {
+                var order_id = results.order.id;
+                if(clothes_added == 1){
+                    self.postOrderItems(order_id);
+                }
+
+                // initializes and invokes show immediately
+                setTimeout(function() {
+                    location.href="/partner/getorder/{{customer_id}}/" + order_id;
+                }, 1000);                      
+            },
+            error: function(xhr, status, error){
+                 Toast.show({
+                          message  : xhr.responseJSON.error,
+                          duration    : Toast.DURATION_LONG,
+                         // background: '#428bca',
+                        }); 
+                console.log('Something went wrong');
+                submit_button.button('reset');
+                $( "form#partner_customer_verifycoupon span.loader_circle" ).hide();
+                $("#partner_customer_coupon").val("");
+
+            }
+        });
+    });
+
+});
+  </script>
+{% endblock %}

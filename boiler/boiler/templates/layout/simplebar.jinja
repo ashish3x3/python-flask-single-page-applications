@@ -1,0 +1,43 @@
+{% import 'elements/macros.jinja' as html %}
+<!doctype html>
+
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="" lang="en" xml:lang="en">
+<!--<![endif]-->
+<head>
+    {% include 'elements/head.jinja' %}
+</head>
+<body>
+
+    {#--top navigation start--#}
+
+    {#--top navigation end--#}
+    <main class="main-container landing-container" style="margin-top:0">
+        <div class="banner-talentsearch col-md-12 clearfix padding-35 unsub">
+            <h4 class="pull-left">{{ heading }}</h4>
+            <img class="pull-right" src=" {{ mainLogoUrl or '/static/icons/210x36.png' }}" alt="MyParichay" title="MyParichay" />
+        </div>
+        {#--content start-#}
+        {% block main_content %}
+            <div class="container" id="maincontainer">
+               {% block content %} {% endblock content  %}
+            </div>
+        {% endblock main_content  %}
+        {#--content end-#}
+    </main>
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    </div>
+    <div class="loader-lg tx-white popupLoader hidden" id="modal-loader">
+        <span class="glyphicon glyphicon-spinner glyphicon-spin"></span>
+        <div class="text-muted" style="font-size:12px;"></div>
+    </div>
+    {#--footer start--#}
+    {% include 'elements/postscript.jinja' %}
+ {#--footer end--#}
+</body>
+</html>
+

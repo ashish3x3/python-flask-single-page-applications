@@ -1,0 +1,21 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block content %}
+	<div class="js-row-each">
+		{% include 'companyparichay/searchbox.jinja' %}
+		<div class="js-replace-wrapper">
+			{% block jobstabcontent %}
+			<div class="js-autofill" id='cTabIframeChild' data-css-loc="{{ cssLocation if cssLocation }}" data-html-location="{{htmlLocation if htmlLocation}}" data-parent-url="{{parentUrl}}"  href="/jobstab/job?{{ searchparams }}&sub=1{{'&isCareerSite=True' if isCareerSite}}" data-loading-selector="none">
+				<div class="loader-lg"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+			</div>
+			<!-- <div class="js- autofill" href="">
+				<div class="pull-center text-center" >
+					<img src="/static/img/loadery.gif" border="0" />
+					<h3 class="color_blue">Finding Jobs </h3>
+				</div>
+			</div>-->
+			{% endblock jobstabcontent %}
+		</div>
+	</div>
+	<div id="loader-cs" class="loader-lg hidden"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% if show and (show.multicontact or show.multisearch or show.multisave)  %}
+<div class="pull-left">
+     <div class="btn-group checkbox-inside-saved">
+            <div class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" >
+                <span class="glyphicon glyphicon-square-o js-trigger-multi-select tx-14" id="js-bulk-select"></span>
+                <span class="caret cartmargin"></span>
+            </div>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="js-multi-select-all" data-tag="all">All</a></li>
+                <li><a href="#" class="js-multi-select-all" data-tag="mp">MyParichay candidates</a></li>
+                {% if section.sub == "profile_saved" %}
+                    <li><a href="#" class="js-multi-select-all" data-tag="nc">Not Contacted</a></li>
+                {% endif %}
+            </ul>
+    </div> &nbsp;&nbsp;
+</div>
+{% endif %}
+
+<div class="pull-left lineheight-26">
+        {% set count = search_result.selected_profile_count if search_result.selected_profile_count is defined else 0 %}
+        {% if pagination %}
+            <strong class="js-selected-profile-count">{{ count if count > 0 }}</strong>
+            <span class="js-selected-profile-text">
+            {% if count > 0 %}
+                {{ 'profile' | pluralize(pagination.total_results) }} selected of 
+            {% endif %}
+            </span>
+            <strong class="main-connection-count">{{ pagination.total_results }}</strong> {{ 'profile' | pluralize(pagination.total_results) }} 
+        {% else %}
+            <strong>{{ section.title }}</strong>
+        {% endif %}
+    </strong>
+</div>
+
+{% include 'people/multiselected_user_options.jinja' %}

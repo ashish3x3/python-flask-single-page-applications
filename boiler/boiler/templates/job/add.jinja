@@ -1,0 +1,158 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% elif section.main == 'manage_career_tab' %}
+    {% extends "pagetab/main.jinja" %}
+{% else %}
+    {% extends "job/listing/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+<br>
+{% if section.main == 'manage_career_tab' %}
+    <form action="{{ url }} " method="POST" class="form-horizontal js-post-job container">
+{% else %}
+    <form action="/jobs/edit/{{ jobId or 0 }}" method="POST" class="form-horizontal  js-post-job container">
+{% endif %}
+    {# JOB TITLE #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_headline" title = "Job Title">Job Title:</label>
+        <div class="col-md-6">
+            <input type="text" required id = "jobadd_headline" name="headline" value = "{{ job.headline }}" placeholder="" class="form-control" autofocus />
+        </div>
+    </div>
+
+    {# Company #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_company" title="Company">Company:</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" value="{{ job.company.name if job.company }}" {% if user.pagetab %}readonly{% endif %} required id="jobadd_company" name="company" data-searchtype="page"  />
+            <input type="hidden" name="company_id" class="prefill" value="{{ job.company.fb_id if job.company}}"/>
+        </div>
+    </div>
+
+    {# Location #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_location" title="Location">Location:</label>
+        <div class="col-md-6">
+            <input class="form-control fb-autocomplete" type="text"  value="{{ job.location.name if job.location }}" required id="jobadd_location" name="location"  data-searchtype="adcity"  />
+            <input type="hidden" name="location_id"  class="prefill" placeholder="City" value="{{ job.location.fb_id if job.location }}"/>
+        </div>
+    </div>
+
+    {# Experience #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_experience" title="Experience">Experience:</label>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <select class="form-control" name="experience_min" id="jobadd_experience" >
+                        <option value="-1">Min Exp</option>
+                            {% for x in  range(0,16) %}
+                                <option value="{{ x }}" {% if 'experience' in job and x == (job.experience.min | int) %} selected {% endif %} >
+                                    {{ x }}
+                                </option>
+                            {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" name="experience_max" >
+                        <option value="-1">Max Exp</option>
+                            {% for x in range(1,16) %}
+                                <option value="{{ x }}" {% if 'experience' in job and x == (job.experience.max | int) %} selected {% endif %} >
+                                    {{ x }}
+                                </option>
+                            {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Job Details #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_description" title="Job Details">Job Details:</label>
+        <div class="col-md-6">
+            <textarea rows="13" class="form-control" name="description" id="jobadd_description" required>{{ job.description }}</textarea>
+        </div>
+    </div>
+
+    {# Referral Bonus  #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_referral_amount" title="Referral Bonus">Referral Bonus (in INR):</label>
+        <div class="col-md-6">
+            <input class="form-control" type="number" value="{{ job.referral_amount }}" max="900000" id="jobadd_referral_amount" name="referral_amount" step="1000" />
+        </div>
+    </div>
+
+    {# Job Closes On #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_closing_date" title="Job Closes On">Job Closes On:</label>
+        <div class="col-md-6">
+            <input class="form-control js-datepicker" type="text" value="{{ job.valid_to | date_display("default") }}" required  id="jobadd_closing_date" name="closing_date" readonly />
+        </div>
+    </div>
+
+    {# Skills #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_skill" title="Skills" > Skills: </label>
+        <div class="col-md-6">
+            <input class="form-control" data-searchtype="skill" type="text" value="{{ job.skill }}" required id="jobadd_skill" name="skill" placeholder="eg: PHP Java Tally" />
+        </div>
+    </div>
+
+    {# Send Responses to #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_response" title="Send Responses to">Send Responses to:</label>
+        <div class="col-md-6">
+            <input class="form-control" type="email" value="{{ job.response or user.email }}" {% if user.pagetab %}readonly{% endif %} required id="jobadd_response" name="response" placeholder="Your Email" />
+        </div>
+    </div>
+
+    {# Target Companies #}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="jobadd_targetcompany" title="Target Companies">Target Companies:<span class="js-helptip helptip" data-title="{{ messages.POST_A_JOB_TARGET_COMPANY or '' }}"></span>
+        </label>
+        <div class="col-md-6">
+            <input class="form-control" type='text' value="{{ job.targetcompany}}" data-searchtype="company" name="targetcompany" />
+        </div>
+    </div>
+
+    {# USER PIC AND INFO #}
+    <hr></hr>
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <div class="media sm-media">
+                <div class="pull-left">
+                    <div class="logo-blk-img">
+                        {{ html.imageWithProfileUrl(user) }}
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div class="pull-left">
+                        <h4 class="media-heading">
+                            <a class="js-main-container-link" data-menu-item="3" href="#" role="link">
+                                {{ user.name }}
+                            </a>
+                        </h4>
+                        <strong>{{ user.position }}</strong>
+                        <div>
+                          {{ user.company.name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#----SUBMIT button-------#}
+    <div class="form-actions clearfix margin-bot-muted">
+        <input type="submit" class="btn btn-default" value="Preview Job" name="preview">
+        <input type="submit" class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" value="Post Job"  name="post">
+
+        <a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-post-job','','width=500,height=500');" class="btn btn-primary  {% if user.write_permission != false %}hide{% endif %}"> Post Job</a>
+
+         <small class="pull-right text-muted">*Clicking 'Post Job' will share your job post on your Timeline and your friends' Newsfeeds.</small>
+    </div>
+</form>
+
+{% endblock search_result_block %}

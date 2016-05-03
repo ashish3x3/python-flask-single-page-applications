@@ -1,0 +1,52 @@
+{% extends 'elements/header_min.jinja' %}
+
+{% block content %}
+<header class="navbar navbar-fixed-top main-top-nav logout-bar js-keep-fixed">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="container-full">
+        <div class="navbar-header col-md-3">
+            {% if not show or show.menu_links != false %}
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% endif %}
+            {% if main_logo_url %}
+                <a class="navbar-brand" id="partner_logo" >
+                    <img src="{{main_logo_url}}" title="{{partner.name if partner}}">
+                </a>
+            {% else %}
+                <a class="navbar-brand logo-mp" href="/landing" id="myparichay_logo" title="MyParichay" >&nbsp;</a>
+            {% endif %}
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if not show or show.menu_links != false %}
+                <li><a data-toggle="modal" href="#modal" data-remote="/popup/login?{{ (request.path + '?' + request.query_string) | stringurlencode('next') }}">Login</a></li>
+                <li><a href="//www.myparichay.in/website/company/about-us/" target="_blank">About</a></li>
+                <li><a href="//www.myparichay.in/website/blog/" target="_blank">Blog</a></li>
+                <li><a href="//www.myparichay.in/website" target="_blank">Employer Solutions</a></li>
+                <li class="nav-social hidden-xs">
+                    <a href="http://www.facebook.com/MyParichay" class="glyphicon-stack glyphicon-lg share-link" target="_blank" title="Visit us on Facebook">
+                        <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-fb"></span>
+                        <span class="glyphicon glyphicon-facebook glyphicon-stack-1x glyphicon-inverse"></span>
+                    </a>&nbsp;
+                    <a href="http://www.linkedin.com/company/myparichay" class="glyphicon-stack glyphicon-lg share-link " target="_blank" title="Visit us on Linkedin">
+                        <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-linkedin"></span>
+                        <span class="glyphicon glyphicon-linkedin glyphicon-stack-1x glyphicon-inverse"></span>
+                    </a>&nbsp;
+                    <a href="https://twitter.com/MyParichayJobs" class="glyphicon-stack glyphicon-lg share-link" target="_blank" title="Visit us on Twitter">
+                        <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-tw"></span>
+                        <span class="glyphicon glyphicon-twitter glyphicon-stack-1x glyphicon-inverse"></span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</header>
+{% endblock content %}

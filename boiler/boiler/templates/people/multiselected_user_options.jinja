@@ -1,0 +1,54 @@
+{% if show %}
+<div class="clearfix">
+    <div class="pull-right">
+        <div class="btn-group {{ 'invisible' if not show.multisavebutton }} multi_options_button {{ dropdown_class if dropdown_class }}">
+        {% if (show.multicontact and show.multisearch)  %}
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                Options <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right min-width325" role="menu">
+                <li>
+                    <a class="clearfix js-generate-url hover-white js-popup-loader" data-toggle="modal" href="#modal" data-backdrop='static' data-refresh="true" data-popup-text="Sending Parichay Messages" data-url="/contactmulti?jobid={{ job.id }}&daily={{ quota.daily_current if quota }}&weekly={{ quota.weekly_current  if quota }}"  data-name="fbid">
+                        <span class="pull-left lineheight">Send Parichay Messages</span>
+                        {% if quota %}
+                        <span class="{% if quota.daily_current < quota.daily_max %} text-muted {% else %} text-danger {% endif %} pull-right">
+                            Daily limit {{ quota.daily_current }}/{{ quota.daily_max }}
+                        </span><br />
+                        <span class="{% if quota.weekly_current < quota.weekly_max %} text-muted {% else %} text-danger {% endif %} pull-right">
+                            Weekly limit {{ quota.weekly_current }}/{{ quota.weekly_max }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a class="js-generate-url" data-url="/user/search?" data-name="fbid" >
+                        In-Network Search
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a data-url="/user/unsave?folderId={{ folderID }}" data-name="fbid" class="js-generate-url js-multi-unsave">Unsave</a>
+                </li>
+            </ul>
+        {% elif show.multisearch %}
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                Options <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a class="js-generate-url" data-url="/user/search?" data-name="fbid" data-append-details="false">
+                        In-Network Search
+                    </a>
+                </li>
+                <li>
+                    <a data-url="/user/unsave?folderId={{ folderID }}" data-name="fbid" class="js-generate-url js-multi-unsave">Unsave</a>
+                </li>
+            </ul>
+        {% elif show.multisave  %}
+            <a class="btn btn-primary btn-sm multi_save_user_button" data-toggle="modal" data-href="/user/save?cname={{ multi_select_name }}" data-remote="/user/save?id={{ request.cookies.get(multi_select_name,'') }}&cname={{ multi_select_name }}" data-target="#modal" title="Save Selected Users" href="#modal">Save Profiles</a>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

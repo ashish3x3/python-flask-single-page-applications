@@ -1,0 +1,74 @@
+<div class="row">
+    {% if friend_count_to_win %}
+        <div class="col-md-12 clearfix">
+            <div class="col-md-5 col-sm-5 col-md-offset-0 invite-bx-left text-center">
+                <span class="glyphicon glyphicon-play invite-bx-left-arrow"></span>
+                <h1>{{ friend_count_to_win }}</h1>
+                <p class="tx-16"><strong>Friends </strong><br>away from winning</p>
+                <p>
+                    <a data-toggle="modal" href="#modal" data-remote="/invitefriends?bannertype=resumemakeover&{{ ('/landing') | stringurlencode('next') }}"  class="btn btn-primary js-track-analytics" id="resume-makeover-invite">Invite Friends</a>
+                </p>
+            </div>
+            <a href="https://www.myparichay.in/website/resume-makeover-terms-conditions/" target="_blank">
+                <div class="col-md-7 col-sm-7 col-md-offset-0 invite-bx-right">
+                    {% if days_left %}
+                        <div class="date-badge text-center">
+                            <span>{{ days_left }}</span><br>
+                            <small>Days Left</small>
+                        </div>
+                    {% endif %}
+                    <div class="resume-makeover-tx">
+                        <div class="big-caps-tx">
+                            <span class="tx-16"><strong>INVITE</strong></span> <br>
+                            {{ max_friends_to_invite }} FRIENDS <br>
+                            <span class="tx-14">to MyParichay and get
+                        </div>
+                        <div class="tx-14 resume-make-amt">
+                            <span><i class="glyphicon glyphicon-inr"></i> {{ prize_money }} </span>off on<br>
+                            Resume Makeover by Shine.com
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% else %}
+        <div class="col-md-12 clearfix">
+            <div class="invite-congrats">
+                <div class="text-center">
+                    <span>&nbsp;</span>
+                    <h2 class="clearfix">Congratulations!! </h2>
+                    <p class="tx-14">
+                        <strong>{{ friends_on_myparichay }}</strong> of your friends are now on MyParichay.<br>
+                        Continue growing your Network
+                    </p>
+                    <a onclick="window.open('{{ JCONSTANTS.FB_INVITE_URL }}','','width=500,height=500');" class="btn btn-info"><b>Invite Friends</b></a><br>
+                    <a href="{{url}}" target="_blank"><strong class="tx-white"><u>Redeem</u></strong></a> your Coupon Code.
+                    worth <strong>{{ prize_money }}</strong> Rs. and get a Resume Makeover.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if people_won_count %}
+        <div class="col-md-12 clearfix js-result-box">
+            <div class="invite-promo-bot">
+                <p class="pull-left">
+                    {{ people_won_count  }} {% if people_won_count!=1 %} People have{% else %} person has{% endif %} won till date
+                </p>
+                <p class= "pull-right">
+                    <a class="link-blue js-cluster-open" role="link" href="/winnerslist">
+                        <i class="sprite glyphicon glyphicon-cluster" ></i>
+                        List of winners
+                    </a>
+                </p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+<style type="text/css">
+    /**
+     * Overwrite for having a carousel with dynamic width.
+     */
+    .jcarousel-skin-tango .jcarousel-clip-horizontal {
+        width: 100%;
+    }
+</style>

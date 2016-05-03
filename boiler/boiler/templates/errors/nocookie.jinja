@@ -1,0 +1,76 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block content_wrap %}
+<div class="borderwrap borderwrap-light jobview">
+     <div >
+        <h1> You Have Cookies Disabled </h1>
+        <div>
+            Most apps on Facebook use third-party cookies to log you in. Currently, third-party cookies are disabled on your browser. To continue to MyParichay, please follow these instructuions.<small>(you can change you settings back at any time)</small>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div >
+        <h2>Internet Explorer</h2>
+        <ol>
+            <li>
+                Click on "<b>Tools</b>" on the menu bar and then click on "<b>Internet Options</b>".
+            </li>
+            <li>
+                Click on the "<b>Privacy</b>" tab. Select the "<b>Advanced</b>" button under "<b>Settings</b>". The "<b>Advanced Privacy Settings</b>" window should now open.
+            </li>
+            <li>
+                Check the "<b>Override automatic cookie handling</b>" box so that you now have access to the "<b>First-party Cookies</b>" and "<b>Third-party Cookies</b>" options.
+            </li>
+            <li>
+                Select "<b>Accept</b>" for "<b>Third-party Cookies</b>".
+            </li>
+        </ol>
+    </div>
+    <p>&nbsp;</p>
+    <div >
+        <h2>FireFox</h2>
+        <ol>
+            <li>Click the "<b>Tool</b>" menu.</li>
+            <li>Click "<b>Options</b>".</li>
+            <li>Select the "<b>Privacy</b>" menu.</li>
+            <li>Check the "<b>Accept third-party cookie</b>".</li>
+            <li>Make sure "<b>Keep until</b>" is set to "<b>they expire</b>".</li>
+        </ol>
+    </div>
+    <p>&nbsp;</p>
+    <div >
+        <h2>Chrome</h2>
+        <ol>
+            <li>Select the "<b>Wrench</b>" (spanner) icon at the top right</li>
+            <li>Select "<b>Settings</b>".</li>
+            <li>Click "<b>Show advanced settings</b>".</li>
+            <li>In the "<b>Privacy</b>" section, click the "<b>Content settings</b>" button.</li>
+            <li>In the "<b>Cookies</b>" section, Uncheck "<b>Block third-party cookies and site data</b>".</li>
+        </ol>
+    </div>
+    <p>&nbsp;</p>
+    <div >
+        <h2>Safari</h2>
+        <ol>
+            <li>Click the "<b>Safari</b>"  menu.</li>
+            <li>Click "<b>Preferences</b>".</li>
+            <li>Click the "<b>Security</b>"  menu.</li>
+            <li>For "<b>Accept cookies</b>"  select "Always".</li>
+        </ol>
+    </div>
+    <p>&nbsp;</p>
+    <div >
+        <h2>Opera</h2>
+        <ol>
+            <li>Click the "<b>Tools</b>" menu.</li>
+            <li>Click "<b>Preferences</b>".</li>
+            <li>Click the "<b>Advanced</b>" tab.</li>
+            <li>Select "<b>Cookies</b>" on the left list.</li>
+            <li>Make sure "<b>Accept cookies</b>" is selected and uncheck "<b>Delete new cookies when exiting Opera</b>".</li>
+            <li>Click "<b>OK".</li>
+        </ol>
+    </div>
+</div>
+
+
+{% endblock content_wrap %}

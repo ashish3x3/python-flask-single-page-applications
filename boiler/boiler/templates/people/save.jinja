@@ -1,0 +1,91 @@
+{% set show_footer = false %}
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% elif request.is_xhr and request.args.get('sub', '0') == '1' %}
+    {% extends "layout/ajax_content.jinja" %}
+{% else %}
+    {% extends "layout/modal.jinja" %}
+{% endif %}
+
+<h4>
+    Please select the folder
+</h4>
+
+{% block content %}
+    <div class="js-ajax-replace-wrapper js-row-each">
+        <div class="alert hide"></div>
+        {% if folder_complete_status == false %}
+            <div class="alert alert-info margin-muted">
+                <span class="glyphicon glyphicon-info-circle"></span>
+                &nbsp; We are still fetching all the folders associated with your account. Try again in a few mins.
+            </div>
+            <br />
+        {% endif %}
+        <h4> Choose a Folder </h4>
+        <div class=" clearfix row">
+           <form action="/folder/add" class="js-folder-save form-inline col-md-12" method="post">
+                <div class="input-group">
+                    <label class="sr-only" for="peoplenewfolder"> New Folder Name</label>
+                    <input class="form-control" type="text" name="folder" placeholder="Folder Name" required autofocus id="peoplenewfolder"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Add</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+
+        <div class=" clearfix">
+            <form action="{{ save_url }}" class="js-update-append-form" method="post" onsubmit="return false;" data-closeandnotify="true">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="js-folders-list form-group note">
+                            <br>
+
+                            <div class="clearfix">
+                                <lable for="lsavefoldersearch" class="sr-only">
+                                    Search Folder
+                                </lable>
+                                <input type="text" placeholder="Search Folder" class="form-control js-mp-autocomplete js-foldersave-complete"  data-searchtype="foldersearch" autocomplete="off" id="lsavefoldersearch">
+                            </div>
+
+
+                            <div class="scrool-height" id="select-folder-list">
+                                {% for x in folders %}
+                                    {% if folders[x].name %}
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="{{ folders[x].id }}" name="folder" required />
+                                            {{ folders[x].name }}
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="savenote">Add a Note</label>
+                            <textarea rows="5" name="note" class="form-control" id="savenote"></textarea>
+                        </div>
+                        <div class="form-group form-actions margin-bot-muted">
+                            <p class="text-error hide js-modal-save-response-message"></p>
+                            <button type="submit" class="btn btn-primary ">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% raw %}
+        <script id="tmpl_foldersaveblock" type="text/templates" >
+            <div class="radio">
+                <label>
+                    <input type="radio" value="{{ key }}" name="folder" required checked/>
+                    {{ value }}
+                </label>
+            </div>
+        </script>
+    {% endraw %}
+
+
+{% endblock content %}

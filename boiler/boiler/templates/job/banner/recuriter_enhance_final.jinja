@@ -1,0 +1,54 @@
+{% extends "layout/ajax.jinja" %}
+
+{% block ajaxcontent %}
+{% set not_fit_success_message = "You said 'Not a fit' to this job." %}
+{% set not_interested_success_message = "You said 'Not Interested' to this job." %}
+<div class="js-row-each padding-muted">
+    <div class="contactfix-wrap-contact pad-bot">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-12 ">
+                <div class="media panel panel-default box-arrow">
+                    <div class="pull-left hidden-xs hidden-sm">
+                        {{ html.imageWithProfileUrl(contact.recruiter) }}
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a role="link" class="link-blue" href="{{ contact.recruiter.profileUrl }}">
+                                {{ contact.recruiter.name }}
+                            </a>
+                        </h4>
+                        <p class="tx-12 margin-muted">Recruiter</p>
+                        {% if contact.recruiter.company %}
+                            <p class="tx-12 margin-muted">{{ contact.recruiter.company }}.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <p class="tx-14"><h4>Hello {% if display_name %}{{display_name}}{% elif user %}{{ user.name }}{% endif %},</h4></p>
+                <p class="tx-14">{{ contact.message }}</p>
+                <p><small><em class="text-muted">Your profile has been noticed by the recruiter</em></small></p>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12 identsucstxt">
+                {% if show.notfitforjob %}
+                    <p class="idendifytxt">{{not_fit_success_message}}</p>
+                {% else %}
+                    <div class="dropdown notint-link js-parent-to-remove">
+                        <a data-toggle="dropdown" data-toggle="tooltip" data-placement="top" title="Is this job not a fit for your skills?" href="#" class="intro-tooltip js-job-action-visibility pull-right" data-jav-param="hash">
+                            Not a fit? <i class="glyphicon glyphicon-info-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>Is this job not a fit for your skills? Please click on ‘Yes’ to confirm.</li>
+                            <li>
+                                <button class="btn btn-primary pull-left js-job-action" data-job-action='ajax' data-url="/splash/notfitforjob/" data-param-append="hash" data-success-message="{{not_fit_success_message}}">Yes</button>
+                                <button class="btn btn-default pull-left">No</button>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock ajaxcontent %}

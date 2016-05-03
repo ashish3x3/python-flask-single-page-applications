@@ -1,0 +1,119 @@
+{% extends 'layout/externallayout.jinja' %}
+
+{% block title%}
+    <h3> <img src="/static/img/pictures/connections.png" alt="connections" /> &nbsp;&nbsp; Professional Introduction Request</h3>
+{% endblock title%}
+
+{% block main_wrapper%}
+    <div class="pull-center row">
+        <div class="clearfix">
+            <div class="requset_message clearfix">
+                <div class="span8 offset1" style="border-right:1px solid #eee; height:330px; ">
+                    <div class="span6 contributors-box">
+                        <div class="contributor">
+                            <main class="clearfix" title="{{ target.name }}">
+                                <div class="pull-left">
+                                    <div class="tinypic image">
+                                        <a href="{{ target.profileUrl }}" class="img {% if target.connection_type=='linkedin'%}connection-linkedin{% else %}connection-facebook{% endif %}" target="_blank">
+                                            <img src="{{ target.pictureUrl }}?height=30&amp;width=30" width="30" height="30" alt="{{ target.name }}" title="{{ target.name }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="cliptext">
+                                        <strong class="heading">{{ target.name }}</strong>
+                                    </div>
+                                    <div class="cliptext text-info">
+                                        <strong>{{ target.company }}</strong>
+                                    </div>
+                                    <div>
+                                        {{ target.position }}
+                                        {{ 'at '+target.location if target.location }}
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    &nbsp;
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+
+                    <div class="span6 contributors-box offsetheight4">
+                        <div class="contributor">
+                            <main class="clearfix" title="{{ candidate.name }}">
+                                <div>
+                                    <div class="pull-left">
+                                        <div class="tinypic image">
+                                            <a href="{{ candidate.profileUrl }}" class="img {% if candidate.connection_type=='linkedin'%}connection-linkedin{% else %}connection-facebook{% endif %}" target="_blank">
+                                                <img src="{{ candidate.pictureUrl }}?height=30&amp;width=30" width="30" height="30" alt="{{ candidate.name }}" title="{{ candidate.name }}">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="cliptext">
+                                            <strong class="heading">{{ candidate.name }}</strong>
+                                        </div>
+                                        <div class="cliptext text-info">
+                                            <strong>{{ candidate.company }}</strong>
+                                        </div>
+                                        <div>
+                                            {{ candidate.position }}
+                                            {{ 'at '+candidate.location if candidate.location }}
+                                        </div>
+                                        <div class="cliptext">
+                                            {{ candidate.phone }}
+                                        </div>
+                                        <div class="cliptext">
+                                            {{ candidate.email }}
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <footer>
+                                    <div class="pull-right">
+                                        <a class="js-msg-user-add" href="{{ candidate.resume_url }}" title="download resume" target="_blank">↓ Download Resume</a>
+                                    </div>
+                                </footer>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+                <div class="span14 offset1 responsive979">
+                    {% include 'jobaction/help/introducesecond_message.jinja' %}
+                    <div  class="clearfix offsetheight4">
+
+                        <a class="pull-right js-introducefirst-link" data-href="http://localhost:5000/splash/forwardintroducereq/{{ ID }}" data-userid="1535282599">
+                            <big>Introduce {{ target.name }} to {{ candidate.name }}</big>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            <hr class="span24 clearfix borderline"/>
+        </div>
+        <div class="muted clearfix  offset2 responsive480">
+            {% include 'jobaction/help/introducesecond_nextstep.jinja' %}
+        </div>
+        <br />
+        <hr class="span24 clearfix borderline"/>
+        <div id="jobs" class="offsetheight4 span24 responsive979">
+            <div class="clearfix  center">
+                <span class="muted"> - - - - About the Job - - - - </span>
+            </div>
+            <div class="clearfix">
+                <a href="#" class="muted pull-right">back to top </a>
+            </div>
+            <div class="clearfix">
+                <div>
+                    {% include 'job/miniview.jinja' %}
+                </div>
+                <div class="offsetheight6">
+                    <a href="/job/{{ job.id }}?{{ request.url | stringurlencode('searchurl') }}" class="pull-right"><big>Open the full job description</big></a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock main_wrapper%}

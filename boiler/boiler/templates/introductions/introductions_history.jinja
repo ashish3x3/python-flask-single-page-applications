@@ -1,0 +1,74 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% if data.history|length > 0 %}
+        {# this is the page which has some introductions and a sidebar #}
+        {% extends "introductions/main.jinja" %}
+    {% else %}
+        {# this is the page which has no sidebar #}
+        {% extends "introductions/main-two.jinja" %}
+    {% endif %}
+{% endif %}
+
+{% block search_result_block %}
+{% if data.history|length > 0 %}
+    <div class="clearfix js-message-content-block introduction">
+        <div class="intro-gift-bg col-md-4 col-sm-4 hidden-xs padding-muted"></div>
+        <div class="col-md-12 col-sm-12 col-xs-12 wave-border padding-muted">
+            <div class="col-md-12 col-sm-12 col-xs-12 padding-muted">
+                <div class="col-md-12 col-sm-12 col-xs-12 padding-muted">
+                    <aside class="col-md-2 col-sm-2 col-xs-3 padding-muted text-center total-points-center">
+                        <label class="grey-txt">TOTAL</label>
+                        <strong class="header-txt">{{ data.total_points }}</strong>
+                        <label class="grey-txt">POINTS</label>
+                    </aside>
+                    <div class="col-md-10 col-sm-10 col-xs-9 intro-gift padding-muted">
+                        <div class="col-md-4 col-sm-4 col-xs-12 padding-muted pull-right termtxt-sec">
+                            <a href="https://www.myparichay.in/website/incentive-terms-and-condition/" target="_blank"><span class="text-muted pull-right term-txt">Terms &amp; Conditions</span></a>
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-xs-12 padding-muted">
+                            <a href="/introductions/redeem" class="btn btn-primary">Redeem Points</a><br>
+                            <small class="text-muted smalltxt">Click on Redeem Points to win exciting gifts. <a class="js-track-analytics" data-toggle="modal" data-remote="/introductions/redeem/knowmore" data-target="#modal" href="#modal">Know More</a></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for item in data.history %}
+            <div class="media result-box">
+                <div class="pull-left">
+                    <a class="img" data-menu-item="3" href="#">
+                        <img class="tinypic" alt="{{item.candidate_name}}" src="//graph.facebook.com/{{item.candidate_fb_id}}/picture">
+                    </a>
+                </div>
+                <div class="pull-right media-rgt circle-badge-red">{{ item.points }}</div>
+                <div class="media-body">
+                    <p>You introduced <a href="http://facebook.com/{{item.candidate_fb_id}}">{{item.candidate_name}}</a> for the role of <a href="{{item.jobUrl}}">{{item.job_title}}</a> at {{item.company_name}} in {{item.job_location}}.</p>
+                    <p class="text-muted">{{item.date}}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if 'page' in pagination and 'total' in pagination  and (pagination.total | int ) > 1 %}
+        <div class="row">
+            <div class="pagination-centered">
+                {{ html.pagination('', pagination.total, pagination.page, request.path) }}
+            </div>
+        </div>
+    {% endif %}
+
+{% else %}
+
+    <div class="col-md-12 text-center pull-center margintop-100">
+        <div class="text-center">
+            <img src="/static/img/pictures/no-record-icon.png">
+        </div>
+        <br>
+        <p class="tx-14 text-center text-muted">
+            <strong>You have not made any introductions</strong>
+        </p>
+    </div>
+
+{% endif %}
+{% endblock search_result_block %}

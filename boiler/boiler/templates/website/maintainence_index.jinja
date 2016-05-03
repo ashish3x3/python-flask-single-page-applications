@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+  <!-- Basic Page Needs
+  ================================================== -->
+  <meta charset="utf-8">
+  <title>MyWash - Clean clothes at the tap of a button</title>
+
+
+  <!-- Mobile Specific Metas
+  ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="/static/web-css/base.css">
+  <link rel="stylesheet" href="/static/web-css/skeleton.css">
+  <link rel="stylesheet" href="/static/web-css/style_558c134627e76e47aefc6fc5.css">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <!-- Favicons
+  ================================================== -->
+  <link rel="shortcut icon" type="image/png" href="/static/img/favicon.png"/>
+  <link rel="apple-touch-icon" href="/static/web-images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/static/web-images/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/static/web-images/apple-touch-icon-114x114.png">
+
+
+    <!-- for Google -->
+     <meta name="description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash.in is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta name="keywords" content="" />
+
+     <meta name="author" content="" />
+     <meta name="copyright" content="" />
+     <meta name="application-name" content="" />
+
+     <!-- for Facebook -->
+     <meta property="og:title" content="MyWash - Clean clothes at the tap of a button" />
+     <meta property="og:image" content="https://c2.staticflickr.com/6/5612/14978414593_73d8f5138c.jpg" />
+     <meta property="og:url" content="http://mywash.in" />
+     <meta property="og:description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash is simply the best  laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="850">
+     <meta property="og:image:height" content="313">
+
+     <!-- for Twitter -->
+     <meta name="twitter:card" content="summary" />
+     <meta name="twitter:title" content="MyWash" />
+     <meta name="twitter:description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta name="twitter:image" content="http://c2.staticflickr.com/4/3952/15349058449_5b50b9b007.jpg" />
+
+  <script src="/static/web-js/jquery.js"></script>
+
+{% if config.DEBUG %}
+<!--google analytics test -->
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    //ga('create', 'UA-61700181-1', 'auto');
+    ga('send', 'pageview');
+
+    ga('create', 'UA-61700181-1',{
+        'cookieDomain': 'none'
+    });// creates cookies for local host
+
+    /*$('#wash_schedule_button').click(function(event) {
+        event.preventDefault();
+        ga('send', 'event', 'link', 'click', 'schedule-a-wash');
+    });
+    $('#cancel-order').click(function(event) {
+        $('#modal-cancel').on('click', function(event) {
+            event.preventDefault();
+            ga('send', 'event', 'link', 'click', 'cancel-wash');
+        });
+    });
+    $('#submitorder').submit(function(event) {
+        event.preventDefault();
+        ga('send', 'event', 'form', 'submit', 'submit-wash');
+    });*/
+</script>
+
+{% else %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-55912010-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+{% endif %}
+
+</head>
+
+
+
+<body> 
+<!-- Google Tag Manager test-->
+
+<noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-K9PJX5" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K9PJX5');
+</script>
+
+
+  <!-- Primary Page Layout
+  ================================================== -->
+
+  <!-- Delete everything in this .container and get started on your own site! -->
+
+
+<div id="nav-wrapper" >
+  <div class="container">
+    <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+
+    <div id="navigation" class="eleven columns">
+
+      <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+      <a id="menu" href="#"><img src="/static/web-images/menu.png" title="dry cleaning service near kormangala" alt="dry cleaning service near me"></a>
+
+
+      <ul>
+        <li><a href="#home">Home<img id="onclick" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India"></a></li>
+        <li><a href="#howitworks">How we work</a></li>
+        <li><a href="/about">About us</a></li>
+        <li><a  href="#areas">Areas we serve</a></li>
+        <li><a  href="#price">Pricing</a></li>
+        {% if  session.access_token %} 
+         <li><a href="/logout">Log Out</a>  </li>
+        {% else %} 
+        <li><a  href="/login">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+  <div id="fixed-navigation" class="eight columns">
+    <div class="fixed-nav-wrap">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#howitworks">How MyWash works</a></li>
+        <li><a href="/about">About us</a></li>
+        <li><a href="#areas">Areas we serve</a></li>
+        <li><a href="#price">Pricing</a></li>
+        {% if  session.access_token %} 
+         <li><a href="/logout">Log Out</a>  </li>
+        {% else %} 
+        <li><a  href="/login">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div id="home" class="container">
+
+    <div class="seven columns alpha mobile-hero">
+      <img id="logo" src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service">
+      <h3>Under scheduled maintenance. Check back after {{config.MAINTENANCE_END}}.</h3>
+    </div>
+
+    <div id="hero-img" class="nine columns omega">
+      <img src="/static/web-images/shirt2.png" title="laundry services in indiranagar bangalore" alt="online laundry service bangalore">
+    </div>
+
+  </div><!-- container -->
+
+  <div id="howitworks">
+
+    <img id="wave" src="/static/web-images/wave.png" title="Fast laundry service bangalore" alt="laundry and drycleaning services marathahalli">
+    <div class="blue_wrap">
+      <div class="container">
+
+        <h3 class="align_center"><img class="hanger" src='/static/web-images/hanger-small-white.png'>How MyWash works?</h3>
+
+        <div class="four columns  steps align_center">
+          <span class="step-count">1</span>
+          <span class="step1-icon"></span>
+          <h4>Place Order</h4>
+          <h5>Forget carrying your clothes to the dry cleaner or washing them at home. Just go to MyWash.in and select your pickup and delivery times. It is that simple.
+          </h5>
+        </div>
+
+        <div class="four columns steps align_center">
+          <span class="step-count">2</span>
+          <span class="step4-icon"></span>
+          <h4>Pick up</h4>
+          <h5>A MyWash Agent armed with ecofriendly bags will arrive at your door to pick up your dry cleaning and laundry.
+          </h5>
+        </div>
+
+        <div class="four columns steps align_center">
+          <span class="step-count">3</span>
+          <span class="step2-icon"></span>
+          <h4>Wash & Iron</h4>
+          <h5>Our expert cleaners and master pressers ensure that your clothes come back looking fresh and beautiful every time.
+</h5>
+        </div>
+
+        <div class="four columns steps align_center">
+          <span class="step-count">4</span>
+          <span class="step3-icon"></span>
+          <h4>Deliver</h4>
+          <h5>Your clothes will be delivered on time to your doorstep. Now getting your laundry done is that simple.
+</h5>
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div><!-- howitworks -->
+
+
+  <div id="press" class="container">
+    <h3><img class="hanger" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India">In the press</h3>
+    <ul style="margin: 0 auto;width: 70%;">
+      <li>
+        <a href="http://yourstory.com/2014/11/mywash/" target="_blank"><img src="/static/web-images/yourstory.jpg"></a>
+      </li>
+      <li>
+        <a href="http://economictimes.indiatimes.com/news/emerging-businesses/regional-hubs/south/koramangalas-location-offers-logistic-benefits-silus/articleshow/45294626.cms" target="_blank"><img src="/static/web-images/et.jpg"></a>
+      </li>
+
+
+    </ul>
+  </div>
+
+
+
+
+  <div id="areas" class="container">
+    <h3><img class="hanger" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India">Areas we cover</h3>
+
+    <div id="area-banner" class="" style="text-align: center;">
+      <img src="/static/web-images/bengaluru.png" title="Mywash service at kormanagala and marathalli" alt="Laundry service at jayanagar and domlur">
+    </div>
+<!--
+    <div id="street" class="five columns">
+      <div class="border">Areas covered</div>
+      <ul class="two columns">
+       <li><i>Koramangala</i></li>
+        <li><i>Indra Nagar</i></li>
+        <li><i>Domlur</i></li>
+        <li><i>HSR Layout</i></li>
+
+      </ul>
+
+      <ul class="two columns float-right">
+
+        <li><i>Bellandur</i></li>
+        <li><i>BTM Layout</i></li>
+        <li><i>Ejipura</i></li>
+        <li><i>Adugodi</i></li>
+      </ul>
+    </div>
+ -->
+<!--     <div id="street" class="eight columns alpha omega">
+            <img src="/static/web-images/map-image.jpg">
+    </div> -->
+
+
+  <!--   <div id="street" class="sixteen columns">
+      <div class="sixteen columns">
+        <h4>Area List</h4>
+      </div>
+      <ul class="eight columns">
+        <li><i>Koramangala</i></li>
+        <li><i>Indra Nagar</i></li>
+        <li><i>Domlur</i></li>
+        <li><i>HSR Layout</i></li>
+        <li><i>BTM</i></li>
+
+      </ul>
+       <ul class="eight columns">
+        <li><i>Bellandur</i></li>
+        <li><i>Ejipura</i></li>
+        <li><i>Bannerghatta</i></li>
+        <li><i>Adugodi</i></li>
+      </ul>
+
+    </div>
+ -->
+
+  </div>
+
+
+<div id="price" class="price container">
+
+      <h3><img class="hanger" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India">Prices</h3>
+
+
+                <div class="table">
+                    <table class="price">
+                    <colgroup>
+                        <col width="65%">
+                        <col width="35%">
+                    </colgroup>
+                        <tbody><tr>
+                            <th colspan="2"><span>Wash & Iron &nbsp;(only Iron - Rs.9/cloth)</span></th>
+                        </tr>
+                        <tr>
+                            <td>Shirts</td>
+                            <td>Rs.19 &nbsp; / cloth</td>
+                        </tr>
+                        <tr>
+                            <td>Pants</td>
+                             <td>Rs.19 &nbsp; / cloth</td>
+                        </tr>
+                        <tr>
+                            <td>Salwar</td>
+                             <td>Rs.19 &nbsp; / cloth</td>
+                        </tr>
+                    </tbody></table>
+                </div>
+
+                <div class="table">
+                    <table class="price">
+                    <colgroup>
+                        <col width="65%">
+                        <col width="35%">
+                    </colgroup>
+                        <tbody><tr>
+                            <th colspan="2">Dry Cleaning</th>
+                        </tr>
+                        <tr>
+                            <td>Suits</td>
+                            <td>Rs. 290 &nbsp; / cloth</td>
+                        </tr>
+                        <tr>
+                            <td>Saree</td>
+                            <td>Rs. 190 &nbsp; / cloth</td>
+                        </tr>
+                        <tr>
+                            <td>Shirt / Trouser</td>
+                            <td>Rs. 60 &nbsp; / cloth</td>
+                        </tr>
+                    </tbody></table>
+                </div>
+
+
+
+
+                </br></br>
+                </br>
+                <div id="price-buttons" class="container">
+                  <a href="/estimate" class="button " target="_blank">Estimator</a>
+                  <a href="/price" class="button secondary" target="_blank">Price list</a>
+                </div>
+
+
+
+</div>
+
+
+ <div id="testimonials" class="container">
+    <h3><img class="hanger" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India">Testimonials</h3>
+  <div id="clients-list">
+
+    <ul>
+  <li class="four columns  id-testimonials">
+    <div class="user-comment ">
+      <div class="box">Congrats for coming up this idea. Eventhough there are lot of local vendors does the same business, your idea of executing this business is great. Let me share my experience of my first order. I gave order on Saturday and selected the delivery date on Sunday. Accidentally, saturday and sunday it was fully raining in bangalore. I initially thought that delivery will be delayed for couple of days due to weather. I got surprised on Sunday morning when I received a call stating that due to bad weather delivery might be delayed for couple of hours. When I received delivery, I see the clothes are neatly packed individually and delivered in a bag. Amazing experience.. Good luck for your business.</div>
+<!--      <a class="link" data-bypass="true" target="_blank" rel="nofollow" href="http://twitter.com/mywashapp" title="Happy user of MyWash">@mywashapp</a>
+ -->       <a class="tweet-link" data-bypass="true" target="_blank" rel="nofollow" href="https://www.facebook.com/mywashapp/posts/696838293734428" title="Happy user after using MyWash for laundry and Dry Cleaning"></a>
+      <span class="arrow-down"></span>
+    </div>
+
+    <div class="user-description">
+      <img src="/static/web-images/testimonials/jeevan.jpg">
+      <div class="pull-left user-detail">
+        <div class="user-name">
+
+        </div>
+        <div class="user-add">
+          <i class="icon-twitter"></i>
+          <a class="link" data-bypass="true" target="_blank"  rel="nofollow" href="https://www.facebook.com/mywashapp/posts/696838293734428" title="Happy user after using MyWash for laundry and Dry Cleaning">Jeevan Kumar </br><small>Bangalore</small></a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+
+
+
+    <li class="four columns  id-testimonials">
+          <div class="user-comment">
+<div class="box">
+No maid! no washing machine!! Only one website... MyWash will soon be one of my favorite start ups Great work guys... My best wishes with you!!</div>
+<!--       <a class="link" data-bypass="true" target="_blank" rel="nofollow" href="http://twitter.com/mywashapp" title="Happy user of MyWash">@mywashapp</a>
+ -->      <a class="tweet-link" data-bypass="true" target="_blank" rel="nofollow" href="https://www.facebook.com/abhijethd/posts/10152726803219088" title="Happy user after seeing images of properties on Housing.com"></a>
+      <span class="arrow-down"></span>
+    </div>
+
+    <div class="user-description">
+      <img src="/static/web-images/testimonials/abhijet.jpg">
+      <div class="pull-left user-detail">
+        <div class="user-name">
+
+        </div>
+        <div class="user-add">
+          <i class="icon-twitter"></i>
+            <a class="link" data-bypass="true" target="_blank"  rel="nofollow" href="https://www.facebook.com/abhijethd/posts/10152726803219088" title="Happy user after using MyWash for laundry and Dry Cleaning">Abhijeth Dugginapeddi</br><small>Bangalore</small></a>
+        </div>
+      </div>
+    </div>
+  </li><!-- four columns -->
+
+
+
+
+    <li class="four columns  id-testimonials">
+    <div class="user-comment">
+<div class="box">
+Have tried it !! Liked the way packaging was done !! way to go !</div><!--       <a class="link" data-bypass="true" target="_blank" rel="nofollow" href="http://twitter.com/mywashapp" title="Happy user of MyWash">@mywashapp</a>
+ -->      <a class="tweet-link" data-bypass="true" rel="nofollow" href="https://www.facebook.com/groups/bootstrap.blr/permalink/738928109529589/" title="Happy user after using MyWash for laundry and Dry Cleaning"></a>
+      <span class="arrow-down"></span>
+    </div>
+
+    <div class="user-description">
+      <img src="/static/web-images/testimonials/suhel.jpg">
+      <div class="pull-left user-detail">
+        <div class="user-name">
+
+        </div>
+        <div class="user-add">
+          <i class="icon-twitter"></i>
+         <a class="link" data-bypass="true" target="_blank" rel="nofollow" href="https://www.facebook.com/groups/bootstrap.blr/permalink/738928109529589/" title="Happy user of MyWash">Suhel </br><small>Bangalore</small></a>        </div>
+      </div>
+    </div>
+
+  </li><!-- four columns -->
+
+
+
+
+
+</ul>
+
+ </div>
+
+ </div>
+
+
+<div id="celebrity">
+
+  <div class="container">
+
+
+
+    <div class="eight columns alpha">
+
+      <img id="logo" src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service">
+      <h3>Treat your clothes like a celebrity</h3>
+      <a href="/order_schedule" class="button">Schedule a Wash</a>
+
+    </div>
+
+    <div id="hero-img" class="eight columns omega">
+      <img src="/static/web-images/dress2.png" title="mywash - online dry cleaning bangalore" alt="online dry cleaning service">
+    </div>
+
+  </div><!-- container -->
+
+</div><!-- celebrity -->
+
+<div id="footer">
+
+  <div class="container">
+
+    <div class="four columns">
+
+      <h4>Company</h4>
+      <h5><a href="#">About</a></h5>
+      <h5><a href="#">How MyWash works?</a></h5>
+<!--       <h5><a href="#">Testimonials</a></h5>
+ -->      <h5><a href="/terms">Terms & Conditions</a></h5>
+<!--       <h5><a href="#">Policy</a></h5>
+ -->
+      <br>
+      <br>
+
+      <h4>Phone</h4>
+      <h5 class="phone"><img class="phone" src="/static/img/phone2.png">080-39591212 (8am-10pm)</h5>
+      <h4>Email</h4>
+      <h5 class="phone">support@mywash.com</h5>
+
+    </div>
+
+
+    <div class="four columns">
+
+      <h4>Follow us</h4>
+      <h5><a href="https://www.facebook.com/mywashapp"><img src="/static/web-images/fb.png">Facebook</a></h5>
+      <h5><a href="https://twitter.com/mywashapp"><img src="/static/web-images/twitter.png">Twitter</a></h5>
+      <h5><a href="https://plus.google.com/102797204251643014956" rel="publisher"><img src="/static/web-images/gplus.png">Google+</a></h5>
+
+
+    </div>
+
+    <div class="eight columns">
+
+      <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+      <h4>MyWash.in - Online Laundry & Dry cleaning India</h4>
+      <p>MyWash.in is the best online laundry service & online dry washing service in India. MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash.in is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand. MyWash.in picks up your dirty laundry and dry cleaning, and returns them clean, ironed, and folded within about a day.</p>
+
+      <p>Through MyWash app you can place an order on your phone or tablet, including pickup and drop-off time scheduling. A MyWash agent will arrive at the time you scheduled to pick up your laundry and dry cleaning, and within 48-72 hours your clothes are delivered in reusable non-plastic bags, washed and folded. MyWash.in is the online laundry service, online dhobi, awesome laundry service, one-stop laundry center, laundry app, dry cleaning service, laundry & dry cleaning service, you have been waiting for. We are currently providing our online laundry & dry cleaning service in all areas in Bangalore.
+
+</p>
+
+    </div>
+
+
+  </div>
+
+</div>
+  <script type="text/javascript" src="/static/web-js/mywash03.js"></script>
+  <script type="text/javascript" src="//s3.amazonaws.com/scripts.hellobar.com/e61bf47078b23ad0c27b941f7f70255424cb7723.js"></script>
+
+<script>(function() {
+  var _fbq = window._fbq || (window._fbq = []);
+  if (!_fbq.loaded) {
+    var fbds = document.createElement('script');
+    fbds.async = true;
+    fbds.src = '//connect.facebook.net/en_US/fbds.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(fbds, s);
+    _fbq.loaded = true;
+  }
+  _fbq.push(['addPixelId', '619741384794414']);
+})();
+window._fbq = window._fbq || [];
+window._fbq.push(['track', 'PixelInitialized', {}]);
+</script>
+<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=619741384794414&amp;ev=PixelInitialized" /></noscript>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 958398878;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/958398878/?value=0&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+
+<script type="text/javascript">
+adroll_adv_id = "MUPQRYBEOJGUJNJSRIX5Q2";
+adroll_pix_id = "GMQ2YCKLUBDQ5CM3K3F2OM";
+
+
+(function () {
+var oldonload = window.onload;
+window.onload = function(){
+   __adroll_loaded=true;
+   var scr = document.createElement("script");
+   var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+   scr.setAttribute('async', 'true');
+   scr.type = "text/javascript";
+   scr.src = host + "/j/roundtrip.js";
+   ((document.getElementsByTagName('head') || [null])[0] ||
+    document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+   if(oldonload){oldonload()}};
+}());
+</script>
+
+
+{% if config.DEBUG %}
+
+{% else %}
+<!-- webengage integration test-->
+<script id="_webengage_script_tag" type="text/javascript">
+
+  var _weq = _weq || {};
+
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "in") {
+    _weq['webengage.licenseCode'] = '~134106357';
+  }
+  else {
+    _weq['webengage.licenseCode'] = '~71680cad';
+
+  }
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "localhost") {
+    _weq['webengage.licenseCode'] = '~c2ab3813';
+  }
+
+  _weq['webengage.widgetVersion'] = "4.0";
+
+  (function(d){
+    var _we = d.createElement('script');
+    _we.type = 'text/javascript';
+    _we.async = true;
+    _we.src = (d.location.protocol == 'https:' ? "https://ssl.widgets.webengage.com" : "http://cdn.widgets.webengage.com") + "/js/widget/webengage-min-v-4.0.js";
+    var _sNode = d.getElementById('_webengage_script_tag');
+    _sNode.parentNode.insertBefore(_we, _sNode);
+  })(document);
+</script>
+
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.perfectaudience.com/serve/54eb320b3a84b7f6ce00006c.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+{% endif %}
+
+
+<!-- live chat test-->
+<script type="text/javascript">
+var __lc = {};
+__lc.license = 5956231;
+
+(function() {
+    var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+})();
+</script>
+
+
+
+<!-- webengage integration test-->
+<script id="_webengage_script_tag" type="text/javascript">
+
+  var _weq = _weq || {};
+
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "in") {
+    _weq['webengage.licenseCode'] = '~134106357';
+  }
+  else {
+    _weq['webengage.licenseCode'] = '~71680cad';
+
+  }
+  if (document.location.hostname.substring(document.location.hostname.lastIndexOf('.')+1) == "localhost") {
+    _weq['webengage.licenseCode'] = '~c2ab3813';
+  }
+
+  _weq['webengage.widgetVersion'] = "4.0";
+
+  (function(d){
+    var _we = d.createElement('script');
+    _we.type = 'text/javascript';
+    _we.async = true;
+    _we.src = (d.location.protocol == 'https:' ? "https://ssl.widgets.webengage.com" : "http://cdn.widgets.webengage.com") + "/js/widget/webengage-min-v-4.0.js";
+    var _sNode = d.getElementById('_webengage_script_tag');
+    _sNode.parentNode.insertBefore(_we, _sNode);
+  })(document);
+</script>
+
+<!-- live chat test-->
+<script type="text/javascript">
+var __lc = {};
+__lc.license = 5956231;
+
+(function() {
+    var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+})();
+</script>
+
+<!-- End Document
+================================================== -->
+</body>
+</html>

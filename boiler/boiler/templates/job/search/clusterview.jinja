@@ -1,0 +1,123 @@
+{% if request.is_xhr  and request.args.get('sub','') == '1' %}
+    {% extends "layout/ajax.jinja" %}
+{% elif section.main == 'manage_career_tab' %}
+    {% extends "pagetab/main.jinja" %}
+{% elif  section.sub == 'self_company_jobs' %}
+    {% extends "job/listing/main.jinja" %}
+{% else %}
+    {% extends "job/search/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    <div class="media cluster-view js-cluster-view js-result-box">
+        {% if search_result and search_result.result %}
+            <div class="pull-left">
+                {{ html.companyLogo(company) }}
+            </div>
+            <div class="media-body">
+                {# CONNECTIONS #}
+                {% if show and show.connection != false %}
+                    {% set jobID = search_result.result[0].job.id %}
+                    <div class="js-autofill"  href="/jobs/miniconnectionlist?jobid={{ jobID }}&company={{ company.name }}&{{ request.url | stringurlencode('searchurl') }}&clusterview=1" id="job-search-mini-connection-{{ jobID }}"  data-loading-selector="none" data-replace-type= "withouthistory" >
+                        <div class="loader-sm text-left"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                    </div>
+                {% endif %}
+
+                {# LIST OF JOBS #}
+                <div class="cluster-wrap">
+                    {% for x in search_result.result %}
+                    <div class="result-box">
+                        <div class="pull-right media-rgt hidden-xs">
+                            <ul class="list-unstyled">
+                                <li class="text-right">
+                                    {# REFERRAL AMOUNT #}
+                                     {% if show.referral_amount == true and search_result.result[x].job.referral_amount %}
+                                        <a href="/jobs/referlist/{{ search_result.result[x].job.id }}">
+                                            <div class="refer-earn-box text-center">
+                                                <div class="refer-amt">
+                                                    <p class="tx-16">
+                                                        <i class="glyphicon glyphicon-{{ search_result.result[x].job.referral_amount.currency | lower }}"></i>
+                                                         <strong>{{ search_result.result[x].job.referral_amount.amount }}</strong>
+                                                    </p>
+                                                </div>
+                                                <div class="label label-info">Refer & Earn</div>
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                {% if  search_result.result[x].job.saved == true %}
+                                    <li class="save-btn savedbtn text-right">
+                                        <p class="show-on-hover pull-right">
+                                            <button class="btn disabled btn-success">
+                                               Saved &nbsp; <i class="glyphicon glyphicon-check"></i>
+                                            </button>
+                                        </p>
+                                    </li>
+                                {% else %}
+                                    <li class="save-btn text-right ">
+                                        <p class="show-on-hover js-ajax-replace-wrapper">
+                                            <a class="btn  btn-default js-replace-action js-track-analytics" role="button" href="/jobs/save/{{ search_result.result[x].job.id }}">
+                                               Save &nbsp; &nbsp; <i class="glyphicon glyphicon-plus"></i>
+                                           </a>
+                                       </p>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a href="/job/{{ search_result.result[x].job.id }}?{{ request.url | stringurlencode('searchurl') }}" class="link-blue js-job-link js-popout-link {{ 'js-focus' if loop.index == 1 }}" role="link" target="{{ '_blank' if (user.in_iframe) }}">
+                                        {{ search_result.result[x].job. title }}
+                                    </a>
+                                </h4>
+                                <p class="text-muted">
+                                    {{ search_result.result[x].job. location }}
+                                </p>
+                                <p>
+                                    {{ search_result.result[x].job.description | truncate(150) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {# PAGINATION AND SHOW MORE #}
+                {% if  show and show.show_more == true %}
+                    {% if pagination and pagination.total_results and (pagination.total_results) > constants.MAX_SEARCH_RESULTS %}
+                        <div class="pull-right">
+                            <a href="{{ '/jobs/search?' + pagination.auxparams | remove_params_query_string('view')  }}" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link js-scrolltop-link">
+                                <b>Show More</b>
+                            </a>
+                        </div>
+                    {% endif %}
+                    <p><a class="js-close-cluster" href="javascript:void(0);"><i class="sprite glyphicon glyphicon-clu-close"></i>
+                        Hide these jobs  </a></p>
+                {% elif show and show.pagination != false %}
+                    {#---PAGINATION---#}
+                    <div class="row-fluid">
+                        <div class="pagination pagination-centered">
+                            {{ html.pagination(pagination.auxparams, pagination.total_results, pagination.page, request.path) }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="row result-empty" >
+               <b> No jobs found.</b>
+            </div>
+        {% endif %}
+    </div>
+{% endblock search_result_block %}
+
+
+
+
+
+
+
+
+
+
+

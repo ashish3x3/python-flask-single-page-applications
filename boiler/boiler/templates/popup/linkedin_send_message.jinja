@@ -1,0 +1,27 @@
+{% set show_footer = false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block modal_body %}
+<div class="js-row-each">
+	<form action="/linkedin/messages" role="form" class="form-horizontal js-update-append-form" data-replace="true" >
+		<p>&nbsp;</p>
+		<div class="col-md-12">
+			<div>
+				<label class="" for="linkedin_subject"> Subject </label>
+				<input class="form-control" type="text" required id="linkedin_subject" name="subject" value="{{ subject }}" />
+			</div>
+			<br />
+			<div>
+				<label class="" for="linkedin_message"> Message </label>
+				<textarea name="message" class="form-control" required rows="5" for="linkedin_message">{{ message }}</textarea>
+			</div>
+			<input type="hidden" name="id" value="{{ to }}">
+			<input type="hidden" name="link" value="{{ link }}">
+			<h3> <a href="{{ link }}" target="_blank">Dossier attached</a></h3>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary pull-right">Send</button>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock modal_body %}

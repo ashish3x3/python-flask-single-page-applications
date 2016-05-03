@@ -1,0 +1,36 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block main_content %}
+	<p class="spacer">&nbsp;</p>
+	<div class="container signup-button-bottom">
+		{% if not error_msg %}
+			<h2>You must sign in to use MyParichay.</h2>
+			<p class="spacer">&nbsp;</p>
+			<div>
+					<p>
+						{{ html.loginbutton('facebook',request, '','TSLogin') }}
+					</p>
+					<div class="text-center small-text pull-center">By clicking, you agree to MyParichay's Terms of Service </div>
+			</div>
+		{% else %}
+			<div class="alert alert-warning">
+				<b>{{ error_msg }}</b>
+			</div>
+		{% endif %}
+
+		<p class="spacer">&nbsp;</p>
+		<div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<h4>How does MyParichay use facebook?</h4>
+					<p>
+						MyParichay helps recruiters and HR managers to amplify their current talent pool using the Facebook Social Graph. Using Social Retargeting(TM), our proprietary technology, you can now reach out, attract and engage with quality talent with ease.
+					</p>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</div>
+	</div>
+	<br>
+	{% endblock main_content %}

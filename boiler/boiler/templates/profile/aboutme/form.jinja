@@ -1,0 +1,14 @@
+<form method="post" class="js-aboutme-form js-track-analytics js-write-permission js-replace-form" onsubmit="return false;" action="/profile/aboutme/edit"  data-getperm="{% if user.write_permission == false %}true{% endif %}">
+    <fieldset>
+    	<div class="form-group">
+    		<div class="col-md-14">
+    			<textarea class="form-control" name="aboutme" rows="5" maxlength="500" id="aboutme" required>{{ aboutme }}</textarea>
+    		</div>
+    	</div>
+    	<div class="clearfix">
+    		<button type="submit" class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" >Save</button>&nbsp;&nbsp;
+            <a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-write-permission','','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Save</a>
+    		<button type="button" class="btn btn-default js-landing-cancel">Cancel</button>
+    	</div>
+    </fieldset>
+</form>

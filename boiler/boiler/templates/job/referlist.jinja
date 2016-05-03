@@ -1,0 +1,81 @@
+{% if request.is_xhr  %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "job/native.jinja" %}
+{% endif %}
+
+{% block jobcontent %}
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel panel-default">
+                <header class="panel-heading">
+                    <h4>Refer a Friend</h4>
+                </header>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <input type="text" placeholder="Search All Friends" class="js-search-my-friends form-control input-lg col-md-6 js-refer-search">
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6 js-list-block">
+                            <div class="result-empty js-noautosuggest">
+                                <strong>Please use the search box above to refer a friend who might be a good fit for this job.</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-5">
+                            <br>
+                            <p>You do not have to be an employee of this company to refer a candidate</p>
+                            <hr></hr>
+                            <p>You can refer a friend through Facebook. </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    {% raw %}
+    <script id="tmpl_referblock" type="text/templates" >
+        <div class="media result-box sm-media" title="{{ User.name }}" id="rc_list_each_{{ User.fb_id }}" style="display:none;">
+            <div class="pull-left">
+                <div class="logo-blk-img">
+                    <img src="//graph.facebook.com/{{ User.fb_id }}/picture?height=90&amp;width=90" alt="{{ User.name }}" title="{{ User.name }}">
+                </div>
+            </div>
+            <div class="media-body">
+                <div class="col-md-9">
+                    <h4 class="media-heading">
+                        {{ User.name }}
+                    </h4>
+                    <strong>{{ User.company }}</strong>
+                    <div>{{ User.position }}</div>
+                </div>
+                <div class="pull-right">
+                    <a class="js-contact-refer btn btn-default" onclick="window.open('{{ User.sendlink }}', '', 'width=500,height=300');">
+                        Refer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </script>
+    {% endraw %}
+    <script type="text/javascript">
+
+        var FriendList  = [
+                {% for x in friends %}
+                {% set referlink = (config.MP_URL + 'job/referral_page/' + (job.id|string) + '?from=' + (user.fb_id|string) + '&to=' + (friends[x].fb_id|string) + '&' + request.query_string)  %}
+                {% set redirect_uri = ('https://' +request.headers['Host'] + '/jobs/refer/' + (job.id|string) + '/' + (friends[x].fb_id|string))  %}
+                {
+                    fb_id: "{{ friends[x].fb_id }}",
+                    label: "{{ friends[x].full_name | removequotefilter if friends[x].full_name else friends[x].name | removequotefilter }}",
+                    name: "{{ friends[x].full_name | removequotefilter if friends[x].full_name else friends[x].name | removequotefilter }}",
+                    position: "{{ friends[x].position | removequotefilter }}",
+                    company: "{{ friends[x].company | removequotefilter }}",
+                    job_id : "{{ job.id }}",
+                    sendlink:"{{ JCONSTANTS.FB_SENDMESSAGE_URL }}&{{ redirect_uri | stringurlencode('redirect_uri')  }}&to={{ friends[x].fb_id }}&{{ referlink | stringurlencode('link') }}"
+                }{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            ];
+    </script>
+{% endblock jobcontent  %}

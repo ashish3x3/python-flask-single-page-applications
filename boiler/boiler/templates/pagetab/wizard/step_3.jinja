@@ -1,0 +1,144 @@
+{% extends "pagetab/wizard/install.jinja" %}
+
+{% block step_content %}
+<div class="">
+        <h4 class="tx-16 text-muted text-center"><strong>Step 3 of 3: Sharing Options</strong></h4>
+
+        <div class="step-bar col-xs-12 col-sm-12 col-md-12 clearfix">
+            <div class="blue-bg col-xs-4 col-sm-4 col-md-4">&nbsp;</div>
+            <div class="blue-bg col-xs-4 col-sm-4 col-md-4">&nbsp;</div>
+            <div class="blue-bg col-xs-4 col-sm-4 col-md-4">&nbsp;</div>
+        </div>
+
+        <div class="pagetab-center-stp3">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-xs-2 col-sm-2 col-md-3 control-label">Facebook : </label>
+                            <div class="col-xs-10 col-sm-10 col-md-9">
+                                <div class="form-control-static col-xs-12 col-sm-12 col-md-12">
+                                    <div class="col-xs-6 col-sm-6 col-md-6" style="padding-left: 0px;">
+                                        <p class="wallpostpages">My Wall</p>
+                                        {% for x in data.share.options.pages %}
+                                            <p class="wallpostpages">{{ data.share.options.pages[x].name }}</p>
+                                            
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="btn-group">
+                                            <a class="btn btn-default {% if data.share.options.user_wall %}btn-primary{% endif %}" {% if data.share.options.user_wall %} disabled {% endif %} href="/pagetab/wall/auth?next={{data.next}}">
+                                                {% if not data.share.options.user_wall %}
+                                                    ON
+                                                {% else %}
+                                                    &nbsp;&nbsp;&nbsp;
+                                                {% endif %}
+                                            </a>
+                                            <a class="btn btn-default {% if not data.share.options.user_wall %}btn-primary{% endif %}" {% if not data.share.options.user_wall %}disabled {% endif %}  href="/pagetab/wall/unauth?next={{data.next}}">
+                                                {% if data.share.options.user_wall %}
+                                                    OFF
+                                                {% else %}
+                                                    &nbsp;&nbsp;&nbsp;
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <br>
+                                        {% for page_id, page_details in data.share.options.pages.items() %}
+                                            <p>
+                                                <div class="btn-group">
+                                                    <a class="btn btn-default {% if page_details.share %}btn-primary {% endif %}" {% if page_details.share %}disabled {% endif %} href="/pagetab/page/{{ page_id }}/auth?next={{data.next}}">
+                                                        {% if not page_details.share %}
+                                                            ON
+                                                        {% else %}
+                                                            &nbsp;&nbsp;&nbsp;
+                                                        {% endif %}
+                                                    </a>
+                                                    <a class="btn btn-default {% if not page_details.share %}btn-primary {% endif %}" {% if not page_details.share %}disabled {% endif %} href="/pagetab/page/{{ page_id }}/unauth?next={{data.next}}">
+                                                        {% if page_details.share %}
+                                                            OFF
+                                                        {% else %}
+                                                            &nbsp;&nbsp;&nbsp;
+                                                        {% endif %}
+                                                    </a>
+                                                </div>
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 col-sm-2 col-md-3 control-label">Twitter : </label>
+                            <div class="col-xs-10 col-sm-10 col-md-9">
+                                <p class="form-control-static col-xs-12 col-sm-12 col-md-12">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        {% if data.share.options.twitter %}
+                                            {{ data.share.usernames.twitter }}
+                                        {% else %}
+                                            <a href="{{ data.share.authorize.twitter }}">
+                                                <i class="glyphicon glyphicon-twitter-square  glyphicon-2x"> </i>&nbsp;
+                                                Add a Twitter Account
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="btn-group">
+                                            <a class="btn btn-default {% if data.share.options.twitter %}btn-primary{% endif %}" {% if data.share.options.twitter %}disabled {% endif %} href="/pagetab/twitter/auth?next={{ data.next }}">
+                                                {% if not data.share.options.twitter %}ON{% else %}&nbsp;&nbsp;&nbsp;{% endif %}
+                                            </a>
+                                            <a class="btn btn-default {% if not data.share.options.twitter %}btn-primary {% endif %}" {% if not data.share.options.twitter %}disabled {% endif %} href="/pagetab/twitter/unauth?next={{ data.next }}">
+                                                {% if data.share.options.twitter %}OFF{% else %}&nbsp;&nbsp;&nbsp;{% endif %}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 col-sm-2 col-md-3 control-label">LinkedIn : </label>
+                            <div class="col-xs-10 col-sm-10 col-md-9">
+                                <p class="form-control-static col-xs-12 col-sm-12 col-md-12">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        {% if data.share.options.linkedin %}
+                                            {{ data.share.usernames.linkedin }}
+                                        {% else %}
+                                            <a href="{{ data.share.authorize.linkedin }}">
+                                                <i class="glyphicon glyphicon-linkedin-square  glyphicon-2x"> </i>&nbsp;
+                                                Add a LinkedIn Account
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="btn-group">
+                                            <a class="btn btn-default {% if data.share.options.linkedin %}btn-primary {% endif %}" {% if data.share.options.linkedin %}disabled {% endif %} href="/pagetab/linkedin/auth?next={{ data.next }}">
+                                                {% if not data.share.options.linkedin %}
+                                                    ON
+                                                {% else %}
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {% endif %}
+                                            </a>
+                                            <a class="btn btn-default {% if not data.share.options.linkedin %}btn-primary {% endif %}" {% if not data.share.options.linkedin %} disabled {% endif %} href="/pagetab/linkedin/unauth?next={{ data.next }}">
+                                                {% if data.share.options.linkedin %}
+                                                    OFF
+                                                {% else %}
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="button" class="btn btn-default" value="Back" onclick="document.location.href='/pagetab/install?step=2.5'"/>
+            <input type="button" class="btn btn-default" value="Skip" onclick="document.location.href='{{ data.post_job_url }}'"/>
+            <input type="button" class="btn btn-primary" value="Save and Finish" onclick="document.location.href='{{ data.post_job_url }}'"/>
+        </div>
+        <br>
+        <br>
+</div>
+{% endblock step_content %}

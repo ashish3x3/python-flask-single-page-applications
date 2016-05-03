@@ -1,0 +1,43 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block content %}
+	<div class="invite-fr-container">
+		<div class="row">
+			<div class="col-md-5 col-sm-7" style="overflow: hidden;">
+				<div class="invite-graphic">
+					<div class="invite-graphic-mask"></div>
+					<img alt="My Pic" title="My Pic" src="//graph.facebook.com/{{ user.fb_id }}/picture?width=160&height=160" class="profile-1">
+					{% for x in friends %}
+						<img alt="Friends Pic" title="Friends Pic" src="//graph.facebook.com/{{ x }}/picture?width=160&height=160" class="profile-{{ loop.index+1 }}">
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="col-md-7 col-sm-5">
+				<br><br>
+				<section role="region" aria-labelledby="Welcome_back_heading" class="clearfix">
+					<header>
+						<h2 class="tx-big" id="Welcome_back_heading">MyParichay works best with your friends</h2>
+					</header>
+					<br>
+					<p class="tx-14">
+						<strong>Welcome back to MyParichay,</strong> the talent pool on Facebook.
+            			You're all set up, but you haven't invited all your friends to MyParichay yet. MyParichay analyzes your facebook network and  finds valuable insider connections to top companies. A friend referral can increase your chances of getting your dream job by as much as five times ! Invite your friends now.
+					</p>
+					<br><br>
+				</section>
+				<div role="region" aria-label="Invite Friends" class="clearfix" >
+					<a onclick = "window.open('/fbinviteredirect?start=1','', 'width=500,height=250');" class="btn btn-primary btn-lg js-track-event"  style="margin-left:30%" role="button" data-category="Invite" data-labels="Splash">
+						<span class="btn-divider">
+							<i class="glyphicon glyphicon-facebook"></i>
+						</span>
+						<strong>Continue</strong>
+					</a>
+					{#<a href="/landing" class="btn btn-link btn-lg">Not now</a>#}
+				</div>
+			</div>
+		</div>
+	</div>
+	<p> &nbsp; </p>
+	<p> &nbsp; </p>
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+  <div class="navbar-brand " href=""><img class="header_image_icon" src="/static/img/refer.png">Share & Gift</div>
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+    <div class="col-md-8 order-page">
+
+
+        <div id="applyCoupon" class="col-md-8">
+<div id="coupon-hero"> <img style="width:50%" src="/static/img/refer-large.png"> 
+
+
+<h3>Share and gift your friends a MyWash experience</h3>
+
+</div>
+
+  <form id="applycoupon" method="get" action="/applycoupon" >
+            <fieldset class="cf">
+             <div id="share-icons" class="input-group">
+
+               
+<div class="social-likes">
+
+  <div class="facebook" title="Share link on Facebook">Facebook</div>
+  <div class="twitter" title="Share link on Twitter">Twitter</div>
+  <div class="plusone" title="Share link on Google+">Google+</div>
+</div>
+
+  </div>
+        </div>  
+      
+    </div>
+
+{% endblock main_content %}

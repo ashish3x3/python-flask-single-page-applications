@@ -1,0 +1,91 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% endif %}
+{% block main_wrapper %}
+    <div class="pop_up_form">
+        <form>
+            <input type="text" placeholder="Search All Friends" class="js-search-my-friends span9">
+        </form>
+    </div>
+    <div class="connections_box js-list-block span9">
+
+        {% for x in friends %}
+            <div class="see_connections_list" id="rc_list_each_{{ friends[x].fb_id }}">
+                <div class="msg_img span2" style="background-image:url('//graph.facebook.com/{{ friends[x].fb_id }}/picture?type=small');"></div>
+                <div class="span5 omega margin_top_minus10">
+                    <h4>
+                        <a href="/profile/{{ friends[x].fb_id }}">
+                            <span class="color_blue bold" >{{ friends[x].name }}</span>
+                        </a>
+                    </h4>
+                    <h6 class="color_grey">
+                        {% if friends[x].position %}
+                            {{ friends[x].position }}
+                        {% endif %}
+                        {% if friends[x].position and friends[x].company %}
+                            |
+                        {% endif %}
+                        {% if friends[x].company %}
+                            {{ friends[x].company }}
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="span2 omega">
+                    <a href="/profile/{{ friends[x].fb_id }}" class="btn btn-small bold">
+                        View
+                    </a>
+                </div>
+            </div><!-- See Connections -->
+        {% endfor %}
+
+    </div>
+{% endblock main_wrapper %}
+
+
+{% block postscript %}
+    {% raw %}
+    <script id="tmpl_referblock" type="text/templates">
+        <div class="see_connections_list" id="rc_list_each_{{ User.fb_id }}">
+            <div class="msg_img span2"
+                style="background-image:url('//graph.facebook.com/{{ User.fb_id }}/picture?type=small')">
+            </div>
+            <div class="span5  omega margin_top_minus10">
+                <h4 class="color_blue bold">
+                    <a href="#">{{User.name}}</a>
+                </h4>
+                <h6 class="color_grey">
+                    {{ User.position }}, {{ User.company }}
+                </h6>
+            </div>
+            <div class="span2 omega">
+                <a href="/profile/{{ User.fb_id }}" class="btn btn-small bold">
+                        View
+                </a>
+            </div>
+        </div>
+    </script>
+    {% endraw %}
+
+    <script type="text/javascript">
+
+        jQuery('.referblock').each(function(){
+            var data        = jQuery.parseJSON($(this).find('.hidden').html());
+            var result      = tmpl_referblock(data);
+            $(this).html(result);
+        });
+
+
+        var FriendList  = [
+                {% for x in friends %}
+                {
+                    fb_id: "{{ friends[x].fb_id }}",
+                    label: "{{ friends[x].name }}",
+                    name: "{{ friends[x].name }}",
+                    position: "{{ friends[x].position }}",
+                    company: "{{ friends[x].company }}"
+                },
+                {% endfor %}
+            ];
+    </script>
+
+{% endblock postscript %}

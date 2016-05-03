@@ -1,0 +1,108 @@
+<meta charset="utf-8">
+<title>
+    {{ section.title  if section and section.title }} | MyParichay
+</title>
+
+{# Mobile/Tablet #}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
+<meta name="apple-mobile-web-app-title" content="MyParichay" >
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<link rel="icon" sizes="196x196" href="/static/icons/196x196.png">
+
+{# Windows #}
+<meta name="application-name" content="MyParichay">
+<meta name="msapplication-starturl" content="{{ config.MP_URL }}">
+
+{# Share OG #}
+{% if meta and meta.og_url %}
+    <meta property="og:url" content="{{ meta.og_url }}">
+{% endif %}
+
+{% if  meta and meta.og_description %}
+    {% set meta_og_description = meta.og_description %}
+{% else  %}
+    {% set meta_og_description = 'MyParichay Social Job Board, Find jobs through friends, Social hiring and job search platform' %}
+{% endif %}
+
+{% if meta and meta.og_title %}
+    <meta property="og:title" content="{{ meta.og_title }}">
+{% endif %}
+<meta name="twitter:title" content="{{ section.title if section  }}">
+<meta name="twitter:card" content="summary">
+
+<meta property="fb:app_id" content="{{ config.APP_ID }}">
+<meta property="og:description" content="{{ meta_og_description | striptags | truncate(255) }}">
+<meta name="twitter:description" content="{{ meta_og_description | striptags | truncate(255) }}">
+
+<meta name="twitter:image" content="{% if meta and meta.og_image %} {{ meta.og_image }} {% else %} {{ config.MP_URL }}static/icons/200x200.png {% endif %}">
+<meta property="og:image" content="{% if meta and meta.og_image %} {{ meta.og_image }} {% else %} {{ config.MP_URL }}static/icons/200x200.png {% endif %}">
+
+<script>
+    var UserFBId = '{{ user.fb_id if(user) else 0}}';
+    var LoaderHTML = '<span class="loader"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></span>';
+    var user_current_country = "{{ user.country if(user) else IN }}";
+    var MP_URL = "{{ config.MP_URL }}";
+    var _gaq = _gaq || [];
+    var in_iframe = {
+            client : (window.top != window.self) ? true : false,
+            server: {% if (user and user.in_iframe) %} true {% else %} false {% endif %}
+    }
+    var FBRedirect   = {% if config.FBREDIRECT and not nofbredirect %} true {% else %} false {% endif %};
+    var RedirectUrl  = '{{ redirectUrl }}';
+    var FBAccessToken = '{{ config.ACCESS_TOKEN }}';
+    var App = {};
+    var parentURLOrigin = false;   //a white list of valid URLs where this app can be embedded
+    var App = {};
+</script>
+
+{# CSS and Less  Starts #}
+{% if config.DEBUG == false %}
+    {% assets filters="less", output="gen/packed.css", "less/bootstrap.less" %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+
+    {% if section and (section.main == 'landing' and section.sub == 'login') %}
+        {% assets filters="less", output="gen/mp-landing.css", "less/mp-landing.less" %}
+            <link href="{{ ASSET_URL }}" rel="stylesheet">
+        {% endassets %}
+    {% endif %}
+{% else %}
+    <link href="/static/less/bootstrap.less" rel="stylesheet/less">
+    {% if section and (section.main == 'landing' and section.sub == 'login') %}
+        <link href="/static/less/mp-landing.less" rel="stylesheet/less">
+    {% endif %}
+    <script src="/static/js/lib/min/less.1.4.1.min.js" ></script>
+{% endif %}
+
+{% if isCareerSite and request.args['associationValue'] %}
+    {% if isFileExist('/static/css/'+request.args['associationValue']+'.css') %}
+        <link rel="stylesheet" href="/static/css/{{request.args['associationValue']}}.css" type="text/css" />
+    {% endif %}
+{% endif %}
+{# CSS and Less  Ends #}
+
+
+{# only important js starts #}
+
+<!--[if IE 8]>
+<script src="//cdn.jsdelivr.net/modernizr/2.6.2/modernizr.min.js" ></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+{% if config.DEBUG == false %}
+    <script src="//cdn.jsdelivr.net/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+
+    {% if config.APP_NAMESPACE == 'myparichay' %}
+    <script>
+        (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
+        c&&c.apply(this,a)};var b=function(){var c=e.createElement(rr),b=e.getElementsByTagName(rr)[0];
+        c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
+        _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
+        (window,document,"script","53c50d9884e782235300045a");
+    </script>
+    {% endif %}
+
+{% else %}
+    <script src="/static/js/lib/jquery.1.9.1.js"></script>
+{% endif %}
+
+{# only important js ends #}

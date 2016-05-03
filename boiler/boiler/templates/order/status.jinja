@@ -1,0 +1,409 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+  <div class="navbar-brand order_status" href="">
+    <img class="header_image_icon" src="/static/img/order_history.png">
+    {{status_text}}
+  </div>
+{% endblock screen_name %}
+
+{% block main_content %}
+
+  <div id="order_status" class="col-md-7 ">
+    <div class="progress-container fade-in">
+      <div>
+        <h2>{{status_group_name|capitalize}}</h2>
+        <h3>{{status_text}}</h3>
+      </div>
+      <img id="img0" src="/static/img/wheel/wheel-bg.png">
+      {% if status_group == "order_placed" %}
+        <img class="blue-progress prog-1" data-bindattr-25="25" src="/static/img/wheel/wheel-progress-1.png">
+      {% endif %}
+      {% if status_group == "clothes_picked" %}
+        <img class="blue-progress prog-2" data-bindattr-26="26" src="/static/img/wheel/wheel-progress-2.png">
+      {% endif %}
+      {% if status_group == "clothes_ready" %}
+        <img class="blue-progress  prog-3" data-bindattr-27="27" src="/static/img/wheel/wheel-progress-3.png">
+      {% endif %}
+      {% if status_group == "order_complete" %}
+        <img class="blue-progress prog-4" data-bindattr-28="28" src="/static/img/wheel/wheel-progress-4.png">
+      {% endif %}
+    </div>
+  </div>
+  <div id="order_status_info" class="col-md-4 order-status order-status-info">
+    {% if coupon_applied.status == "success" %}
+      <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px; width: 290px;">
+        {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <img src="/static/img/apply_coupons_image2.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+            {# <h3 style="margin-left: 10px;">Coupon Status<br/>{{coupon_applied.name|upper}}</h3> #}
+            <h4 style="text-decoration: none;">Coupon Status<br/>{{coupon_applied.name|upper}}</h4>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px;width: 290px;">
+      {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+          <img src="/static/img/pick-up-truck.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+{#           <h3 style="margin-left: 10px;">Pick up<br/>{{pickup.result[0].schedule_date}}&nbsp;&nbsp;{{pickup.result[0].schedule_time}}</h3> #}
+          <h4 style="text-decoration: none;">Pick up :<br/>{{pickup.result[0].schedule_date}}&nbsp;&nbsp;{{pickup.result[0].schedule_time}}</h4>
+        </div>
+      </div>
+    </div>
+    <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px;width: 290px;">
+      {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+          <img src="/static/img/pick-up-truck2.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+{#           <h3 style="margin-left: 10px;">Delivery<br/>{{delivery.result[0].schedule_date}}&nbsp;&nbsp;{{delivery.result[0].schedule_time}}</h3> #}
+          <h4 style="text-decoration: none;">Delivery :<br/>{{delivery.result[0].schedule_date}}&nbsp;&nbsp;{{delivery.result[0].schedule_time}}</h4>
+        </div>
+      </div>
+    </div>
+    <div id="" class="pickup-drop-block last col-md-12">
+      <h4>Pickup/Delivery Address</h4>
+      <p>OrderId: #{{order_id}}</p>
+      <p>{{address.result[0].apartment_number}}, {{address.result[0].address_1}}, {{address.result[0].city}} </p>
+      <p> Phone: {{phone}} </p> 
+      <p> Type : {{type}} </p>
+    </div>
+
+    <!-- Display Select status only if session is of admin -->
+    {% if status_group == "order_cancelled" %}
+      <div id="" class="pickup-drop-block last col-md-12">
+        <h4 style="text-decoration: none;">Order&nbsp;Cancelled</h4>
+      </div>
+    {% elif status_group == "order_rejected" %}
+      <div id="" class="pickup-drop-block last col-md-12">
+        <h4 style="text-decoration: none;">Order&nbsp;Rejected</h4>
+      </div>
+    {% elif (status == 'order_placed' or status == 'pickup_progress') %}
+      <div id="" class="pickup-cancel-block col-md-12">
+        <p>
+          <a href="#" id="cancel-order" data-target="#editOrderCancel" data-toggle="modal" data-id="{{_id}}" class="edit-order">Cancel</a>
+        </p>
+      </div>
+    
+    {% elif is_paid == 'paid' and payment_id %}
+      <div id="" class="pickup-cancel-block col-md-12">
+        <img class="amount-paid" src='/static/web-images/stamp-webS.png' title="Amount Paid" alt="Paid"  height="90" width="90">
+      </div>
+    {% endif %}
+
+    {% if (
+      status != "order_placed" and
+      status != 'pickup_progress' and
+      status != 'pickup_failed' and
+      status != 'pickup_complete' and
+      status != 'pickup_success' and
+      status != 'order_cancelled' and
+      status != 'order_rejected' and
+      is_paid != 'paid' and
+      is_paid != 'excess_paid' and
+      created_date|date_gt("2015-09-21")
+    )%}
+      <div id="" class="pickup-cancel-block col-md-12" style="line-height: 2.3;">
+        <p>
+          <a href="#" id="pay-now" data-target="#package-invoice-modal" data-toggle="modal" data-id="{{_id}}" class="edit-order">Pay Now</a>
+        </p>
+        <!--<p>
+          <a href="https://s3-ap-southeast-1.amazonaws.com/{{config.AWS_CREDS.bucket}}/{{order_id}}.pdf" target="_blank" class="edit-order" style="text-decoration: none;">&nbsp;&nbsp;Invoice&nbsp;&nbsp;</a>
+        </p>-->
+      </div>
+      
+    {% endif %}
+
+
+  </div>
+{% endblock main_content %}
+
+{% block misc_space %}
+  <input id="page-message" data-status="{{transaction_status.0}}" data-message="{{transaction_message.0|lower|capitalize}}" type="hidden">
+  <div class="modal fade confirm" id="package-invoice-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-right">
+          <button id="collapse" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <h2 class="modal-body-heading"><span>Payment Details</span></h2><br/>
+          <div id="invoice-panel" style="padding: 5px">
+            <div  class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b>Type</b></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p><b>Quantity</b></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b>Total Price (&#x20B9;)</b></p>
+                  </div>
+                </div><br/>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Wash &amp; Iron</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='laundry-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='laundry-amt'></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Dryclean</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='dryclean-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='dryclean-amt'></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Iron</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='iron-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='iron-amt'></b></p>
+                  </div>
+                </div>
+              </div>
+            </div><br/>
+            <div class="row">
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Discount:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="discount"></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Credits:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="used-credits"></b></p>
+                  </div>
+                </div><br/>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Payable Amount:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b class="total-price"></b></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Subtotal:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="sub-total"></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Service Tax (14 %):</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="service-tax"></b></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <form id="paytm-form" method="post" action="" style="display: none;">
+                <input id="REQUEST_TYPE" type="hidden" name="REQUEST_TYPE" value="" placeholder="">
+                <input id="MID" type="hidden" name="MID" value="" placeholder="">
+                <input id="ORDER_ID" type="hidden" name="ORDER_ID" value="" placeholder="">
+                <input id="CUST_ID" type="hidden" name="CUST_ID" value="" placeholder="">
+                <input id="TXN_AMOUNT" type="hidden" name="TXN_AMOUNT" value="" placeholder="">
+                <input id="CHANNEL_ID" type="hidden" name="CHANNEL_ID" value="" placeholder="">
+                <input id="INDUSTRY_TYPE_ID" type="hidden" name="INDUSTRY_TYPE_ID" value="" placeholder="">
+                <input id="WEBSITE" type="hidden" name="WEBSITE" value="" placeholder="">
+                <!-- <input id="MOBILE_NO" type="hidden" name="MOBILE_NO" value="" placeholder=""> -->
+                <input id="CHECKSUMHASH" type="hidden" name="CHECKSUMHASH" value="" placeholder="">
+              </form>
+              <button class="btn" id="payment_submit" style="font-size: 15px;background-color: #21AFCD;width: 60%; height: 30%;">
+                Pay Now
+              </button>
+            </div>
+          </div>
+          <div class="row text-center">
+            <span>Powered by: </span>
+            <img src="/static/img/high-resolution-original-small.png" height="50px">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock misc_space %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+
+  $(function(){
+    var page_message = $('#page-message');
+    if (page_message.attr('data-status') == 'failure') {
+      Toast.show({
+        message  : "Payment failed: " + page_message.attr('data-message'),
+        duration    : Toast.DURATION_LONG,
+      }); 
+    };
+    
+
+    $('#pay-now').click(function(e){
+      e.preventDefault();
+      var order_id = $(this).data("id");
+
+      $.ajax({
+        url: "/orderitem/" + order_id,
+        type: 'get',
+        dataType: 'json',
+        context: this,
+        success: function(data){
+          console.log(data.customer_details);
+          var items = data.data;
+          var qty = "";
+          var rate = "";
+          var tr = $('#invoice-panel #order-items');
+          $('#invoice-panel .order-id').html(data.customer_details.order_id);
+          $('#invoice-panel #customer-name').html(data.customer_details.user.name);
+          $('#invoice-panel #service-type').html(data.customer_details.service_type);
+          $('#invoice-panel #delivery-date').html(data.customer_details.schedules.delivery.schedule_date);
+          $('#invoice-panel #delivery-time').html(data.customer_details.schedules.delivery.schedule_time);
+          $('#invoice-panel .total-price').html(data.customer_details.cost.total);
+          $('#invoice-panel #sub-total').html(data.customer_details.cost.sub_total);
+          if (data.customer_details.discount.amount) {
+            $('#invoice-panel #discount').html(data.customer_details.discount.amount);
+          }
+          else {
+            $('#invoice-panel #discount').html(0);
+          }
+          $('#invoice-panel #service-tax').html(data.customer_details.service_tax.amount);
+          if (data.customer_details.credits.used) {
+            $('#invoice-panel #used-credits').html(data.customer_details.credits.used);
+          }
+          else {
+            $('#invoice-panel #used-credits').html(0);
+          }
+          var laundry_qty = 0;
+          var dryclean_qty = 0;
+          var iron_qty = 0;
+
+          var laundry_amt = 0;
+          var dryclean_amt = 0;
+          var iron_amt = 0;
+
+          for (i=0; i<items.length; i++) {
+            if ('quantity' in items[i]){
+              if ('laundry' in items[i].quantity) {
+                laundry_qty = laundry_qty + parseInt(items[i].quantity.laundry);
+                laundry_amt = laundry_amt + (parseInt(items[i].quantity.laundry) * parseInt(items[i].price.laundry));
+              }
+              if ('dryclean' in items[i].quantity) {
+                dryclean_qty = dryclean_qty + parseInt(items[i].quantity.dryclean);
+                dryclean_amt = dryclean_amt + (parseInt(items[i].quantity.dryclean) * parseInt(items[i].price.dry_cleaning));
+              }
+              if ('iron' in items[i].quantity) {
+                iron_qty = iron_qty + parseInt(items[i].quantity.iron);
+                iron_amt = iron_amt + (parseInt(items[i].quantity.iron) * parseInt(items[i].price.iron));
+              }
+            }
+          }
+          $('#invoice-panel #laundry-qty').html(laundry_qty);
+          $('#invoice-panel #dryclean-qty').html(dryclean_qty);
+          $('#invoice-panel #iron-qty').html(iron_qty);
+          
+          $('#invoice-panel #laundry-amt').html(laundry_amt);
+          $('#invoice-panel #dryclean-amt').html(dryclean_amt);
+          $('#invoice-panel #iron-amt').html(iron_amt);
+          $('#invoice-panel').css('font-size', '13px');
+        },
+        error: function(){
+          console.log("error");
+          location.reload();
+        }
+      })
+
+      $(this).hide();
+      $("#package-invoice-modal").modal({
+          backdrop: 'static',
+          keyboard: false,
+          show: true
+      });
+
+      $.ajax({
+        url: "/paytm/payment/" + order_id,
+        type: 'get',
+        dataType: 'json',
+        context: this,
+        success: function(data) {
+            $('#paytm-form #REQUEST_TYPE').val(data.payment_data.REQUEST_TYPE);
+            $('#paytm-form #MID').val(data.payment_data.MID);
+            $('#paytm-form #ORDER_ID').val(data.payment_data.ORDER_ID);
+            $('#paytm-form #CUST_ID').val(data.payment_data.CUST_ID);
+            $('#paytm-form #TXN_AMOUNT').val(data.payment_data.TXN_AMOUNT);
+            $('#paytm-form #CHANNEL_ID').val(data.payment_data.CHANNEL_ID);
+            $('#paytm-form #INDUSTRY_TYPE_ID').val(data.payment_data.INDUSTRY_TYPE_ID);
+            $('#paytm-form #WEBSITE').val(data.payment_data.WEBSITE);
+/*            
+            $('#paytm-form #MOBILE_NO').val(data.payment_data.MOBILE_NO);
+            $('#paytm-form #EMAIL').val(data.payment_data.EMAIL);
+
+*/
+            $('#paytm-form #CHECKSUMHASH').val(data.payment_data.CHECKSUMHASH);
+            $('#paytm-form').attr('action', data.url);
+        },
+        error: function() {
+          console.log("error");
+          location.reload();
+        }
+      })
+
+    })
+
+    $('#package-invoice-modal #collapse').click(function() {
+      $("#package-invoice-modal").modal({
+          backdrop: 'static',
+          show: false
+      });
+      $('#pay-now').show();
+    });
+
+    $('#package-invoice-modal #payment_submit').click(function(){
+      console.log("redirect to paytm");
+      $( "#paytm-form" ).submit();
+      console.log("form submitted");
+    });
+
+  });
+</script>
+
+{% endblock extra_js %}
+

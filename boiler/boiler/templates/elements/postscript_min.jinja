@@ -1,0 +1,78 @@
+
+<div id="fb-root"></div>
+<div id="webengage_feedback_button" class="feedbackbutton hidden-xs"></div>
+
+{# facebook #}
+<script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
+<script>
+    FB.init({
+        appId : '{{ config.APP_ID }}', // App ID from the app dashboard
+        status : true, // Check Facebook Login status
+        xfbml : true,  // Look for social plugins on the page
+        cookie : true // enable cookies to allow the server to access the session
+    });
+</script>
+
+{% block scripts %}{% endblock scripts %}
+
+{% if config.DEBUG == false %}
+    <script>
+        {# Google  Analytics #}
+        {# custom_var_1=Banner Type #}
+        {# custom_var_2=Product #}
+
+        // _gaq.push(['_setCustomVar',2,'Product','{{ session.product if session and session.product else "Job Seeker App" }}',2]);
+
+        /* _gaq is defined in head */
+        var pluginUrl =  '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+        _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+        _gaq.push(['_setSiteSpeedSampleRate', 75]);
+        _gaq.push(
+            ['_setAccount', 'UA-29987765-1'],
+            ['_trackPageview']
+        );
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+
+        {# Google Tag Manager #}
+        (function(w,d,s,l,i){
+            w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f) ;
+        })(window,document,'script','dataLayer','GTM-5K69FX');
+    </script>
+
+    {# Webengage #}
+    {% if (not UAgentInfo.detectMobileLong()) and (not show or show.feedback_widget != false) and (config.APP_NAMESPACE == 'myparichay') %}
+    <script id="_webengage_script_tag" type="text/javascript">
+        var _weq = _weq || {};
+        _weq['webengage.licenseCode'] = '~2024bd84';
+        _weq['webengage.widgetVersion'] = "4.0";
+        _weq['webengage.feedback.defaultRender'] = false;
+        _weq['webengage.onReady'] = function(){
+            $("#webengage_feedback_button").on('click', function () {
+                webengage.feedback.render({ 'showForm' : true });
+                $("#webengage_feedback_button").remove();
+            });
+        };
+
+        (function(d){
+          var _we = d.createElement('script');
+          _we.type = 'text/javascript';
+          _we.async = true;
+          _we.src = (d.location.protocol == 'https:' ? "https://ssl.widgets.webengage.com" : "http://cdn.widgets.webengage.com") + "/js/widget/webengage-min-v-4.0.js";
+          var _sNode = d.getElementById('_webengage_script_tag');
+          _sNode.parentNode.insertBefore(_we, _sNode);
+        })(document);
+    </script>
+    {% endif %}
+{% endif %}

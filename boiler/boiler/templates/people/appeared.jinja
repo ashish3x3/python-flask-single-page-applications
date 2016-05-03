@@ -1,0 +1,17 @@
+{% import 'elements/macros.jinja' as html %}
+{% if friends.users %}
+    <strong class="text-muted">Appeared Through</strong>
+    <div class="img-connection">
+            {% for y in friends.users %}
+                {% if loop.index <= 3 %}
+                    {{ html.imageWithProfileUrl(friends.users[y]) }}
+                {% endif %}
+            {% endfor %}
+        {% if friends.count > 3 %}
+            <a href="/user/search?customfb_ids={{ more_id }}" class="btn btn-primary more-img more-img-small">
+               {{ friends.count  }}+
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+

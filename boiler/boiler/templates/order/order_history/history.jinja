@@ -1,0 +1,357 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+  <div class="navbar-brand" href="">
+    <img class="header_image_icon" src="/static/img/order_history.png">
+    Order History
+  </div>
+{% endblock screen_name %}
+
+{% block main_content %}
+
+  <div class="col-md-8 order-page pricing orderhistory">
+    {% if result %}
+      <table class="table" style="min-width: 150px;max-width: 750px;">
+        <tbody>
+          {% for order in result %}
+            <tr id="row-{{ order._id }}" style="min-width: 150px;max-width: 750px;background-color: #FFF;">
+              <td>
+                <div class="row" style="padding: 20px 0px 5px 10px;">
+                  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 text-left">
+                    <a href="/getstatus/{{ order._id }}" style="color: #A6AFA8;text-decoration: none;">
+                      <p style="font-size: 17px;">#{{order.order_id}}</p>
+                      <p style="font-size: 13px;">{{order.created_date[:16]}}</p>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                    <p style="font-size: 17px;color: #A6AFA8;">
+                      {% if 'is_paid' in order and order.is_paid == 'partially_paid' %}
+                        &#x20B9; : {{ order.total_price - order.cash_collected }}
+                      {% elif order.total_price %}
+                        &#x20B9; : {{ order.total_price }}
+                      {% elif order.status == 'order_cancelled' or order.status == 'order_rejected' %}
+                        N.A
+                      {% else %}
+                        In Process
+                      {% endif %}
+                    </p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-5 col-xs-5 text-center {% if order.created_date|date_lt('2015-09-21') %}hide{% endif %}" id="payment_tab">
+                    {% if order.status == 'order_cancelled' %}
+                      <button style="background-color: #A6AFA8;padding: 10px;font-size: 15px;min-width: 78px;max-width: 100px;">
+                        Cancelled
+                      </button>
+                    {% elif order.status == 'order_rejected' %}
+                      <button style="background-color: #A6AFA8;padding: 10px;font-size: 15px;min-width: 78px;max-width: 100px;">
+                        Rejected
+                      </button>
+                    }
+                    {% elif order.is_paid == 'paid' and order.payment_id %}
+                      <button style="background-color: #A6AFA8;padding: 10px;font-size: 15px;min-width: 78px;max-width: 100px;">
+                        Paid
+                      </button>
+                    {% elif (order.total_price or order.is_paid == 'not_paid') %}
+                      <button class="pay-now" data-custom-value="{{ order._id}}" style="background-color: #FF8748;padding: 10px;font-size: 15px;min-width: 80px;max-width: 100px;">
+                        Pay Now
+                      </button>
+                      
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div id="applyCoupon" class="col-md-8">
+        <div id="coupon-hero"><span class="icon-smiley-3"></span><h3>Uh Oh! looks like you never tried us before. </h3></div>
+        <form id="order-schedule-link" method="get" action="/order_schedule">
+          <div class="input-group margin_0">
+            <label class="control-label" for="editAccountPhone"></label>
+            <button id="" type="submit" data-ember-action="13" class="primary" value="Save">Place Order</button>
+          </div>
+        </form>
+      </div>
+   {% endif %}
+  </div>
+
+{% endblock main_content %}
+
+
+{% block misc_space %}
+
+  <div class="modal fade confirm" id="package-invoice-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-right">
+          <button id="collapse" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <h2 class="modal-body-heading"><span>Payment Details</span></h2><br/>
+          <div id="invoice-panel" style="padding: 5px">
+            <div  class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b>Type</b></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p><b>Quantity</b></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b>Total Price (&#x20B9;)</b></p>
+                  </div>
+                </div><br/>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Wash &amp; Iron</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='laundry-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='laundry-amt'></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Dryclean</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='dryclean-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='dryclean-amt'></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p>Iron</p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                    <p id='iron-qty'></p>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-left">
+                    <p><b id='iron-amt'></b></p>
+                  </div>
+                </div>
+              </div>
+            </div><br/>
+            <div class="row">
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Discount:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="discount"></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Credits:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="used-credits"></b></p>
+                  </div>
+                </div><br/>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Payable Amount:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b class="total-price"></b></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Subtotal:</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="sub-total"></b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>Service Tax (14 %):</p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <p>&#x20B9; <b id="service-tax"></b></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <form id="paytm-form" method="post" action="" style="display: none;">
+                <input id="REQUEST_TYPE" type="hidden" name="REQUEST_TYPE" value="" placeholder="">
+                <input id="MID" type="hidden" name="MID" value="" placeholder="">
+                <input id="ORDER_ID" type="hidden" name="ORDER_ID" value="" placeholder="">
+                <input id="CUST_ID" type="hidden" name="CUST_ID" value="" placeholder="">
+                <input id="TXN_AMOUNT" type="hidden" name="TXN_AMOUNT" value="" placeholder="">
+                <input id="CHANNEL_ID" type="hidden" name="CHANNEL_ID" value="" placeholder="">
+                <input id="INDUSTRY_TYPE_ID" type="hidden" name="INDUSTRY_TYPE_ID" value="" placeholder="">
+                <input id="WEBSITE" type="hidden" name="WEBSITE" value="" placeholder="">
+                <!-- <input id="MOBILE_NO" type="hidden" name="MOBILE_NO" value="" placeholder=""> -->
+                <input id="CHECKSUMHASH" type="hidden" name="CHECKSUMHASH" value="" placeholder="">
+              </form>
+              <button class="btn" id="payment_submit" style="font-size: 15px;background-color: #21AFCD;width: 60%; height: 30%;">
+                Pay Now
+              </button>
+            </div>
+          </div>
+          <div class="row text-center">
+            <span>Powered by: </span>
+            <img src="/static/img/high-resolution-original-small.png" height="50px">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock misc_space %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+
+  $(function(){
+
+    $('#payment_tab .order-status').click(function(event) {
+      event.preventDefault();
+      console.log($(this).data("custom-value"));
+      window.location.href = '/getstatus/' + $(this).data("custom-value");
+    });
+
+    $('#payment_tab .pay-now').click(function(e){
+      e.preventDefault();
+      var order_id = $(this).data("custom-value");
+
+      $.ajax({
+        url: "/orderitem/" + order_id,
+        type: 'get',
+        dataType: 'json',
+        context: this,
+        success: function(data){
+          var items = data.data;
+          var qty = "";
+          var rate = "";
+          var tr = $('#invoice-panel #order-items');
+          $('#invoice-panel .order-id').html(data.customer_details.order_id);
+          $('#invoice-panel #customer-name').html(data.customer_details.user.name);
+          $('#invoice-panel #service-type').html(data.customer_details.service_type);
+          $('#invoice-panel #delivery-date').html(data.customer_details.schedules.delivery.schedule_date);
+          $('#invoice-panel #delivery-time').html(data.customer_details.schedules.delivery.schedule_time);
+          $('#invoice-panel .total-price').html(data.customer_details.cost.total);
+          $('#invoice-panel #sub-total').html(data.customer_details.cost.sub_total);
+          if (data.customer_details.discount.amount) {
+            $('#invoice-panel #discount').html(data.customer_details.discount.amount);
+          }
+          else {
+            $('#invoice-panel #discount').html(0);
+          }
+          $('#invoice-panel #service-tax').html(data.customer_details.service_tax.amount);
+          if (data.customer_details.credits.used) {
+            $('#invoice-panel #used-credits').html(data.customer_details.credits.used);
+          }
+          else {
+            $('#invoice-panel #used-credits').html(0);
+          }
+          var laundry_qty = 0;
+          var dryclean_qty = 0;
+          var iron_qty = 0;
+
+          var laundry_amt = 0;
+          var dryclean_amt = 0;
+          var iron_amt = 0;
+
+          for (i=0; i<items.length; i++) {
+            if ('quantity' in items[i]){
+              if ('laundry' in items[i].quantity) {
+                laundry_qty = laundry_qty + parseInt(items[i].quantity.laundry);
+                laundry_amt = laundry_amt + (parseInt(items[i].quantity.laundry) * parseInt(items[i].price.laundry));
+              }
+              if ('dryclean' in items[i].quantity) {
+                dryclean_qty = dryclean_qty + parseInt(items[i].quantity.dryclean);
+                dryclean_amt = dryclean_amt + (parseInt(items[i].quantity.dryclean) * parseInt(items[i].price.dry_cleaning));
+              }
+              if ('iron' in items[i].quantity) {
+                iron_qty = iron_qty + parseInt(items[i].quantity.iron);
+                iron_amt = iron_amt + (parseInt(items[i].quantity.iron) * parseInt(items[i].price.iron));
+              }
+            }
+          }
+          $('#invoice-panel #laundry-qty').html(laundry_qty);
+          $('#invoice-panel #dryclean-qty').html(dryclean_qty);
+          $('#invoice-panel #iron-qty').html(iron_qty);
+          
+          $('#invoice-panel #laundry-amt').html(laundry_amt);
+          $('#invoice-panel #dryclean-amt').html(dryclean_amt);
+          $('#invoice-panel #iron-amt').html(iron_amt);
+          $('#invoice-panel').css('font-size', '13px');
+        },
+        error: function(){
+          console.log("error");
+          location.reload();
+        }
+      })
+
+      $(this).hide();
+      $("#package-invoice-modal").modal({
+          backdrop: 'static',
+          keyboard: false,
+          show: true
+      });
+
+      $.ajax({
+        url: "/paytm/payment/" + order_id,
+        type: 'get',
+        dataType: 'json',
+        context: this,
+        success: function(data) {
+            $('#paytm-form #REQUEST_TYPE').val(data.payment_data.REQUEST_TYPE);
+            $('#paytm-form #MID').val(data.payment_data.MID);
+            $('#paytm-form #ORDER_ID').val(data.payment_data.ORDER_ID);
+            $('#paytm-form #CUST_ID').val(data.payment_data.CUST_ID);
+            $('#paytm-form #TXN_AMOUNT').val(data.payment_data.TXN_AMOUNT);
+            $('#paytm-form #CHANNEL_ID').val(data.payment_data.CHANNEL_ID);
+            $('#paytm-form #INDUSTRY_TYPE_ID').val(data.payment_data.INDUSTRY_TYPE_ID);
+            $('#paytm-form #WEBSITE').val(data.payment_data.WEBSITE);
+/*            
+            $('#paytm-form #MOBILE_NO').val(data.payment_data.MOBILE_NO);
+            $('#paytm-form #EMAIL').val(data.payment_data.EMAIL);
+*/
+            $('#paytm-form #CHECKSUMHASH').val(data.payment_data.CHECKSUMHASH);
+            $('#paytm-form').attr('action', data.url);
+        },
+        error: function() {
+          console.log("error");
+          location.reload();
+        }
+      })
+
+    })
+
+    $('#package-invoice-modal #collapse').click(function() {
+      $("#package-invoice-modal").modal({
+          backdrop: 'static',
+          show: false
+      });
+      $('#payment_tab .pay-now').show();
+    });
+
+    $('#package-invoice-modal #payment_submit').click(function(){
+      console.log("redirect to paytm");
+      $( "#paytm-form" ).submit();
+      console.log("form submitted");
+    });
+
+  });
+</script>
+
+{% endblock extra_js %}

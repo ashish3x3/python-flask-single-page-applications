@@ -1,0 +1,38 @@
+{% if skill %}
+    <div class="btn-group taggie js-ajax-replace-wrapper" title="{{ skill.name }}">
+        {% if skill.endorsecount %}
+            <span class="btn btn-primary btn-sm">{{ skill.endorsecount }}</span>
+        {% endif %}
+        <a class="btn btn btn-default btn-sm" {% if show and show.skill_job_link %} href="/jobs/search?{{ skill.name | stringurlencode('keyword') }}"  {% endif %} >
+            {{ skill.name | truncate(18,true) }}&nbsp;
+            {% if show and show.skill_job_count %}
+                <span class="js-autofill js-skill-job-count"  href="/skill/jobs?{{ skill.name | stringurlencode('skill') }}" data-loading-selector="none" data-timeout="3000">
+                </span>
+            {% endif %}
+        </a>
+        {% if not profile_user or sameuser == true %}
+            <button type="button" class="btn btn-default btn-sm js-remove-action" href="/skill/delete/{{ skill.id }}" data-warnmsg="Are you sure you want to remove this skill?">
+                x
+            </button>
+        {% elif skill.show and skill.show.endorse == true %}
+            <span>
+            {% if user %}
+                <button type="button" class="btn btn-info btn-sm js-replace-action btn-endorse" href="/skill/endorse/{{ skill.id }}" >
+            {% else %}
+                <button class="btn btn-info btn-sm btn-endorse" data-toggle="modal" href="#modal" data-remote="/popup/login?{{ ('/skill/endorse/' ~ skill.id ) | stringurlencode('next') }}">
+            {% endif %}
+                    endorse
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </span>
+        {% elif skill.show and skill.show.endorsed == true %}
+            <button type="button" class="btn btn-success btn-sm" >
+                <span class="glyphicon glyphicon-check"></span>
+            </button>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if just_added %}
+    <iframe src="/trackingpixel?pixel_id=skilladd&amp;{{ skill.name | stringurlencode('value') }}" width="1" height="1" class="hide"></iframe>
+{% endif %}

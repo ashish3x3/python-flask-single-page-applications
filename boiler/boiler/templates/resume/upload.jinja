@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>	<html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>	<html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>	<html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+    <head>
+    	<style>
+	    	.upload_box_controls{
+	    		position: relative;
+	    		height: 31px;
+			    overflow: hidden;
+			    width: 114px;
+	    	}
+	    	.upload_box_controls input {
+				cursor: pointer;
+				font-size: 25px;
+				filter: alpha(opacity=1);
+				-moz-opacity: 0.01;
+				opacity: 0.01;
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: 2;
+			}
+			.upload_box_controls .box_upload {
+				background: #426CB3;
+				border-radius: 3px;
+				color: #fff;
+				cursor: pointer;
+				display: inline-block;
+				font-size: 11px;
+				font-weight: bold;
+				margin-right: 5px;
+				padding: 4px 6px;
+				position: relative;
+				border: 1px solid #285E8E;
+				font-family: arial,helvetica,serif;
+			}
+			.upload_box_controls:active > .box_upload {
+				top: 1px;
+				box-shadow: none;
+			}
+			.upload_box_controls:hover > .box_upload {
+				background: #3A58A0;
+			}
+			p.text-error {
+			    color: #FF0000;
+			    font-family: arial,helvetica,serif;
+			    font-size: 12px;
+			    margin: 0 0 10px;
+			    position: absolute;
+			    top: 30px;
+			}
+    	</style>
+    </head>
+	<body style="width=150px;overflow:hidden;padding:0px;background:#fff; margin:0">
+		<p class="text-error">{{ error }}</p>
+		<form action="/resume/upload?type={{ request.args.get('type') }}" method="post" enctype="multipart/form-data">
+			<div class="upload_box_controls">
+				<input type="file"  name="file" class="hidden_choose"	id="upload" accepts="text/plain, text/rtf, application/pdf, application/x-pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+				<button class="box_upload" type="button"> Upload Resume</button>
+			</div>
+		</form>
+	</body>
+
+	<!--<script src="/static/js/libs/jquery-1.6.2.min.js"></script>-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>
+		jQuery('#upload').change(function(){
+			jQuery(this).next().html('<span class="loader"><img src="/static/img/loader-sm.gif" /></span>');
+			jQuery(this).closest('form').submit();
+		})
+		{% if resume %}
+			{% if type == 'profile' %}
+				parent.resumeupload('<li class="list-group-item js-row-each js-ajax-replace-wrapper">{% include ("resume/profile/view.jinja") %}</li>', '{{ type }}');
+			{% else %}
+				parent.resumeupload("<option value={{ resume.id }} selected>{{ resume.name }}</option>", '{{ type }}');
+			{% endif %}
+		{% endif %}
+	</script>

@@ -1,0 +1,47 @@
+<div id="ember542" class="ember-view">
+
+      <div class="wrapper" data-bindattr-1="1">
+        <div id="ember580" class="ember-view">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper" class="" data-bindattr-2="2">
+      <div class="sidebar-brand">
+            <a id="ember589" class="ember-view" href="/partner/customer">
+              <img src="/static/img/sidebar-logotype.png">
+            </a>
+          </div>
+        <ul class="sidebar-nav">
+          <li>
+            <a id="ember596" class="ember-view active" href="/partner/customer">
+              <span class="icon-white-profile"></span>
+              <span class="nav-copy">Customers</span>
+            </a>
+          </li>
+          <li>
+            <a id="ember621" class="ember-view" href="/partner/orders">
+              <span class="icon-clock"></span>
+              <span class="nav-copy">Order History</span>
+            </a>
+          </li>
+          {% if customer_id %}
+            <li>
+              <a id="ember621" class="ember-view" href="/partner/customer/order/{{customer_id}}">
+                <span class="icon-white-home"></span>
+                <span class="nav-copy">Schedule Customer Order</span>
+              </a>
+            </li>
+            <li>
+              <a id="ember621" class="ember-view" href="/partner/customer/profile/{{customer_id}}">
+                <span class="icon-white-profile"></span>
+                <span class="nav-copy">Customer Profile</span>
+              </a>
+            </li>
+          {% endif %}
+            <li>
+              <a id="ember621" class="ember-view" href="/partner/help">
+                <span class="icon-white-help"></span>
+                <span class="nav-copy">Help</span>
+              </a>
+            </li>
+        </ul>
+      </div>
+    </div>

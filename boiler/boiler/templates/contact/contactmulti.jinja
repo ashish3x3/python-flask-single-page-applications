@@ -1,0 +1,88 @@
+{% set show_footer =  false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+
+    {% if status %}
+        <p class="alert alert-success" role="alert">
+            <span class="tx-16">{{ stats.send }}</span> out of {{ stats.total }} candidates have been contacted.
+        </p>
+    {% else %}
+        <p class="alert alert-danger" role="alert">
+            {{ message }}
+        </p>
+    {% endif %}
+
+    {% if users %}
+        <div class="col-md-12">
+            <p class="tx-14">The below candidates can be contacted only by a Facebook Message.
+                <span class="glyphicon text-info glyphicon-question-circle tx-14" title="The below candidates could not be contacted by Parichay Messages because they may have been contacted already or they may have opted out. They can still be contacted by a Facebook Message." data-placement="bottom" data-toggle="tooltip"></span>
+            </p>
+        </div>
+        <div class="panel-body contact-wrap panel panel-default">
+            <ul class="row invite-result-wrap list-unstyled" style="overflow-y: scroll; height: 260px;">
+                {% set counter = 0 %}
+                {% for item in users %}
+                    {% set counter = counter + 1 %}
+                    <li class="col-md-12 col-sm-12" data-name="{{ item.name }}" id="{{ item.fb_id }}">
+                        <div class="media sm-media result-box">
+                            {# PICTURE #}
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(item) }}
+                                </div>
+                            </div>
+
+                            {# DETAILS #}
+                            <div class="media-body">
+                                <div class="pull-right media-rgt">
+                                    <ul class="list-unstyled pull-right text-right">
+                                        <li>
+                                            <a role="button" onclick = "window.open('{{ item.sendmsgurl }}','', 'width=500,height=250');" id="js-{{ item.fb_id }}" class="js-invite btn btn-default">
+                                                <span class="hidden-xs">
+                                                    Send Facebook Message &nbsp;
+                                                </span>
+                                                <span class="visible-xs">
+                                                    FB Message
+                                                </span>
+                                            </a>
+                                        </li>
+                                        {% if item.last_contacted %}
+                                        <li class="text-right">
+                                            <span data-toggle="tooltip" data-placement="bottom" title="Last Contacted {{ item.last_contacted }}" class="glyphicon text-info glyphicon-check-circle tx-16"></span>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="">
+                                    <h4 class="media-heading">
+                                        <a role="link" href="{{ item.profileUrl }}" target="_blank"data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link">
+                                            {{ item.name }}
+                                        </a>
+
+                                        {% if item.connectionLevel and item.connectionLevel  < 3 %}
+                                            <span class="label label-info label-small" title="Connection Level between you">{{ item.connectionLevel }}</span>
+                                        {% endif %}
+                                    </h4>
+                                    {% if item.position %}
+                                        <strong>{{ item.position }}</strong>
+                                    {% endif %}
+                                    <div>
+                                        {% if item.company and item.company.name %}
+                                          {{ item.company.name }}
+                                        {% endif %}
+                                        {% if item.location %}
+                                          <br />
+                                          {{ item.location }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+{% endblock content %}

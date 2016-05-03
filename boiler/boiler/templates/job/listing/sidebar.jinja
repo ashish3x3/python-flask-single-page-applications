@@ -1,0 +1,20 @@
+<div class="col-left">
+    <div class="side-box">
+        <h4>My Jobs</h4>
+    </div>
+    <ul class="nav nav-pills nav-stacked js-sub-tab">
+        <li {% if section.sub == "saved_jobs" %}class="active" {% endif %} ><a href="/jobs/saved"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Saved Jobs</a></li>
+
+        <li {% if section.sub == "applied_jobs" %}class="active" {% endif %}><a href="/jobs/applied"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Applied Jobs</a></li>
+
+        <li {% if section.sub == "posted_jobs" or  section.sub == "add_jobs" %}class="active" {% endif %}><a href="/jobs/posted"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Posted Jobs</a></li>
+
+        <li {% if section.sub == "job_recommended" %}class="active" {% endif %}><a href="/jobs/recommended/1"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Recommended Jobs</a></li>
+
+        {% if user.company and user.company.name %}
+            <li {% if section.sub == "self_company_jobs" %}class="active" {% endif %}><a href="/jobs/search?{{ user.company.name | stringurlencode('companyname') }}&selfcompany=1&clusterview=1"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Jobs at My Company</a></li>
+        {% endif %}
+    </ul>
+
+    <p>&nbsp;</p>
+</div>

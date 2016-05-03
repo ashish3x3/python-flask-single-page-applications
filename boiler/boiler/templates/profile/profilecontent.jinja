@@ -1,0 +1,433 @@
+{% import 'elements/macros.jinja' as html %}
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+
+{% block content %}
+<div class="row">
+    <div class="js-profilecontent">
+        <div class="col-md-12">
+            <div id="left" class="col-md-6 ">
+                <div id="profile_head" class="panel panel-default">
+                    <div class="clearfix panel-body">
+                        <div class="media">
+                            <div class="pull-left">
+                                <div class="logo-blk-img profile-img">
+                                    {{ html.imageWithProfileUrl(profile_user) }}
+                                </div>
+                            </div>
+
+                            <div class="pull-right text-right">
+                                {% if user %}
+                                    <ul class="list-unstyled">
+                                        <li><a href="//facebook.com/{{ profile_user.fb_id }}" target="_blank">
+                                            View Facebook profile
+                                        </a></li>
+                                        {% if show.linkedin == True %}
+                                            <li><a href="{{ profile_user.linkedinUrl }}" target="_blank">
+                                                View Linkedin profile
+                                            </a></li>
+                                        {% endif %}
+                                        {% if show.peopleknow == True %}
+                                        <li>
+                                            <a href="/user/search?view=contacts&fbid={{ profile_user.fb_id }}" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link">
+                                                {% if sameuser==true %}
+                                                    People you know
+                                                {% else %}
+                                                    People they know
+                                                {% endif%}
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if sameuser==false %}
+                                            <li><a href="#" onclick="window.open('{{ JCONSTANTS.FB_SENDMESSAGE_URL }}&to={{ profile_user.fb_id }}', '', 'width=500,height=300');">
+                                                Start a conversation
+                                            </a></li>
+                                            <li><a data-toggle="modal" data-remote="/user/save?id={{ profile_user.fb_id  }}" data-target="#modal" title="Save this User" href="#modal">
+                                                Save to my contacts
+                                            </a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% else %}
+                                    <a data-toggle="modal" href="#modal" data-remote="/popup/login?{{ (request.path + '?' + request.query_string) | stringurlencode('next') }}">
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                View Facebook profile
+                                            </li>
+                                            <li>
+                                                People you know
+                                            </li>
+                                            <li>
+                                                Start a conversation
+                                           </li>
+                                            <li>
+                                                Save to my contacts
+                                            </li>
+                                        </ul>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="media-body">
+                                <h3>
+                                    <a href="/profile/{{ profile_user.fb_id }}" target="_top">{{ profile_user.name }}</a>
+                                    {% if connectionLevel %}
+                                        <sup class="label label-info label-small" title="Connection Level between you">{{ connectionLevel }}</sup>
+                                    {% endif %}
+                                </h3>
+                                <strong>
+                                    {{ profile_user.position }} {% if profile_user.company %}  at {{ profile_user.company.name  }} {% endif %}
+                                </strong> <br>
+                                {{ profile_user.location }}<br>
+                                {% if show.mutualfriends == true %}
+                                    <section href="/user/mutualfriendlist/{{ profile_user.fb_id }}" class="js-autofill" data-loading-selector="none">
+                                        <div class="clearfix">&nbsp;</div>
+                                    </section>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# WORK experience #}
+                {% if (show.workexperience == true and works and (works | length > 0 )) or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Work Experience</h4>
+                            {% if sameuser == true %}
+                                <div class="pull-right  js-profile-main-multiple-edit action">
+                                    <a href="#" class="edit_icon_profile" data-alt-text="Done" >
+                                        Edit
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </header>
+                        <div class="panel-body panel-padding-muted">
+                            {% for x in works %}
+                                {% set work = works[x] %}
+                                <div class="result-box js-row-each js-ajax-replace-wrapper">
+                                    {% include 'profile/work/view.jinja' %}
+                                </div>
+                            {% else %}
+                                {% if sameuser == false %}
+                                    <div class="result-box empty-list">
+                                        No Work details added
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if sameuser == true %}
+                            <footer class="panel-footer text-center">
+                                <a href="#" data-href="/profile/work/edit/0" class="js-empty-add jumboaction js-track-analytics" >
+                                    Add a Work History
+                                </a>
+                            </footer>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# EDUCATION #}
+                {% if (show.education==true and educations and (educations | length > 0 ))  or sameuser == true %}
+                    <div class=" panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Education </h4>
+                            {% if sameuser==true %}
+                            <div class="pull-right  js-profile-main-multiple-edit action">
+                                <a href="#" class="edit_icon_profile" data-alt-text="Done" >Edit</a>
+                            </div>
+                            {% endif %}
+                        </header>
+                        <div class="panel-body panel-padding-muted">
+                            {% for x in educations %}
+                                {% set education = educations[x] %}
+                                <div class="result-box js-row-each js-ajax-replace-wrapper">
+                                    {% include 'profile/education/view.jinja' %}
+                                </div>
+                            {% else %}
+                                {% if sameuser==false %}
+                                    <div class="result-box empty-list">No Education details added</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if sameuser==true %}
+                            <footer class="panel-footer text-center">
+                                <a href="#" data-href="/profile/education/edit/0" class="js-empty-add jumboaction js-track-analytics">
+                                    Add a School / College
+                                </a>
+                            </footer>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# CERTIFICATION #}
+                {% if (show.certifications==true and certifications and (certifications | length > 0))  or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Certification </h4>
+                            {% if sameuser==true %}
+                            <div class="pull-right  js-profile-main-multiple-edit action">
+                                <a href="#" class="edit_icon_profile" data-alt-text="Done" >
+                                    Edit
+                                </a>
+                            </div>
+                            {% endif %}
+                        </header>
+
+                        <div class="panel-body panel-padding-muted">
+                            {% for x in certifications %}
+                                {% set certification = certifications[x] %}
+                                <div class="result-box js-row-each js-ajax-replace-wrapper">
+                                    {% include 'profile/certification/view.jinja' %}
+                                </div>
+                            {% else %}
+                                {% if sameuser==false %}
+                                <div class="result-box empty-list">No Certificates added</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if sameuser==true %}
+                            <footer class="panel-footer text-center">
+                                <a href="#" data-href="/profile/certification/edit/0" class="js-empty-add jumboaction js-track-analytics">
+                                    Add a Certification
+                                </a>
+                            </footer>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+
+                {# HONOURS #}
+                {% if (show.awards==true and awards and (awards | length > 0 ))  or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Honours and Awards </h4>
+                            {% if sameuser==true %}
+                            <div class="pull-right  js-profile-main-multiple-edit action">
+                                <a href="#" class="edit_icon_profile" data-alt-text="Done" >
+                                    Edit
+                                </a>
+                            </div>
+                            {% endif %}
+                        </header>
+
+                        <div class="panel-body panel-padding-muted">
+                            {% for x in awards %}
+                                {% set award = awards[x] %}
+                                <div class="result-box js-row-each js-ajax-replace-wrapper">
+                                    {% include 'profile/award/view.jinja' %}
+                                </div>
+                            {% else %}
+                                {% if sameuser==false %}
+                                <div class="result-box empty-list">No Awards added</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if sameuser==true %}
+                            <footer class="panel-footer text-center">
+                                <a href="#" data-href="/profile/award/edit/0" class="js-empty-add jumboaction js-track-analytics">
+                                    Add a Honor / Award
+                                </a>
+                            </footer>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {#
+                <div class="panel panel-default js-profile-main-block">
+                    <header class="panel-heading">
+                        <h4>Contact Preferences</h4>
+                        {% if profile_user.fb_id == user.fb_id %}
+                        <div class="pull-right  js-profile-single-edit action">
+                            <a href="#" data-href="/settings/contactpreferences"  class="edit_icon_profile" data-alt-text="Done" >
+                                Edit
+                            </a>
+                        </div>
+                        {% endif %}
+                    </header>
+
+                    <div class="cardentry js-row-each js-ajax-replace-wrapper">
+                        {% include 'settings/contact/_view.jinja' %}
+                    </div>
+                </div>
+                #}
+            </div> <!-- Left -->
+
+
+            <div  id="right" class="col-md-6">
+
+                {# ABOUT ME #}
+                {% if endorsementModal %}
+                    <div data-toggle="modal" id="foo" href="#endorsementModal" class="btn" style="display:none;">popup button</div>
+                {% endif %}
+                {% if (show.aboutme==true and aboutme and aboutme != '')  or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>About me</h4>
+                            {% if sameuser==true %}
+                            <div class="pull-right  js-profile-single-edit action">
+                                <a href="#"  data-href="/profile/aboutme/edit"  class="edit_icon_profile js-track-analytics" data-alt-text="Done" >
+                                    Edit
+                                </a>
+                            </div>
+                            {% endif %}
+                        </header>
+                        <div class="panel-body js-row-each clear">
+                            {% include 'profile/aboutme/view.jinja' %}
+                        </div>
+                    </div><!-- About Me -->
+                {% endif %}
+
+                {# KEY SKILLS #}
+                {% if (show.skills==true and skills and (skills | length >0))  or sameuser == true  %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Key Skills</h4>
+                        </header>
+                        {#
+                        {% if profile_user.fb_id == user.fb_id %}
+                            <div class="clear tags margin_top">
+                                <h5>
+                                    <form action="/profile/skill/addnew" type="" class="form-horizontal">
+                                        Add More Skills &nbsp; &nbsp;
+                                        <input class="form-control" type="text" name="skill"/>
+                                        <!-- <input class="span3  js-mp-autocomplete  js-skill-search"
+                                            data-searchtype="skill" type="search" name="skill"/> -->
+                                    </form>
+                                </h5>
+                                <ul>
+                                    {% for x in newskills %}
+                                        {% set skill = newskills[x] %}
+                                        <li class="js-row-each">
+                                            {% include 'profile/skill/view.jinja' %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                                    #}
+                        {# NEW #}
+                        <div  class="panel-body panel-padding-muted">
+                            <div class="row js-row-each">
+                                {% if sameuser==true %}
+                                    <form action="/skill/add" role="form" type="" class="form-horizontal js-add-to-list-form js-skill js-track-analytics" data-getperm="{% if user.write_permission == false %}true{% endif %}" id="js-rightperm-profile-skill" >
+                                        <div class="col-md-12">
+                                            <div class="add-skills">
+                                                <div class="input-group">
+                                                    <input placeholder="Add Skills separated by commas. Eg: Java, PHP" type="text" class="form-control"  name="skill" required />
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" type="submit">Add</button>
+                                                        <a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3Fsubmitform%3D%2523js-rightperm-profile-skill', '','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Add</a>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endif %}
+
+                                <div class="tags profile_contents key-skills">
+                                    <ul class="list-unstyled js-list">
+                                        {% for x in skills %}
+                                            {% set skill = skills[x] %}
+                                            <li class="js-row-each">
+                                                {% include('profile/skill/view.jinja') %}
+                                            </li>
+                                        {% else %}
+                                            {% if sameuser==false %}
+                                                <li class="empty-list">No Skills</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# CONTACT INFO #}
+                {% if (show.contact_info == true and (contact.email or contact.mobile or contact.website or contact.twitter))  or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Contact Info</h4>
+                            {% if sameuser == true %}
+                                <div class="pull-right  js-profile-single-edit action js-track-analytics">
+                                    <a href="#"  data-href="/profile/contact/edit"  class="edit_icon_profile" data-alt-text="Done" >
+                                        Edit
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </header>
+                        <div class="panel-body  js-row-each">
+                            {% include 'profile/contact/view.jinja' %}
+                        </div>
+                    </div><!-- Contact Info -->
+                {% endif %}
+
+                {# BASIC INFO #}
+                <div class="panel panel-default js-profile-main-block">
+                    <header class="panel-heading">
+                        <h4>Basic Info</h4>
+                        {% if sameuser==true %}
+                        <div class="pull-right   js-profile-single-edit action js-track-analytics">
+                            <a href="#" data-href="/profile/basicinfo/edit"   class="edit_icon_profile" data-alt-text="Done" >
+                                Edit
+                            </a>
+                        </div>
+                        {% endif %}
+                    </header>
+                    <div class="panel-body  js-row-each">
+                        {% include 'profile/basicinfo/view.jinja' %}
+                    </div>
+                </div><!-- Basic Info -->
+
+                {# RESUME #}
+                {% if show.resume==true  or sameuser == true %}
+                    <div class="panel panel-default js-profile-main-block">
+                        <header class="panel-heading">
+                            <h4>Resume</h4>
+                            <div class="pull-right  js-profile-main-multiple-edit action">
+                                <a href="#" class="edit_icon_profile" >
+                                    Edit
+                                </a>
+                            </div>
+                        </header>
+                        <div class="panel-body panel-padding-muted"></div>
+                            <ul class="list-group" id="resume_block" >
+                            {% for x in resumes %}
+                                {% set resume = resumes[x] %}
+                                    <li class="list-group-item js-row-each js-ajax-replace-wrapper">
+                                       {% include 'resume/profile/view.jinja' %}
+                                    </li>
+                            {% endfor %}
+                            </ul>
+                            <div class="col-md-12">
+                                <iframe src="/resume/upload?type=profile" height="70" frameborder="0" style="padding-bottom: 0" class="padding10" width="100%"></iframe>
+                            </div>
+                    </div><!-- Basic Info -->
+                {% endif %}
+
+                {#
+                {% if profile_user.fb_id == user.fb_id %}
+                <div class="panel panel-default js-profile-main-block">
+                    <header class="panel-heading">
+                        <h4>Challenges and Polls</h4>
+                    </header>
+                    <div class="cardentry" id="mp-assessments" >
+                        <span class="loader" style="margin: 20px 80px;display: block;"><img src="/static/img/loader.gif" /></span>
+                    </div>
+                </div>
+                {% endif %}
+                #}
+            </div><!--  Key Skills-->
+        </div>
+    </div>
+</div>
+
+{% if (show and show.endorsement_popup) %}
+    <a data-toggle="modal" href="#lmodal" class="js-auto-popup"></a>
+    <div class="modal fade" id="lmodal" tabindex="-1" role="dialog" aria-labelledby="lModalLabel" aria-hidden="true">
+        {% include('popup/endorsementmodal.jinja') %}
+    </div>
+{% endif %}
+
+{% endblock content %}

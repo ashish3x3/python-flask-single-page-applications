@@ -1,0 +1,33 @@
+{% set show_footer = false %}
+{% set show_title = false %}
+{% set modal_class = "logedout-popup" %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}{#......Logged out popup.....#}
+    <p class="visible-xs">&nbsp;</p>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 mobilesize">
+            <h1>You must sign in to use MyParichay.</h1>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <p>
+                <a href="#" data-href="{{ request.args.get('next','/landing') }}" class="js-login-fb-link js-track-analytics">
+                    <img class="img-max-width" src="/static/img/buttons/fb-btn.png" />
+                </a>
+            </p>
+            By clicking, you agree to MyParichay's Terms of Service
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="tx-14">
+                <strong class="text-success">How does MyParichay use facebook?</strong>
+            </p>
+            <p>
+                MyParichay™ analyzes your Facebook connections (and LinkedIn if you would like to) and it will recommend the best people who can help you find a job. This increases your likelihood of getting hired by 5X! MyParichay is completely private and secure, and will not post anything about you on Facebook without asking, and will only collect professionally-relevant information.
+            </p>
+        </div>
+    </div>
+
+{% endblock content %}

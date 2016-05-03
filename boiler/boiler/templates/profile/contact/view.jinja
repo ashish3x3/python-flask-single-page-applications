@@ -1,0 +1,49 @@
+<ul class="list-unstyled contact-info col-md-6">
+	<li>
+		{% if contact.email and contact.email != 'PRIVATE' %}
+			<span class="glyphicon-stack glyphicon-lg">
+				<span class="glyphicon glyphicon-circle glyphicon-stack-2x"></span>
+				<span class="glyphicon glyphicon-envelope glyphicon-stack-1x glyphicon-inverse"></span>
+			</span>
+			<a href="mailto:{{ contact.email }}">
+				{{ contact.email }}
+			</a>
+		{% endif %}
+	</li>
+	<li>
+		{% if contact.mobile and contact.mobile != 'PRIVATE' %}
+			<span class="glyphicon-stack glyphicon-lg">
+				<span class="glyphicon glyphicon-circle glyphicon-stack-2x"></span>
+				<span class="glyphicon glyphicon-phone glyphicon-stack-1x glyphicon-inverse"></span>
+			</span>
+			<a href="tel:{{ contact.mobile }}" >
+				{{ contact.mobile }}
+			</a>
+		{% endif %}
+	</li>
+</ul>
+
+<ul class="list-unstyled contact-info col-md-6">
+	<li>
+		{% if contact.website %}
+			<span class="glyphicon-stack glyphicon-lg">
+				<span class="glyphicon glyphicon-circle glyphicon-stack-2x"></span>
+				<span class="glyphicon glyphicon-globe glyphicon-stack-1x glyphicon-inverse"></span>
+			</span>
+			<a href="http://{{ contact.website  | replace('http://', '') | replace('https://', '') }}" target="_blank">
+				{{ contact.website }}
+			</a>
+		{% endif %}
+	</li>
+	<li>
+		{% if contact.twitter %}
+			<span class="glyphicon-stack glyphicon-lg">
+				<span class="glyphicon glyphicon-circle glyphicon-stack-2x"></span>
+				<span class="glyphicon glyphicon-twitter glyphicon-stack-1x glyphicon-inverse"></span>
+			</span>
+			<a href="//twitter.com/{{ contact.twitter }}" target="_blank">
+					@{{ contact.twitter }}
+			</a>
+		{% endif %}
+	</li>
+</ul>

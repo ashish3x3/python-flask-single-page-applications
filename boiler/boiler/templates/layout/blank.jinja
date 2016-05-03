@@ -1,0 +1,18 @@
+{% import 'elements/macros.jinja' as html %}
+<!doctype html>
+
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="" lang="en" xml:lang="en">
+<!--<![endif]-->
+<head>
+    {% include 'elements/head.jinja' %}
+</head>
+<body>
+    {% block content %}{% endblock content %}
+    {% include 'elements/postscript.jinja' %}
+</body>
+</html>

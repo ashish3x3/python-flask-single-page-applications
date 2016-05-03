@@ -1,0 +1,41 @@
+{% set show_footer = false %}
+{% set modal_class = 'redeem-modal' %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+<form class="form-horizontal redemption-form js-track-analytics" role="form" action="/introductions/redeem/claim" method="POST">
+    <div class="content">
+        <div class="form-group">
+            <label for="redeem_first_name" class="col-sm-3 control-label">First Name <span class="text-danger">*</span></label>
+            <div class="col-sm-9">
+                <input required="required" type="text" class="form-control" placeholder="First Name" id="redeem_first_name" name="redeem_first_name" value="{{user_form_details.first_name}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="redeem_last_name" class="col-sm-3 control-label">Last Name <span class="text-danger">*</span></label>
+            <div class="col-sm-9">
+                <input required="required" type="text" class="form-control" placeholder="Last Name" id="redeem_last_name" name="redeem_last_name" value="{{user_form_details.last_name}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="redeem_form_email" >Email <span class="text-danger">*</span></label>
+            <div class="col-sm-9">
+                <input required="required" type="email" class="form-control" placeholder="Email" id="redeem_email" name="redeem_email" value="{{user_form_details.email}}">
+            </div>
+        </div>
+        <div class="form-group hide js-error-message-container">
+            <div class="col-sm-9 col-sm-push-3">
+                <label class="text-danger js-error-message"></label>
+            </div>
+        </div>
+        <input type="hidden" name="redeem_gift_id" id="redeem_gift_id" value="" />
+        <input type="hidden" name="redeem_points" id="redeem_points" value="" />
+        <input type="hidden" name="redeem_value" id="redeem_value" value="" />
+        <input type="hidden" name="redeem_gift_name" id="redeem_gift_name" value="" />
+    </div>
+    <div class="modal-footer">
+        <small class="pull-left text-left col-md-10 padding-muted"><em>These are mandatory to redeem points. Gift vouchers will be addressed to the above mentioned details and will be  emailed to the above mentioned email address.</em></small>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,20 @@
+<dl class="dl-horizontal dl-horizontal-left">
+<dt>Name:</dt>
+<dd>{{ basicinfo.name }}</dd>
+
+{% if basicinfo.sex %}	
+		<dt>Gender:</dt>
+		<dd>{{ basicinfo.sex | capitalize }} </dd>
+{% endif %}
+
+{% if basicinfo.language %}
+		<dt>Languages:</dt>
+		<dd> {{ basicinfo.language }} </dd>
+{% endif %}
+
+{% if basicinfo.interest %}
+		<dt>Interest:</dt>
+		<dd>{{ basicinfo.interest }}</dd>
+{% endif %}
+
+</dl>

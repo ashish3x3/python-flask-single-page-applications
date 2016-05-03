@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html class="js no-touch no-ipad no-iphone no-ipod no-appleios positionfixed no-touch">
+  {% include 'layout/head.jinja' %}
+  <body  class="ember-application order">
+    <div class="background_image_bottom container"></div>
+      <div class="page-content inset">
+        <div class="row">
+          {% block main_content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+    {% block modal %}{% endblock %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/toast.min.js"></script>
+    <script src="/static/js/ajax_5613bae2fa1d8632f430b414.js"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

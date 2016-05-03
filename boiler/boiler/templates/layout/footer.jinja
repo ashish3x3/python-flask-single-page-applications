@@ -1,0 +1,231 @@
+
+{# only important js starts #}
+
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/boostrap.min.js"></script>
+    <script src="/static/js/nivo_slider.min.js"></script>
+    <script src="/static/js/countdown.min.js"></script>
+    <script src="/static/js/flexnav.min.js"></script>
+    <script src="/static/js/magnific.min.js"></script>
+    <script src="/static/js/tweet.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="/static/js/gmap3.min.js"></script>
+    <script src="/static/js/wilto_slider.min.js"></script>
+    <script src="/static/js/mediaelement.min.js"></script>
+    <script src="/static/js/fitvids.min.js"></script>
+    <script src="/static/js/mail.min.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="/static/js/custom.js"></script>
+    <script src="/static/js/switcher.js"></script>
+
+
+      <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'dealsup'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+    </script>
+
+
+<script type="text/javascript">
+ 
+function logout()
+{
+    gapi.auth.signOut();
+    location.reload();
+}
+function g_login() 
+{
+  var myParams = {
+    'clientid' : '459148903959-ppkctekt1it9s67rtg9bdd76p423tbk4.apps.googleusercontent.com',
+    'cookiepolicy' : 'single_host_origin',
+    'callback' : 'loginCallback',
+    'approvalprompt':'force',
+    'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+  };
+  gapi.auth.signIn(myParams);
+}
+ 
+function loginCallback(result)
+{
+
+    console.log(result);
+    var access_token_send = result.access_token;
+    console.log(access_token_send);
+
+     window.location.href="http://dealsup.in/googlelogin?access_token=" + access_token_send; 
+
+
+    if(result['status']['signed_in'])
+    {
+        var request = gapi.client.plus.people.get(
+        {
+            'userId': 'me'
+        });
+        request.execute(function (resp)
+        {
+            var email = '';
+            if(resp['emails'])
+            {
+                for(i = 0; i < resp['emails'].length; i++)
+                {
+                    if(resp['emails'][i]['type'] == 'account')
+                    {
+                        email = resp['emails'][i]['value'];
+                    }
+                }
+            }
+ 
+            // var str = "Name:" + resp['displayName'] + "<br>";
+            // str += "Image:" + resp['image']['url'] + "<br>";
+            // str += "<img src='" + resp['image']['url'] + "' /><br>";
+ 
+            // str += "URL:" + resp['url'] + "<br>";
+            // str += "Email:" + email + "<br>";
+            // console.log(str);   
+            // document.getElementById("profile").innerHTML = str;
+
+
+            var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            console.log(str);   
+            document.getElementById("logged-in-section-register").innerHTML = str;
+        });
+ 
+    }
+ 
+}
+function onLoadCallback()
+{
+    gapi.client.setApiKey('8tLqgv6Tw2n8qRDRIylU8DWL');
+    gapi.client.load('plus', 'v1',function(){});
+}
+ 
+    </script>
+
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ config.FB_APP_ID }}', // Set YOUR APP ID
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+    
+    
+    FB.Event.subscribe('auth.authResponseChange', function(response) 
+    {
+     if (response.status === 'connected') 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Connected to Facebook";
+        //SUCCESS
+        
+    }    
+    else if (response.status === 'not_authorized') 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Failed to Connect";
+
+        //FAILED
+    } else 
+    {
+        document.getElementById("message").innerHTML +=  "<br>Logged Out";
+
+        //UNKNOWN ERROR
+    }
+    }); 
+    
+    };
+    
+    function fb_Login()
+    {
+    
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {    
+                     var fb_access_token_send = response.authResponse.accessToken;
+                    console.log(fb_access_token_send);
+                    alert(fb_access_token_send);
+
+                     window.location.href="http://www.dealsup.in/fblogin?access_token=" + fb_access_token_send; 
+                getUserInfo();
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,user_videos'});
+    
+    
+    }
+
+  function getUserInfo() {
+        FB.api('/me', function(response) {
+
+
+
+            // var str = "<li class='loggin'>" + "<img src='" + resp['image']['url'] + "' </li>";
+            // str += "<li class='loggin-name'>" + resp['displayName'] + "</li>";
+     
+            // console.log(str);   
+            // document.getElementById("logged-in-section-register").innerHTML = str;'
+
+      var str="<li class='loggin-name item-with-ul'>" +response.username+ "</li>";
+          // str +="<b>Link: </b>"+response.link+"<br>";
+          // str +="<b>Username:</b> "+response.username+"<br>";
+          // str +="<b>id: </b>"+response.id+"<br>";
+          // str +="<b>Email:</b> "+response.email+"<br>";
+          // str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          // str +="<button class='btn btn-info' onclick='getPhoto();'>Get Photo</button>&nbsp;";
+          // str +="<button class='btn btn-primary'  onclick='Logout();'>Logout</button>";
+
+         
+
+
+         FB.api('/me/picture?type=normal', function(response) {
+
+          var str2= "<li class='loggin'>" + "<img src='" + response.data.url + "'str </li>";
+          var str3=str2;
+              str3+=str;
+
+          document.getElementById("logged-in-section-register").innerHTML=str3;
+            
+         });
+                
+    });
+    }
+    function getPhoto()
+    {
+      FB.api('/me/picture?type=normal', function(response) {
+
+          var str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+          document.getElementById("status").innerHTML+=str;
+                
+    });
+    
+    }
+    function Logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+
+  
+</script>
+    <script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+    </script>
+
+{# only important js ends #}

@@ -1,0 +1,115 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% import 'elements/macros.jinja' as html %}
+
+{% block facebookPixel %}
+    {% if just_posted == true %}
+        <iframe src="/trackingpixel?pixel_id=postajob&amp;value={{ job.id }}" width="1" height="1"  class="hide"></iframe>
+    {% endif %}
+{% endblock facebookPixel %}
+
+{% block content %}
+    {% if show and show.partner_banner %}
+        {% include('job/banner/partner_banner.jinja') %}
+    {% elif show and show.recuriter_enhance_final_banner %}
+            {% include('job/banner/recuriter_enhance_final.jinja') %}
+    {% elif show and show.recuriter_enhance_middle_banner %}
+            {% include('job/banner/recuriter_enhance_middle.jinja') %}
+    {% elif user %}
+        {% set connection_route = 'recommendedcandidates' if (job.same_user and job.same_user != false) else 'connectionlist'  %}
+        <div class="js-autofill js-content jd-connections-wrapper {{ 'js-jd-page' if section.sub == 'job_details' }} js-connections hidden-xs"  href="/jobs/{{ connection_route }}/{{ job.id }}?{{ params }}{% if job.preview %}&amp;preview=true{% endif %}" data-loading-selector="none"></div>
+    {% else %}
+        {% include('job/banner/connections_notloggedin.jinja') %}
+    {% endif %}
+
+    <div class="row" itemscope itemtype="http://schema.org/JobPosting">
+        <div class="col-md-12 jd-des-native">
+            <section class="panel panel-default overflow-hidden">
+                <div class="panel-body">
+                    {% set status = request.args.get("status") %}
+                    {% if  status %}
+                        <div class="alert alert-{% if status == true %}success{% else %}danger{%endif%}">
+                            {{ request.args.get("message") }}
+                        </div>
+                    {% endif %}
+
+                    {% if job %}
+                        <div class="gap-with-actionbar">
+                            <div class="col-xs-12">
+                                <div class="media">
+                                    <div class="pull-left">
+                                    {% if job and job.company %}
+                                        {{ html.companyLogo(job.company, size="large",type=job.type) }}
+                                    {% endif %}
+                                    </div>
+                                    <div class="media-body">
+                                        <h2 class="h2-mobile margin-top-muted">
+                                            <div>
+                                                <span class="pull-right jd-abs-title-icon">
+                                                    {% if job.diversity_hiring and job.diversity_hiring|int %}
+                                                        <img src="/static/img/icons/mp_diversity_logo.png" title="Job for Women" />
+                                                    {% endif %}
+                                                </span>
+                                                <span itemprop="title">
+                                                    {{ job.headline if job.headline }}
+                                                </span>
+                                            </div>
+                                             {% if job.company and job.company.name %}
+                                                <small class="text-muted" itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                                                    at <span itemprop="name">{{ job.company.name }}</span>
+                                                </small>
+                                            {% endif %}
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            {% include('job/details/actionbar.jinja') %}
+                        </div>
+
+                        <hr class="hidden-xs" />
+
+                        <div class="row">
+                            <div class="col-md-9 col-xs-12">
+                                <div class="jd-native-body" id="subcontainer">
+                                    {% block jobcontent %}
+                                        {% if job.description %}
+                                            <p itemprop="responsibilities">
+                                                <div class="jd-overflow-auto">
+                                                    {% if formatJD is defined and formatJD == false %}
+                                                        {{ job.description }}
+                                                    {% else %}
+                                                        {{ job.description | nl2br }}
+                                                    {% endif %}
+                                                </div>
+                                            </p>
+                                        {% endif %}
+                                    {% endblock jobcontent %}
+                                    <p>&nbsp;</p>
+                                </div>
+                            </div>
+                            {% if not 'otherdetails' in show or show.otherdetails == true %}
+                            <div class="col-md-3">
+                                {% include('job/details/rightsidebar.jinja') %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+
+    {% if show and show.opt_out %}
+        <div class="row">
+            <div class="col-md-12">
+                <p>If you do not wish to receive notification from MyParichay you can <a href="/settings/subscriptions">Opt-out</a> here.</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content  %}

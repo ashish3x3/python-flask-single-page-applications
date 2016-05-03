@@ -1,0 +1,44 @@
+<div class="panel panel-default">
+    <form action="/profile/saved?1" method="GET" onsubmit="return false;">
+        {% if folders %}
+            <div class="side-box">
+                <div class="sidebox-content form-sidebar">
+                    {% if folder_complete_status == false %}
+                        <div class="alert alert-info margin-muted">
+                            <span class="glyphicon glyphicon-info-circle"></span> &nbsp;
+                            <small>We are still fetching all folders associated with your account. </small>
+                        </div>
+                        <br />
+                    {% endif %}
+                    <h4>Folders</h4>
+
+                    {% if show and show.folder_search %}
+                    <div class="clearfix">
+                        <lable for="leftfoldersearch" class="sr-only">
+                            Search Folder
+                        </lable>
+                        <input type="text" name ="folder" placeholder="Search Folder" class="form-control js-mp-autocomplete js-autocomplete-redirect"  data-searchtype="foldersearch" autocomplete="off" id="leftfoldersearch"
+                        data-redirecturl="{% raw %} /user/saved/{{key}}?folder_name={{value}} {% endraw %}">{# raw is for handlebar#}
+                    </div>
+                    {% endif %}
+
+                    <div class="list-group list-folder">
+                        {# Other Values #}
+                        {% for x in folders %}
+                            <a href="/user/saved/{{ folders[x].id }}?{{ folders[x].name | stringurlencode('folder_name') }}&amp;{{folderargs}}" class="js-main-container-link list-group-item {% if (folders[x].id == folderID) %} active {% endif %}" title="{{ folders[x].name }}">
+                                <i class="glyphicon glyphicon-folder"></i> {{ folders[x].name | truncate(25,true) }}
+                            </a>
+                            {% if folders[x].id == folderID and show and show.delete_folder %}
+                                    <a href="/folder/delete/{{ folderID }}" data-warnmsg="Are you sure you want to Delete this folder? All candidates saved in this folder will be lost." class="js-confirm-redirect pull-right save-delete" title="Delete Folder">
+                                        <i class="glyphicon glyphicon-trash-o pull-right" style="margin-top:2px;"></i>
+                                    </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {# SUBMIT BUTTON #}
+            </div>
+        {% endif %}
+    <br>
+    </form>
+</div>

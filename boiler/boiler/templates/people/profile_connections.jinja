@@ -1,0 +1,18 @@
+<div class="side-box">
+    <div class="sidebox-content">
+        <div class="list-group">
+            <a class="list-group-item active" href="/user/search?view=contacts&fbid={{ request.args.get('fbid','') }}">
+                <img class="tinypic" alt="Users" src="//graph.facebook.com/{{ profile_user.fb_id }}/picture" style="vertical-align:top;">
+                {% if profile_user.fb_id == user.fb_id %}
+                    Your Network
+                {% else %}
+                    {{ profile_user.name }}'s Network 
+                {% endif %}
+            </a>
+            <a class="list-group-item"  href="/user/search?{{ (pagination.searchparams | remove_params_query_string('fbid')) if pagination }}" class="pull-right">
+                Search All Candidates
+            </a>
+        </div>
+    </div>
+</div>
+

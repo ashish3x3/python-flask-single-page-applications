@@ -1,0 +1,106 @@
+{% import 'elements/macros.jinja' as html %}
+
+{% if show %}
+<div class="clearfix pull-left">
+    {% if show.apply == True %}
+    <ul class="pull-left list-unstyled js-replace-wrapper padding-muted list-inline">
+        {% if job.status.applied == true %}
+            <span class="btn disabled btn-success">
+               Applied &nbsp; <i class="glyphicon glyphicon-check"></i>
+            </span>
+        {% elif login_and_apply %}
+            <li><a data-toggle="modal" href="#modal" data-remote="/popup/login?{{ apply_url | stringurlencode('next') }}&amp;{{ login_query_string }}"  class="btn btn-primary js-track-analytics">
+                {{ apply_button_text }}
+            </a></li>
+        {% elif redirect_and_apply %}
+            <li><a data-toggle="modal" href="#modal" data-remote="/popup/partnerapply?{{ apply_url | stringurlencode('next') }}&{{ redirect_and_apply.params }}"  class="btn btn-primary js-track-analytics {{ 'js-trigger-onload' if partner.auto_apply }}">
+                Apply
+            </a></li>
+        {% else %}
+            <li><a class="btn btn-primary js-sub-container-link" href="{{ apply_url }}" >
+                {{ apply_button_text }}
+            </a></li>
+        {% endif %}
+        {% if apply_with_email %}
+            <li><a href="{{ apply_with_email_url }}" class="btn btn-primary">
+                Apply with Email
+            </a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+    {% if (job.type != 'indeed') and (show.edit or show.publish or show.accept_referral) %}
+        <ul class="pull-left list-inline text-right js-replace-wrapper padding-muted">
+            {% if show.edit %}
+                <li><a class="btn btn-default js-main-container-link" href="/jobs/edit/{{ job.id }}">
+                    Edit
+                </a></li>
+            {% endif %}
+
+            {% if show.publish %}
+                <li><a class="btn btn-primary" href="/jobs/publish/{{ job.id }}?posted=1">
+                    Publish
+                </a></li>
+            {% endif %}
+
+            {% if show.accept_referral %}
+                <li><a class="btn btn-default" href="/job/{{ job.id }}">Decline  Referral</a></li>
+            {% endif %}
+
+        </ul>
+    {% endif %}
+</div>
+<div class="jd-actionbar pull-right pull-xs-left padding-muted clearfix">
+    {% if (job.type != 'indeed') and show.refer and user %}
+        <ul class="list-inline pull-left">
+            <li><a class="btn btn-default js-sub-container-link" href="/jobs/referlist/{{ job.id }}?{{ request.query_string }}">
+                Refer
+                    {% if show.referral_amount and job.referral_amount %}
+                        <span class="">&amp; Earn <i class="glyphicon glyphicon-{{ job.referral_amount.currency | lower }}"></i>{{ job.referral_amount.amount }}</span>
+                    {% else %}
+                        a Friend
+                    {% endif %}
+            </a></li>
+        </ul>
+    {% endif %}
+    {% if show.share %}
+        <ul class="list-inline pull-left list-crunched">
+            {% if show.save == True %}
+                {% if user %}
+                    {% if job.status.saved == false %}
+                        <li class="js-row-each">
+                            <div class="js-ajax-replace-wrapper">
+                                <a class="btn btn-default js-replace-action js-track-analytics" role="button" href="/jobs/save/{{ job.id }}?{{ request.query_string }}">
+                                   Save&nbsp;
+                               </a>
+                           </div>
+                        </li>
+                    {% else %}
+                        <span class="btn disabled btn-success">
+                           Saved &nbsp; <i class="glyphicon glyphicon-check"></i>
+                       </span>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </ul>
+        <ul class="list-unstyled list-inline pull-right hidden-xs">
+            {% set surl = config.MP_URL +'job/'+ job.id | string %}
+            {% set stitle = job.headline  %}
+                <li>
+                    {{ html.socialplugins("facebook", surl, stitle) }}
+                </li>
+                <li>
+                    {{ html.socialplugins("Linkedin", surl, stitle) }}
+                </li>
+                <li>
+                    {{ html.socialplugins("twitter", surl, stitle) }}
+                </li>
+                <li>
+                    {{ html.socialplugins("googleplus", surl, stitle) }}
+                </li>
+                <li>
+                    {{ html.socialplugins("email", surl, stitle) }}
+                </li>
+        </ul>
+    {% endif %}
+</div>
+{% endif %}

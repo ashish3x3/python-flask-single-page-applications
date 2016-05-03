@@ -1,0 +1,69 @@
+{% extends 'elements/header_min.jinja' %}
+
+{% block content %}
+<div class="top-bar" id="top-bar">
+    <div class="container-full clearfix">
+        <div class="pull-left">
+            <div class="dropdown js-ajax-dropdown">
+                {% set international_location = user.country or 'IN' %}
+                <a role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <i data-sprite-row="{{ constants.SUPPORTED_LOCATIONS[international_location].sprite.row }}" data-sprite-col="{{ constants.SUPPORTED_LOCATIONS[international_location].sprite.col }}" class="flags js-default-fill-flag" ></i>
+                    {{ constants.SUPPORTED_LOCATIONS[international_location].name }} <b class="caret drop-arrow"></b>
+                </a>
+                <ul class="dropdown-menu js-fill-dropdown" href="/country/dropdowndata" role="menu" data-update-url='false' data-loading-type="none">
+                    <li>
+                        <div class="text-center">
+                            <i class="glyphicon glyphicon-spinner glyphicon-spin"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-right">
+            <a href="//www.myparichay.in/website" target="_blank">Employer Solutions</a>
+        </div>
+    </div>
+</div>
+
+{% if user and user.show_privacy == true %}
+    <div class="privacy-topbar js-ajax-replace-wrapper">
+        <div class="container-full clearfix">
+            <a href="/privacyaction" class="glyphicon glyphicon-times pull-right tx-16 js-replace-action js-privacy-toolbar"></a>
+            <p class="tx-16"><strong>PRIVACY NOTICE: Your Privacy is Guaranteed on MyParichay.</strong></p>
+            <p>We won't post anything on Facebook about your job search. Learn about our privacy guarantee by clicking <a href="https://www.myparichay.in/website/myparichay-privacy-guaranteed/" target="_blank"><u>here</u></a></p>
+        </div>
+    </div>
+{% endif %}
+
+<header class="navbar navbar-fixed-top main-top-nav js-keep-fixed">
+    <div class="container-full">
+        <div class="row">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header col-md-3">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {% if main_logo_url %}
+                    <a class="navbar-brand" id="partner_logo" >
+                        <img src="{{main_logo_url}}" title="{{partner.name if partner}}">
+                    </a>
+                {% else %}
+                    <a class="navbar-brand logo-mp" href="/landing" id="myparichay_logo" title="MyParichay" >&nbsp;</a>
+                {% endif %}
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                {% include ('elements/main_menu.jinja') %}
+            </div>
+        </div>
+    </div>
+
+    <div class="progress progress-tiny hide" id="main-progress">
+        <div class="progress-bar" style="width: 10%;"></div>
+    </div>
+</header>
+{% endblock content %}

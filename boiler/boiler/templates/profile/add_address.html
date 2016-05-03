@@ -1,0 +1,187 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">
+{% if add_address %}Add {% else %}Edit {% endif %}address</div>
+{% endblock screen_name %}
+
+
+{% block main_content_row %}
+<div class="row">
+    <div class="personal col-md-8" id="editAddress">
+        <form id="submitaddress" method="post" action="/submitaddress">
+            <div class="form-group">
+                <label class="control-label" for="tag">Tag this location</label>
+                <input name="tag" type="text"
+                {% if add_address %}
+                {% else %}
+                value="{{address.tag}}" 
+                {% endif %}
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="apartment_number">Flat Number</label>
+                <input name="apartment_number"  class="ember-view ember-text-field" type="text"
+                {% if add_address %}
+                {% else %}
+                value="{{address.apartment_number}}" 
+                {% endif %}
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="address_2">Landmark</label>
+                <input name="address_2" class="ember-view ember-text-field" type="text"
+                {% if add_address %}
+                {% else %}
+                value="{{address.address_2}}" 
+                {% endif %}
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="locality">Locality</label>
+                <input name="locality" class="ember-view ember-text-field" type="text" placeholder="e.g. Koramangala"
+                {% if add_address %}
+                {% else %}
+                value="{{address.locality.map_string}}" 
+                {% endif %}
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="address_1">Address</label>
+                
+                {% if add_address %}
+                <textarea name="address_1"></textarea>
+                {% else %}
+                <textarea name="address_1">{{address.address_1}}</textarea>
+                {% endif %}
+            </div>
+
+            {% if add_address %}
+            <div class="form-group add-address-submit text-center">
+                <button type="button" name="add-address-save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving" class="primary">Save</button>
+            </div>
+            {% else %}
+            <div class="row edit-address-submit hidden-xs hidden-sm">
+                <div class="col-md-6 col-sm-6 text-right">
+                    <button type="button" name="edit-address-save" class="btn primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+                </div>
+                <div class="col-md-6 col-sm-6 text-left">
+                    <button type="button" name="edit-address-delete" class="btn btn-danger" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Deleting">Delete</button>
+                </div>
+            </div>
+            <div class="row edit-address-submit hidden-lg hidden-md">
+                <div class="col-sm-6 col-xs-6 text-right">
+                    <button type="button" name="edit-address-save" class="btn primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">Save</button>
+                </div>
+                <div class="col-sm-6 col-xs-6 text-left">
+                    <button type="button" name="edit-address-delete" class="btn btn-danger" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Deleting">Delete</button>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+
+</div>
+{% endblock main_content_row %}
+
+
+{% block extra_js %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&sensor=false"></script>
+<script type="text/javascript">
+    
+    $(function () {
+        {% if add_address %}
+        var add_address = true;
+        {% else %}
+        var add_address = false;
+        {% endif %}
+        var locality_info = null;
+        var northEast = new google.maps.LatLng(13.094677, 77.794881);
+        var southWest = new google.maps.LatLng(12.788851, 77.405553);
+        var bounds = new google.maps.LatLngBounds(southWest, northEast);
+        var options = {
+            bounds: bounds,
+            regions: ['sublocality'],
+            // types: ['(cities)'],
+            componentRestrictions: {country: 'in'}
+        }
+        var places = new google.maps.places.Autocomplete($('#submitaddress input[name="locality"]')[0], options);
+        google.maps.event.addListener(places, 'place_changed', function() {
+            var place = places.getPlace();
+            locality_info = {
+                'map_string': place.formatted_address, 
+                'lat': place.geometry.location.G,
+                'lng': place.geometry.location.K,
+            }
+        });
+
+        if (!add_address) {
+            {% if address %}
+                locality_info = {{address.locality|tojson}}
+            {% endif %}
+        }
+
+        // Add new address/ Edit address
+        $('#submitaddress button[name="add-address-save"], #submitaddress button[name="edit-address-save"]').click(function(event){
+            var address_index = "{{address._id}}";
+            var url = "/dashboard/address", type = 'post';
+
+            if (address_index) {
+                url = "/dashboard/address/" + address_index;
+                type = 'put';
+            }
+            $(this).button('loading');
+            $.ajax({
+                url: url,
+                type: type,
+                dataType: 'json',
+                context: this,
+                data: {
+                    tag: $('#submitaddress input[name="tag"]').val(),
+                    apartment_number: $('#submitaddress input[name="apartment_number"]').val(),
+                    address_2: $('#submitaddress input[name="address_2"]').val(),
+                    address_1: $('#submitaddress textarea[name="address_1"]').val(),
+                    locality: JSON.stringify(locality_info),
+                    user_id: "{{user_id}}"
+                },
+                success: function(data){
+                    window.location = "/myprofile";
+                },
+                error: function(){
+                    $(this).button('reset');
+                }
+            })
+        })
+        
+        // Add new address
+        $('#submitaddress button[name="edit-address-delete"]').click(function(){
+            var address_index = "{{address._id}}";
+            $(this).button('loading');
+            $.ajax({
+                url: "/dashboard/address/" + address_index,
+                type: 'delete',
+                dataType: 'json',
+                success: function(data){
+                    window.location = "/myprofile";
+                },
+                error: function(){
+                    $(this).button('reset');
+                }
+            })
+        })
+
+        if($("#editAddress .panel").length == 1) {
+            $("a.edit-address").trigger('click');
+        }
+
+
+    });
+
+
+
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,70 @@
+{% extends "layout/partner_customer_layout.jinja" %}
+
+
+
+{% block screen_name %}
+            <div class="navbar-brand " href=""> <img class="header_image_icon" src="/static/img/header_icon_order_history.png">Order Receipt</div>
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+<div class="col-md-8 order_summary" >
+
+<header> <h3 class="float_left">Invoice id: {{_id}}</h3> <h3>Date: {{updated_date}}</h3> </header>
+
+    <table class="table white-table table-watermark">
+            <thead>
+              <tr class="head_blue">
+                <td>Order Description </td>
+                <td>Wash type</td>
+                <td>Qty</td>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in order_items %}
+
+                <tr>
+                  <td>{{x.title}}</td>
+                  <td>{{x.text_type}}</td>
+                  <td>{{x.value}}</td>
+                  <td>Rs.{{x.price}}</td>
+                </tr>
+
+              {% endfor %}
+
+                 
+
+              <tr class="grey_bg">
+                <td>Subtotal</td>
+                <td></td>
+                <td>-</td>
+                <td>Rs.{{order_price}}</td>
+              </tr>
+              
+              <tr class="grey_bg">
+                <td>Coupons</td>
+                <td></td>
+                <td></td>
+                <td>-Rs.{{credits_applied}}</td>
+              </tr>
+
+              <tr>
+                <td><strong>Total</strong></td>
+                <td></td>
+                <td></td>
+
+                <td>
+                  <strong>
+                 Rs.{{final_price}}
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+<!--          <button class="col-md-4 primary" style="float:right;">Pay Now</button> -->
+
+
+{% endblock main_content %}

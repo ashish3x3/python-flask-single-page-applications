@@ -1,0 +1,74 @@
+{% extends "pagetab/main.jinja" %}
+
+{% block search_result_block %}
+<br>
+<br>
+<div class="col-md-12 js-row-each">
+  <div class="alert hide"></div>
+  <form action="/pagetab/admin/account" method='POST' class="form-horizontal" enctype="multipart/form-data" role="form">
+    <div class="form-group">
+      <label for="" class="col-md-3 control-label">Company Name</label>
+      <div class="col-md-6">
+          <input id="company_name" class="form-control" type="text" value="{{ data.account.company_name }}" name="company_name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="" class="col-md-3 control-label">Admin Email</label>
+      <div class="col-md-6">
+          <input name="user_email" type="" class="form-control" id="inputPassword1" placeholder="" value="{{ data.account.user_email }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-3 control-label">Banner Image</label>
+      <div class="col-md-6">
+           {% if data.account.file.exists %}
+          <div  id="div-banner">
+              <img src="{{ data.account.file.path }}" height="93" width="251"/>
+          </div>
+          {% else %}
+              <div class="div-middle-settings" id="div-banner">&nbsp;</div>
+          {% endif %}
+              <input type="file" size="3" id="BrowserHidden" name="company_banner"  />    
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-3 col-md-6">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+
+
+{#<div id="account-settings">
+    <h3>Account Details</h3>
+
+    Company Name :
+    <div id="div-company"><input id="company_name" type="text" value="{{ data.account.company_name }}" name="company_name"></div>
+    <a href="#" id="save_name">Edit</a>
+
+    Admin Email :
+    <div  id="div-email">{{ data.account.user_email }}</div>
+    <a href="#" id="save_name">Edit</a>
+    
+    Banner Image :
+ 
+    {% if data.account.file.exists %}
+    <div  id="div-banner">
+        <img src="{{ data.account.file.path }}" height="93" width="251"/>
+    </div>
+    {% else %}
+    <div class="div-middle-settings" id="div-banner">&nbsp;</div>
+    {% endif %}
+    <div  id="div-banner-link"><a href="#" id="edit_banner">Edit</a></div>    
+    
+</div>
+#}
+{% endblock search_result_block %}

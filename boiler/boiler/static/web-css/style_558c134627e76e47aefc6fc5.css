@@ -1,0 +1,669 @@
+
+/* Skeleton V1.2
+* Copyright 2011, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 6/20/2012
+*/
+
+/* Table of Content
+==================================================
+	#Site Styles
+	#Page Styles
+	#Media Queries
+	#Font-Face */
+
+/* #Site Styles
+================================================== */
+.hanger{margin-right: 10px !important; vertical-align: middle;}
+.profile_pic{border-radius: 50%;vertical-align: middle;margin-right: 10px;}
+#menu{display: none;}
+img{max-width: 100%;}
+
+
+/* #Page Styles - Fixed Navigation
+================================================== */
+
+#fixed-navigation{display: none;}
+
+#fixed-navigation {
+	width: 100%;
+	position: fixed;
+	top: 0;
+	background: rgba(255, 255, 255, 0.98);
+	z-index: 100;
+	border-bottom: 1px solid rgba(18, 184, 219, 0.25);
+}
+
+
+#fixed-navigation .fixed-nav-wrap{
+	text-align: center;
+	float: none;
+	width: 70%;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 5px;
+}
+
+
+#fixed-navigation .fixed-nav-wrap img{
+	float: left;
+	width: 120px;
+	padding: 5px;
+	margin-top: 5px;
+}
+
+
+
+
+#fixed-navigation ul{
+	text-align: center;
+	float: none;
+	width: 70%;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 20px;
+}
+
+#fixed-navigation ul li{ float: left; margin-right: 50px;margin-bottom: 0}
+#fixed-navigation ul li a{position: relative;}
+#fixed-navigation ul li a:hover{border-bottom: 2px solid #12b8db}
+#fixed-navigation ul li a img{
+	display: block;
+	text-align: center;
+	margin: 0 auto;
+	position: relative;
+	margin-top: -50px;
+}
+
+
+
+/* #Page Styles - Home
+================================================== */
+#home{
+	padding: 30px;
+}
+
+
+
+/* #Page Styles - About
+================================================== */
+
+/*.face {
+    border: 3px solid #33ADFF;
+    border-radius: 300px;
+    -webkit-border-radius: 300px;
+    -moz-border-radius: 300px;
+}*/
+
+.face {
+	border-radius: 3px;
+	width: 190px;
+	height: 190px;
+}
+
+
+
+.silus, .paul, .raghu, .bala, .abhilash, .tony, .vinit, .baid, .shakti,
+.divya, .haridas, .pragya, .prabha, .megha, .ravitej, .kandwal,
+.kataria, .vikram, .naren, .veera, .nirav, .prashanth {
+	background-image: url('../web-images/about-us-page-2.jpg');
+	background-repeat: no-repeat;
+	height: 142px;
+	width: 142px;
+	border-radius: 5px;
+}
+.raghu {
+	background-position: -145px -287px;
+}
+.silus {
+	background-position: 0px 0px;
+}
+.bala {
+	background-position: -572px 0px;
+}
+.abhilash {
+	background-position: -715px -287px;
+}
+.tony {
+	background-position: -428px 0px;
+}
+.vinit {
+	background-position: -858px -144px;
+}
+.baid {
+	background-position: -858px -286px;
+}
+.vikram {
+	background-position: -715px 0px;
+}
+.shakti {
+	background-position: -287px -144px;
+}
+.divya {
+	background-position: -572px -144px;
+}
+.pragya {
+	background-position: -286px 0px;
+}
+.haridas {
+	background-position: 0px -144px;
+}
+.prabha {
+	background-position: -143px -144px;
+}
+.megha {
+	background-position: -857px 0px;
+}
+.ravitej {
+	background-position: -429px -144px;
+}
+.kandwal {
+	background-position: 0px -286px;
+}
+.kataria {
+	background-position: -286px -286px;
+}
+.naren {
+	background-position: -428px -286px;
+}
+.veera {
+	background-position: -715px -144px;
+}
+.nirav {
+	background-position: -572px -285px;
+}
+.paul {
+	background-position: -145px 0px;
+}
+.prashanth {
+	background-position: 0px -430px;
+}
+
+
+
+#about{
+	padding: 30px;
+}
+
+#about #logo{
+	float: left;
+}
+
+#about h3{
+	margin-top: 13px;
+	margin-left: 20px;
+	float: left;
+	border-left: 1px solid #d0d0d0;
+	padding-left: 20px;
+}
+
+#about .about_me{
+	margin-top: 10px;
+	margin-left: 30px;
+	font-size: 14px;
+}
+
+
+#about .linkedin_profile{
+	width: auto !important;
+	float: none;
+	margin-left: 10px;
+	margin-bottom: 30px;
+}
+
+
+#about .about-text{
+	margin-top: 30px;
+	margin-bottom: 40px;
+}
+#about h4{
+	font-weight: 400;
+}
+#about h6{
+	display: block;
+	overflow: hidden;
+	float: left;
+	width: 100%;
+	margin-top: 10px;
+	font-size: 15px;
+	line-height: 26px;
+	text-align: justify;
+	color:rgb(57, 57, 57)
+}
+
+#about h6.italic{
+font-weight: 400;
+color: grey;
+}
+
+#about .team img{
+	width: 150px;
+	border-radius: 3px;
+	margin-top: 15px;
+	float: left;
+}
+
+#about .team{display: block;
+overflow: hidden;
+margin: 20px 0;}
+
+.border{text-decoration: underline;
+font-style: italic;
+font-size: 15px;}
+#areas #street{
+	margin-top: 50px;
+	float: right;
+}
+#about .team h3{border:0;display: block;overflow: hidden;float: none; padding-left: 20px; margin-left: 0}
+
+#about .team h5{border:0;display: block;overflow: hidden;float: none; padding-left: 20px; margin-left: 0}
+.float-right{float: right !important;}
+
+#howitworks{
+	margin-top: -30px;
+}
+/* #Page Styles - Navigation
+================================================== */
+#nav-wrapper{
+	background:rgba(255, 255, 255, 0.95);
+}
+.scrolled{
+	position: fixed;
+	z-index: 100;
+	width: 100%;
+	border-bottom: 1px solid rgba(18, 184, 219, 0.19);
+}
+.scrolled #mobile-logo{
+	display: inline-block;
+	width: 140px;
+	margin: 10px 0;
+	float: left;
+}
+
+#mobile-logo{
+	display: none;
+}
+
+.not-scrolled #mobile-logo{
+	display: none;
+}
+#navigation{float: right;}
+#navigation ul{float: right; margin: 30px 0;margin-bottom: 0}
+#navigation ul li{ float: left; margin: 15px}
+#navigation ul li a{position: relative;}
+#navigation #onclick{
+	display: block;
+	text-align: center;
+	margin: 0 auto;
+	position: relative;
+	margin-top: -50px;
+}
+
+		#navigation #mobile-logo{ display: none}
+
+.blue_wrap{
+	background: #12b8db;
+	margin-top: -36px;
+	height: auto;
+	padding: 30px 0;
+}
+
+.blue_wrap h1, .blue_wrap h2, .blue_wrap h3, .blue_wrap h4, .blue_wrap h5{color: #fff;font-weight: 500}
+.blue_wrap h4{font-size: 20px;margin: 10px}
+.blue_wrap h5{font-size: 13px;text-align: left}
+
+.blue_wrap h3{margin-bottom: 50px;font-size: 25px;}
+img#wave{
+margin-top: -145px;
+width: 35%;
+}
+
+.align_center{
+	text-align: center;
+}
+.step1-icon{
+	background-image: url('../web-images/step-icons.png');
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	margin: 0;
+}
+
+
+.step2-icon{
+	background-image: url('../web-images/step-icons.png');
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	background-repeat: no-repeat;
+	background-position: 0 -62px;
+	margin: 0;
+}
+
+
+
+.step3-icon{
+	background-image: url('../web-images/step-icons.png');
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	background-repeat: no-repeat;
+	background-position: 0 -123px;
+	margin: 0;
+}
+
+
+.step4-icon{
+	background-image: url('../web-images/step-icons.png');
+	display: inline-block;
+	width: 110px;
+	height: 50px;
+	background-repeat: no-repeat;
+	background-position: 0 -189px;
+	margin: 0;
+}
+
+.step-count{
+	position: relative;
+	font-size: 20px;
+	color: #fff;
+	font-weight: 900;
+	text-align: center;
+	display: block;
+	top: -5px;
+	right: -30px;
+}
+
+.circle-wrap{
+	display: inline-block;
+	border: 1px solid #7ED4F0;
+	padding: 25px;
+	border-radius: 50%;
+}
+
+/* #Page Styles - Landing Page
+================================================== */
+
+#hero-img{text-align: center;}
+#logo{margin-bottom: 20px;}
+
+
+/* #Page Styles - Press
+================================================== */
+
+#press{padding: 30px; border-bottom: 1px solid #EAEAEA}
+#press ul li{
+	float: left;
+	clear: right;
+	padding: 30px;
+}
+
+#press h3{text-align: center;font-size: 25px;margin-bottom: 50px;}
+
+
+/* #Page Styles - Area
+================================================== */
+
+#areas{padding: 30px; border-bottom: 1px solid #EAEAEA}
+#areas h3{text-align: center;font-size: 25px;margin-bottom: 50px;}
+
+#area-banner{padding: 30px;}
+#street ul{
+	margin: 10px 0;
+	list-style: circle url("../web-images/location.png");
+	font-style: italic;
+}
+
+
+
+/* #Page Styles - Price
+================================================== */
+.price{padding: 30px;border-bottom: 1px solid #EAEAEA;}
+.price h3{text-align: center;font-size: 25px;margin-bottom: 50px;}
+.price table{
+	width: 50%;
+	float: left;
+}
+
+.price th {
+	background: #12b8db;
+	padding: 0.5rem;
+	color: #fff;
+	text-align: center;
+	outline: 1px solid #FFFFFF;
+	font-size: 18px;
+}
+
+.price td {
+	padding: 0.7rem;
+	text-align: center;
+	border: 1px solid #EBEBEB;
+}
+
+.price #price-buttons{
+	text-align: center;
+}
+
+.price #price-buttons a{
+	margin-top:30px;
+	font-size: 20px;
+	margin-right: 10px;
+	width: 200px;
+	color: #fff;
+}
+
+.price #price-buttons a.secondary{
+	background: #12b8db;
+}
+
+
+
+/* #Page Styles - Celebrity
+================================================== */
+#celebrity{background: #fff;padding: 100px;}
+#celebrity p{font-size: 12px}
+#celebrity h5{font-weight: 500;margin: 10px 0;color: rgb(116, 116, 116)}
+#celebrity #footer{margin: 50px 0;}
+
+
+
+
+/* #Page Styles - Footer
+================================================== */
+#footer{background: #12b8db;padding: 50px;}
+#footer h4{
+	font-weight: 500;
+	font-size: 20px;
+	margin-bottom: 10px;
+	color: #fff;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.46);
+	display: inline-block;
+}
+#footer h5, #footer p{font-size: 13px; font-weight: 500;color: #fff;text-align: justify;}
+#footer a{color: #fff;font-weight: 500;font-size: 14px;}
+#footer img {
+	width: 13px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+#footer img.phone{
+	width: 30px;
+	vertical-align: text-bottom;
+}
+#footer h5.phone{
+	font-size: 23px;
+}
+
+
+/* #Page Styles - testimonials
+================================================== */
+
+#testimonials{padding: 50px;border-bottom: 1px solid #EAEAEA;}
+
+#testimonials h3{text-align: center;font-size: 25px;margin-bottom: 50px;}
+
+#testimonials .user-comment{
+	background: #FDFDFD;
+	padding: 20px;
+	font-size: 12px;
+	border: 1px solid rgba(18, 184, 219, 0.19);
+	-webkit-border-radius: 3px;
+	-moz-border-radius:3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	position: relative;
+}
+
+#testimonials .arrow-down{
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 8px solid rgba(18, 184, 219, 0.19);
+	position: absolute;
+	bottom: -8px;
+	left: 18px;
+}
+
+
+
+#testimonials .user-description{
+	margin: 10px;
+}
+
+
+#testimonials .user-description img{
+	float: left;
+	border-radius: 50%;
+	width: 40px;
+	margin-right: 10px;
+}
+
+
+#testimonials .id-testimonials{
+	width: 30%;
+	float: left;
+}
+
+.box{
+	display: block;
+	display: -webkit-box;
+	height: 70px;
+	margin: 0 auto;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* #Media Queries
+================================================== */
+
+	/* Smaller than standard 960 (devices and browsers) */
+	@media only screen and (max-width: 959px) {
+
+		#navigation{width: 60%;}
+
+
+
+	}
+
+	/* Tablet Portrait size to standard 960 (devices and browsers) */
+	@media only screen and (min-width: 768px) and (max-width: 959px) {}
+
+	/* All Mobile Sizes (devices and browser) */
+	@media only screen and (max-width: 767px) {
+
+		#navigation{position: fixed;
+			left: 0;
+			background: #fff;
+			z-index: 1;
+			border-bottom: 1px solid rgba(18, 184, 219, 0.1);
+		}
+		#navigation #mobile-logo{ display: inline;float: left;padding: 10px 20px;}
+		#navigation #mobile-logo img{ width: 120px;padding: 5px;}
+		#navigation #menu{
+			float: right;
+			padding: 0 45px;
+			margin-top: 20px;
+			display: block;
+		}
+		#navigation ul{display: none;margin: 0;width: 100%;}
+		#navigation ul li {
+			float: left;
+			margin-top: 5px;
+			text-align: center;
+			margin-bottom: 0;
+			width: 100%;
+			border-bottom: 1px solid #f8f8f8;
+			padding: 10px 0;
+			margin: 5px 0 0 0;
+			clear: both;
+		}
+		#navigation img#onclick {
+			display: none
+		}
+		#navigation .link{display: none;}
+		#navigation{width: 100%;}
+		#fixed-navigation{display: none !important;}
+		#logo{display: none;}
+
+
+		/*Hero*/
+		.mobile-hero{ text-align: center; padding:30px 0;}
+		#home{padding-top: 100px;}
+
+		/*Steps*/
+		.steps{margin-bottom: 50px !important;}
+		.blue_wrap{padding: 20px;}
+
+		/*Areas*/
+		#areas #street{padding: 0}
+		#area-banner{padding: 0}
+		.border{text-align: center;margin-bottom: 20px;}
+		#street ul{margin: 0 auto;width: 87%;}
+		#street ul li{margin-right: 30px;float: left;}
+
+		/*Price*/
+		.table{width: 100%;}
+		table.price{width: 100%;margin-bottom: 30px;}
+
+		/*Testimonials*/
+		#testimonials{padding: 50px 0;}
+		#testimonials .carousel-wrap{width: 60%}
+		#testimonials .carousel-wrap ul li{width: 10%;}
+		#testimonials .carousel-wrap .context{font-size: 15px;margin-bottom: 27px;font-weight: 500;}
+
+		/*skirt*/
+		#celebrity{padding: 50px 0;text-align: center;}
+	}
+
+	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+	@media only screen and (max-width: 479px) {}
+
+
+/* #Font-Face
+================================================== */
+/* 	This is the proper syntax for an @font-face file
+		Just create a "fonts" folder at the root,
+		copy your FontName into code below and remove
+		comment brackets */
+
+/*	@font-face {
+	    font-family: 'FontName';
+	    src: url('../fonts/FontName.eot');
+	    src: url('../fonts/FontName.eot?iefix') format('eot'),
+	         url('../fonts/FontName.woff') format('woff'),
+	         url('../fonts/FontName.ttf') format('truetype'),
+	         url('../fonts/FontName.svg#webfontZam02nTh') format('svg');
+	    font-weight: normal;
+	    font-style: normal; }

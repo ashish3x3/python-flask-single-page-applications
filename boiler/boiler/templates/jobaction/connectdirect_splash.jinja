@@ -1,0 +1,20 @@
+{% extends 'layout/defaultlayout.jinja' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default main-splash">
+            <div class="panel-body text-center text-muted">
+                <br><br><br>
+                <img src="/static/img/pictures/connections_large.png" width="" height="" />
+                <h3 class="text-info">{{ candidate.name }}</h3> 
+                <h4 class="tx-16">would like to discuss a job opening at your company.</h4><br><br>
+                <p>
+                    <a class="btn btn-primary" href="/detail/connectdirect/{{ ID }}"> Open this request </a>
+                </p>
+                <br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

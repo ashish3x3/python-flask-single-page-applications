@@ -1,0 +1,29 @@
+{% extends 'layout/defaultlayout.jinja' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default main-splash">
+            <div class="panel-body text-center text-muted">
+                <br><br><br>
+                <p>
+                    <img src="/static/img/pictures/connections_large.png" width="" height="" />
+                    <br><br>
+                </p> 
+                <p class="tx-16">
+                    {{ candidate.name }} is requesting an introduction to your friend
+                    <strong class="text-info">{{ target.name }}</strong>,
+                    who works at <strong class="text-info">{{ job.company.name }}</strong>.
+                </p>
+                <p class="tx-16">
+                    <strong>{{ 'he' | gender(candidate.gender) | capitalize }} would like to chat with {{ target.name }} about a job opening at {{ 'his' | gender( target.gender ) }} company.</strong>
+                </p><br><br>
+                <p>
+                    <a class="btn btn-primary" href="/detail/introducefirst/{{ ID }}"> Open this request </a>
+                </p>
+                <br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

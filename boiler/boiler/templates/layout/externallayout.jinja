@@ -1,0 +1,48 @@
+{% import 'elements/macros.jinja' as html %}
+<!doctype html>
+
+<!--[if lt IE 8]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 8]>  <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+    <head>
+        {% include 'elements/head_min.jinja' %}
+        {% block og_tags %}{% endblock og_tags %}
+    </head>
+
+    <body>
+        {% block body %}
+        <div class="container-fluid containerwrap">
+            <div class="clearfix">
+                {% include 'elements/oldbrowser.jinja' %}
+            </div>
+            <div>
+                <section class="clearfix">
+                    <header class="clearfix brand-bar span24 pull-center no-float" role="banner">
+                        <div class="pull-left">
+                            {% block title%}
+                                <h2>MyParichay</h2>
+                            {% endblock title %}
+                        </div>
+                        <div class="pull-right">
+                            <a href="{{ config.APP_URL }}landing/" target="_top" class="pull-right">
+                                <img src="/static/img/logo_small.png" class="pull-right" title="MyParichay" alt="MyParichay">
+                            </a>
+                        </div>
+                    </header>
+                    <div id="dynamic_content" role="main" class="clearfix span24 pull-center no-float no-overflow">
+                        {% block main_wrapper%}
+                            Welcome To MyParichay
+                        {% endblock main_wrapper %}
+                    </div><!-- Dynamic Content -->
+                </section>
+            </div>
+            
+        </div> <!-- /container -->
+        {% endblock body %}
+
+        {% include 'elements/postscript_min.jinja' %}
+
+        {% block postscript %}{% endblock postscript %}
+    </body>
+</html>
+

@@ -1,0 +1,148 @@
+{% extends "layout/partner_customer_layout.jinja" %}
+
+{% block screen_name %}
+  <div class="navbar-brand order_status" href="">
+    <img class="header_image_icon" src="/static/img/order_history.png">
+    {{status_text}}
+  </div>
+{% endblock screen_name %}
+
+{% block main_content %}
+
+  <div id="order_status" class="col-md-7 ">
+    <div class="progress-container fade-in">
+      <div>
+        <h2>{{status_group_name|capitalize}}</h2>
+        <h3>{{status_text}}</h3>
+      </div>
+      <img id="img0" src="/static/img/wheel/wheel-bg.png">
+      {% if status_group == "order_placed" %}
+        <img class="blue-progress prog-1" data-bindattr-25="25" src="/static/img/wheel/wheel-progress-1.png">
+      {% endif %}
+      {% if status_group == "clothes_picked" %}
+        <img class="blue-progress prog-2" data-bindattr-26="26" src="/static/img/wheel/wheel-progress-2.png">
+      {% endif %}
+      {% if status_group == "clothes_ready" %}
+        <img class="blue-progress  prog-3" data-bindattr-27="27" src="/static/img/wheel/wheel-progress-3.png">
+      {% endif %}
+      {% if status_group == "order_complete" %}
+        <img class="blue-progress prog-4" data-bindattr-28="28" src="/static/img/wheel/wheel-progress-4.png">
+      {% endif %}
+    </div>
+  </div>
+  <div id="order_status_info" class="col-md-4 order-status order-status-info">
+    {% if coupon_applied.status == "success" %}
+      <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px; width: 290px;">
+        {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <img src="/static/img/apply_coupons_image2.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+            {# <h3 style="margin-left: 10px;">Coupon Status<br/>{{coupon_applied.name|upper}}</h3> #}
+            <h4 style="text-decoration: none;">Coupon Status<br/>{{coupon_applied.name|upper}}</h4>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px;width: 290px;">
+      {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+          <img src="/static/img/pick-up-truck.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+{#           <h3 style="margin-left: 10px;">Pick up<br/>{{pickup.result[0].schedule_date}}&nbsp;&nbsp;{{pickup.result[0].schedule_time}}</h3> #}
+          <h4 style="text-decoration: none;">Pick up :<br/>{{pickup.result[0].schedule_date}}&nbsp;&nbsp;{{pickup.result[0].schedule_time}}</h4>
+        </div>
+      </div>
+    </div>
+    <div id="" class="pickup-drop-block col-md-12"  style="background-color: rgb(249, 249, 249);padding: 5px 20px;border: 1px solid #E5E5E5;border-radius: 3px;margin-bottom: 20px;width: 290px;">
+      {# <h4 style="margin: 0;margin-bottom: 5px;"></h4> #}
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+          <img src="/static/img/pick-up-truck2.png" style="margin-left: -12px;width: 70px;margin-top: 8px;">
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+{#           <h3 style="margin-left: 10px;">Delivery<br/>{{delivery.result[0].schedule_date}}&nbsp;&nbsp;{{delivery.result[0].schedule_time}}</h3> #}
+          <h4 style="text-decoration: none;">Delivery :<br/>{{delivery.result[0].schedule_date}}&nbsp;&nbsp;{{delivery.result[0].schedule_time}}</h4>
+        </div>
+      </div>
+    </div>
+    <div id="" class="pickup-drop-block last col-md-12">
+      <h4>Pickup/Delivery Address</h4>
+      <p>OrderId: #{{order_id}}</p>
+      <p>{{address.result[0].apartment_number}}, {{address.result[0].address_1}}, {{address.result[0].city}} </p>
+      <p> Phone: {{phone}} </p> 
+      <p> Type : {{type}} </p>
+    </div>
+
+    <!-- Display Select status only if session is of admin -->
+    {% if status_group == "order_cancelled" %}
+      <div id="" class="pickup-drop-block last col-md-12">
+        <h4 style="text-decoration: none;">Order&nbsp;Cancelled</h4>
+      </div>
+    {% elif status_group == "order_rejected" %}
+      <div id="" class="pickup-drop-block last col-md-12">
+        <h4 style="text-decoration: none;">Order&nbsp;Rejected</h4>
+      </div>
+    {% elif (status == 'order_placed' or status == 'pickup_progress') %}
+      <div id="" class="pickup-cancel-block col-md-12">
+        <p>
+          <a href="#" id="cancel-order" data-target="#editOrderCancel" data-toggle="modal" data-id="{{_id}}" class="edit-order">Cancel</a>
+        </p>
+      </div>
+    
+    {% elif is_paid == 'paid' and payment_id %}
+      <div id="" class="pickup-cancel-block col-md-12">
+        <img class="amount-paid" src='/static/web-images/stamp-webS.png' title="Amount Paid" alt="Paid"  height="90" width="90">
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock main_content %}
+
+{% block misc_space %}
+{% endblock misc_space %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+
+  $(function(){
+    var page_message = $('#page-message');
+    if (page_message.attr('data-status') == 'failure') {
+      Toast.show({
+        message  : "Payment failed: " + page_message.attr('data-message'),
+        duration    : Toast.DURATION_LONG,
+      }); 
+    };
+    
+    $('#partner-customer-order-cancel').click(function(e){
+        e.preventDefault();
+        var self = Actors;
+        var cancel_button = $(this).button('loading');
+        $.ajax({
+            type: 'GET',
+            url: '/partner/cancelorder/{{customer_id}}?order_id=' + cancel_order_id,
+            dataType: 'json',
+            success: function(results) {
+                // initializes and invokes show immediately
+                setTimeout(function() {
+                    location.href="/partner/customer";
+                }, 1000);
+            },
+            error: function(xhr, status, error){
+              Toast.show({
+                message: xhr.responseJSON.error,
+                duration: Toast.DURATION_LONG,
+              });
+              console.log('Something went wrong');
+              cancel_button.button('reset');
+            }
+        });
+    });
+  });
+</script>
+
+{% endblock extra_js %}
+

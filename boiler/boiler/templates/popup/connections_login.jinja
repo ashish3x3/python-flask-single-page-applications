@@ -1,0 +1,37 @@
+{% set show_footer = false %}
+{% set show_title = false %}
+{% set modal_class = "logedout-popup" %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}{#......Logged out popup.....#}
+	<p class="visible-xs">&nbsp;</p>
+	<div class="clearfix">
+        <div class="col-md-6 col-sm-6">
+            <h1>We'd like to show you something cool!</h1>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <p>
+                <a href="#" data-href="{{ request.args.get('next','/landing') }}" class="js-login-fb-link js-track-analytics">
+                    <img class="img-max-width" src="/static/img/buttons/fb-btn.png" />
+                </a>
+            </p>
+            By clicking, you agree to MyParichay's Terms of Service
+        </div>
+    </div>
+    <br><br>
+	<div class="clearfix">
+		<h3>Your job search is incomplete without social features.</h3>
+		<p>MyParichay helps you find your first and second-degree <strong>social connections at any company on this job board</strong>. You may be pleasantly surprised!</p>
+
+		<h3>How does this help?</h3>
+		<p>At least 40% of jobs are filled through employee referrals. Logging in will allow you to <strong>find and message your contacts at any company. It's the future</strong>.<a href="https://www.myparichay.in/website/products/candidates/#w2" target="_blank">Learn More.</a></p>
+	</div>
+    <br>
+	<div class="hidden-xs">
+		<iframe src="http://www.facebook.com/plugins/facepile.php? 
+			app_id={{ config.APP_ID }}&max_rows=1&size=small" scrolling="no" frameborder="0" style="border:none;  
+			overflow:hidden; width:400px; height:50px;" allowTransparency="true">
+		</iframe>
+	</div>
+
+{% endblock content %}

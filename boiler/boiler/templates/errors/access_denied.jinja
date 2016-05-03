@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Access Denied</title>
+  <style type="text/css">
+  img {
+    border: none;
+  }
+  body {
+    font-family: arial;
+    font-size: 12px;
+    background: #f9f9f9;
+  }
+    .clearfix:before,
+    .clearfix:after {
+    display: table;
+    content: " ";
+    }
+
+    .clearfix:after {
+    clear: both;
+    }
+    .button {
+        color: white; background-color: #6788B6; padding: 11px 19px; font-size: 17.5px; text-decoration:none; display:inline-block; box-shadow:3px 3px 0 #333;
+        position: relative;
+        -webkit-transition:all 0.1s linear;
+        -moz-transition:all 0.1s linear;
+        -ms-transition:all 0.1s linear;
+        -o-transition:all 0.1s linear;
+        transition:all 0.1s linear;
+    }
+    .button:hover {
+        background-color: #3A59A1;
+    }
+    .button:active {
+        background-color: #3A59A1;
+        top: 2px;
+        box-shadow: 0 0 0px #333, inset 0 0 10px #333;
+    }
+  </style>
+</head>
+<body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ config.APP_ID }}";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div class="container" style="margin: 0 auto; width: 700px; margin-top: 5%;border:2px solid #e0e6f0; background:#fff; border-radius:5px; box-shadow:0 0 15px #ccc;">
+        <div class="king clearfix" style="border-bottom:10px solid black;display:block;  border-bottom:5px solid #e0e6f0">
+            <div style="background: white;padding: 30px 20px 20px 30px;border-radius:5px; float:left;">
+                <a href="/"><img src="/static/img/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service" style="border-radius:5px;"></a>
+            </div>
+            <div style="float:right; margin:65px 10px 0 0;">
+                <div class="fb-like" data-href="http://dev.myparichay.in/" data-width="450" data-layout="button_count" data-show-faces="true" data-send="true"></div>
+            </div>
+        </div>
+        <div class="body" style="padding:20px;">
+            <h2 style="color:#416aaf;">Why should you install MyParichay?</h2>
+            <h4 style="color:#2e5178;"> - Discover interesting job opportunities<small><i style="color:#95abd0;font-size:12px;font-weight:lighter">&nbsp;( More than 2 Million jobs available )</i></small></h4>
+            <h4 style="color:#2e5178;"> - Refer friends and earn awards</h4>
+            <h4 style="color:#2e5178;"> - Take cool business challenges<small><i style="color:#95abd0;font-size:12px;font-weight:lighter">&nbsp;( Test your knowledge on Google, Tatas, Infosys etc.... )</i></small></h4>
+            <h4 style="color:#2e5178;"> - Update profile and attract career opportunities</h4>
+        </div>
+        <div class="footer" style="padding:20px;padding-top:0;">
+            <h3 style="color:#416aaf;">Would you like to try MyParichay?</h3>
+
+            <a href='/login#autologin' style="" class="button" >
+                Yes, I'll try it »
+            </a>
+
+            <a href="http://myparichay.in/website"><span style="float:right;font-size:12px !important;color:#95abd0;margin-top:30px; border-bottom:1px dotted #ccc;">No Thanks</span></a>
+        </div>
+    </div>
+</body>
+</html>

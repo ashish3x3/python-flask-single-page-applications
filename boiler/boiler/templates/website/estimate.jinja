@@ -1,0 +1,147 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+
+{% block screen_name %}
+  <div class="navbar-brand " href=""><img class="header_image_icon" src="/static/img/schedule_icon.png">Schedule a wash</div>
+{% endblock screen_name %}
+
+{% block clothes_modal %}
+
+
+
+  <!-- Estimator Modal -->
+  <div class="modal fade confirm" id="addClothes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="estimator">
+            <div class="">
+                            <h2>Estimate your order 
+                              <span class="value">200</span> 
+                              <span>Rs.</span>
+                              <span class="minorder">Minimum </br> order</span>
+                            </h2>
+
+              <div class="toggle-btns">
+                <div class="btn-group">
+                  <a class="btn btn-default active" data-toggle="tab" href="#tab-dry-cleaning" id="toggle-dry-cleaning">
+                    <span class="drywash"></span> Wash &amp; Iron</a>
+                  <a class="btn btn-default" data-toggle="tab" href="#tab-laundry" id="toggle-wash-fold">
+                    <span class="normalwash"></span> Dry Clean</a>
+                </div>
+              </div>
+
+
+              <div class="tab-content" id="myTabContent">
+
+                <div class="tab-pane active" id="tab-dry-cleaning">
+                  <trid="item-dry-cleaning-dress-shirt">
+                        </trid="item-dry-cleaning-dress-shirt">
+                                <form id="wash" class="submitClothes" method="post" action="">
+
+                        <table class="table estimate-table" id="table-dry-cleaning">
+                          <tbody>
+                      
+
+                    
+              {% for x in result %}
+                
+
+                      <tr class="item-washing" style="display: table-row;">
+                        <td class="dc-item">{{x.title}}<span class="rs-perpiece">/cloth</span><span class="dc-item-price">{{x.price.laundry}}</span><span class="rs-tag">Rs.</span></td>
+                        <td>
+                          <button data-price="{{x.price.laundry}}" data-type="0" class="button minus">-</button>
+                          <input class="plus" name="{{x._id}}" type="text" style="padding:0;" value="0">
+                          <button data-price="{{x.price.laundry}}" data-type="0" class="button plus">+</button>                        
+                        </td>
+                      </tr>
+
+              {% endfor %}
+
+                    </tbody>
+                  </table>
+                                </form>
+
+                </div>
+
+                <div class="tab-pane" id="tab-laundry">
+                    <form id="drywash" class="submitClothes" method="post" action="">
+
+                  <table class="table estimate-table" id="table-wash-fold">
+                    <tbody>
+
+
+
+                     {% for x in result %}
+
+                      <tr class="item-drywash" style="display: table-row;">
+                         <td class="dc-item">{{x.title}}<span class="rs-perpiece">/cloth</span><span class="dc-item-price">{{x.price.dry_cleaning}}</span><span class="rs-tag">Rs.</span></td>
+
+
+                         <td>
+                          <button data-price="{{x.price.dry_cleaning}}" data-type="1" class="button minus">-</button>
+                          <input class="plus" name="{{x._id}}" type="text" style="padding:0;" value="0">
+                          <button data-price="{{x.price.dry_cleaning}}" data-type="1" class="button plus">+</button>                        
+                        </td>
+                      </tr>
+
+                    {% endfor %}
+
+
+
+                    </tbody>
+                  </table>
+                </form>
+               
+
+                </div>
+              </div>
+
+              <div>
+
+                <a id="seeMoreRecords" class="button-left cancel">Cancel</a>
+                <button id="submit" type="submit" data-ember-action="13" class="button-right" value="Save">Save</button>
+                </div>
+            </div>
+          </div>
+
+          <div class="disclaimer show-mobile">Prices based on average weights of items.</div>
+        </div>
+       
+      </div>
+    </div>
+  </div><!-- Add Clothes Modal -->
+
+{% endblock clothes_modal %}
+
+
+{% block main_content %}
+
+     <div class="col-md-8 order-page">
+
+        <div id="itemEstimator" class="col-md-8">
+
+          <form id="" method="post" action="" >
+            <fieldset class="cf">
+               <div class="input-group">
+                <label class="control-label" for="editAccountFirstname"></label>
+                <a id="addclothes" class="estimator" data-toggle="modal" data-target="#addClothes">Estimate Items</a>
+              </div>     
+            </fieldset>
+
+            <div class="input-group margin_0">
+                 <label class="control-label" for="editAccountPhone"></label>
+              <button id="schedule_order" type="button" onclick="location.href = '/order_schedule';" data-ember-action="13" class="primary" value="Save">Schedule Order Now</button>
+            </div>
+          </form>
+
+        </div>
+          
+      </div>
+
+{% endblock main_content %}

@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xmlns:fb="https://www.facebook.com/2008/fbml">
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {{ fb_app['namespace'] }}: http://ogp.me/ns/{{ fb_app['namespace'] }}#">
+        <meta property="fb:app_id" content="{{ config.APP_ID }}" />
+        {% for key, value in og.iteritems() %}
+            {% if key == 'og:url'  and ogId %} 
+                <meta property="{{ key }}" content="{{ value ~ '?' ~ 'og_id=' ~ ogId ~ '&' ~ install_params }}" />
+            {% else %}
+                <meta property="{{ key }}" content="{{ value }}" />
+            {% endif %}
+        {% endfor %}
+    </head>
+    <body>
+        &nbsp; Welcome to My parichay
+    </body>
+</html>
+

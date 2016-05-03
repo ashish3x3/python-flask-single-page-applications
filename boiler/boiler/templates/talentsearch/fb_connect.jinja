@@ -1,0 +1,38 @@
+{% extends "talentsearch/main.jinja" %}
+
+{% block main_content %}
+	<div class="col-md-12 padding-35 clearfix">
+		<div class="col-md-12 clearfix padding-muted">
+			<div class="connect-profile col-md-5 clearfix">
+				<div class="col-md-12">
+					<div class="media sm-media">
+						<div class="pull-left">
+							<div class="logo-blk-img">
+								{{ html.imageWithProfileUrl( new_user ) }}
+							</div>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{ new_user.name }}</h4>
+							<p>Recruiter</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 clearfix"></div>
+		</div>
+		<p class="spacer">&nbsp;</p>
+		<p class="tx-13">
+			Your are trying to connect this {{ partner.name if partner }} account to the Facebook account shown above. Click on the ‘Yes, this is me’ button to proceed. If this is not you, click on the ‘No, this is not me’ button to log out and sign in with your Facebook account.
+		</p>
+		<p class="spacer">&nbsp;</p>
+		<p>
+			<a class="btn btn-primary btn-text" href="/talentsearch/connect?next={{ request.args.get('next','/user/search?talentsearch=1') | urlencode }}"><strong>Yes, this is me</strong></a>
+			&nbsp; &nbsp;
+			<a class="btn btn-default btn-text" href="/logout?talentsearch=1&next={{ request.args.get('next','/user/search?talentsearch=1') | urlencode }}"><strong>No, this is not me</strong></a>
+		</p>
+		<p class="spacer">&nbsp;</p>
+	</div>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+{% endblock main_content %}

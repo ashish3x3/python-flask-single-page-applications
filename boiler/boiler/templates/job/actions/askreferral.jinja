@@ -1,0 +1,79 @@
+{% if request.is_xhr  %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "job/native.jinja" %}
+{% endif %}
+
+{% block jobcontent %}
+
+    <div class="row js-row-each">
+        {% if section.sub == 'askreferral' %}
+            <form method="post" class="js-askreferral-form form-horizontal js-track-analytics" action="/jobs/askreferral/{{ job.id }}/{{ referrer.id }}?{{ request.query_string }}">
+        {% elif section.sub == 'askintroduction' %}
+            <form method="post" class="js-askreferral-form form-horizontal js-track-analytics" action="/jobs/askintroduction/{{ job.id }}/{{ introducer.id }}/{{ referrer.id }}?{{ request.query_string }}">
+        {% endif %}
+
+            <legend class="text-center">{{ section.title }}</legend>
+            <input type="hidden" name="referral" value="{% if request.args.get('referral') %}{{ request.args.get('referral') }}{% endif %}" />
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="jobapply_email">Email :</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="email" value="{{ user.email }}"
+                    required id="jobapply_email" name="email" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="jobapply_tel">Mobile No :</label>
+                <div class="col-md-6">
+                    <input class="form-control" type='tel'  value="{{ user.tel }}" required id="jobapply_tel" name="tel" pattern='[0-9+-]{10,15}' data-patternmismatch="Enter a valid Mobile No." />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="jobapply_location">Location :</label>
+                <div class="col-md-6">
+                    <input class="form-control" type='text' value="{{ user.location }}" required
+                    id="jobapply_location" name="location" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Attach Your Résumé :</label>
+                <div class="col-md-6" >
+                    <select class="form-control" name="resume_id"  id="resume_block" required>
+                        <option value="">Select a Resume</option>
+                        {% for x in resume %}
+                            <option value="{{ resume[x].id }}">{{ resume[x].name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="clearfix">
+                        <iframe src="/resume/upload?type=apply" height="75" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <input type='hidden' value="{{ msg.subject }}" name="subjectline" />
+            <input type='hidden' value="{{ msg.body }}" name="message" />
+            <input type='hidden' value="{{ target.id }}" name="userid" />
+            <input type='hidden' value="{{ target.name }}" name="username" />
+            <input type='hidden' value="{{ target.connectiontype }}" name="connectiontype" />
+            <input type='hidden' value="{{ target.jobcompany }}" name="jobcompany" />
+            <input type='hidden' value="{{ target.pictureurl }}" name="pictureurl" />
+
+            <div class="form-actions ">
+                <button type="submit" value="Apply" class="btn btn-primary" >
+                    Submit Your Application
+                </button>
+                <a href="/job/{{ job.id }}" class="btn btn-default">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+{% endblock jobcontent  %}
+
+
+
+

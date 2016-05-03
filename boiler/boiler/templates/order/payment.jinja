@@ -1,0 +1,80 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+  <div class="navbar-brand " href=""><img class="header_image_icon" src="/static/img/order_history.png">Order History</div>
+{% endblock screen_name %}
+
+{% block main_content %}
+
+  <!-- ===Modal for Invoice  -->
+<div class="modal fade" id="package-invoice-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg print-area">
+    <div class="modal-content">
+      <div class="modal-header"></div>
+      <div class="modal-body" style="padding:40px 35px 0px 35px;">
+        <div class="panel-body">
+          <div class="row invoice-list">
+            <div class="col-lg-8">
+              <img src="/static/core/img/mywash-logo.png" alt="" style="height:50px;">
+            </div>
+            <div class="col-lg-4" style="font-size:20px;">
+              <span>INVOICE</span>
+            </div>
+          </div>
+
+          {% if order_details  %}
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          {% else %}
+          bbbbbbbbbbbbbbbbbbbbbbbb
+          {% endif %}
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+      
+
+              <!-- ===Modal for Invoice  -->
+
+  
+ 
+
+
+{% endblock main_content %}
+
+
+
+
+
+
+
+
+{% block extra_js %}
+
+
+  <script type="text/javascript">
+
+  console.log('indoe js');
+  alert('m in payment.jinj');
+
+    $(function({
+      console.log('indied jquey load modal');
+      alert('m in payment.jinj');
+
+      $("#package-invoice-modal").modal({
+                      backdrop: 'static',
+                      keyboard: false,
+                      show: true
+            });
+
+
+    });
+
+
+  
+
+</script>
+
+{% endblock extra_js %}

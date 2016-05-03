@@ -1,0 +1,44 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+<div class="navbar-brand " href="">
+    <img class="header_image_icon" src="/static/img/schedule_icon.png"><span>Phone Verification</span>
+</div>
+{% endblock screen_name %}
+
+
+
+{% block main_content %}
+
+<div class="row">
+
+  
+
+<div class="col-md-8 order-page">
+
+
+  <div id="phoneVerify" class="col-md-8">
+      <h3>Verify your phone for better services</h3></br>
+          <div id="show_on_otp">
+            <form id="verifyotp" method="post" action="">
+                    
+                        <input type="text" name="otp" id="otp" value="5 digit key" required></input></br>
+                      </br>
+                        <button  id="verify_otp" type="submit" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Placing order">Verify OTP</button>
+              </form>
+          </div>
+  </div>
+</div>
+
+</div>  
+
+</div>
+
+
+
+</div>
+
+{% endblock main_content %}
+
+        
+

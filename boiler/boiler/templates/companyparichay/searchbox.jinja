@@ -1,0 +1,56 @@
+{% if type=='PARTNER' %}
+<script type="text/javascript" src={{locations_url}}></script>
+{% endif %}
+{% if not isCareerSite %}
+	<div class="row">
+	    <div class="col-sm-12 text-right">
+	    	<small>Powered by <a class="blue_link_bold" target="_blank" href="https://myparichay.in/">MyParichay</a></small>
+	    </div>
+	</div>
+	<hr class="line1"></hr>
+{% endif %}
+<div class="row">
+	{%  set search_url = '/jobstab/job?'+searchparams %}
+	<form action="{{ search_url }}" method="post" >
+		<div class="col-sm-12">
+			<div class="row">
+				<br/>
+				<div class="col-sm-5 col-xs-5 col-xxs-12">
+					<div class="form-group">
+						<label title="Keyword" for="jt_search_keyword">Keyword </label>
+						<input name="keyword" class="form-control" value="{{ keyword }}" type="text" placeholder="Skills, Designation" data-searchtype="keyword" autocomplete="off" id="jt_search_keyword">
+					</div>
+				</div>
+				<div class="col-sm-5 col-xs-5 col-xxs-12">
+					{% if not show or show.location != false %}
+						<div class="form-group">
+							<label title="Location" for="jt_search_location">Location </label>
+							<input class="form-control {{'js-partner-locations-autocomplete' if type=='PARTNER' else 'fb-autocomplete'}}" type="text" value="{{ location }}" data-searchtype="adcity" placeholder="Location" id="advancejobsearch_location" autocomplete="off" {{"name=location" if not type=='PARTNER'}} id="jt_search_location"/>
+							<input type="hidden" {{"name=location" if type=='PARTNER'}} value="{{ request.values['location'] }}" id="locationHidden" />
+						</div>
+					{% elif not show or show.company != false %}
+						<div class="form-group">
+							<label title="Company" for="jt_search_company">Company </label>
+							<input name="company" class="form-control" value="{{ company }}" type="text" placeholder="Company" data-searchtype="company" autocomplete="off" id="jt_search_company" />
+						</div>
+					{% endif %}
+				</div>
+
+				<div class="pull-right col-sm-2 col-xs-2 col-xxs-12">
+					<div class="form-group">
+						<label class="hidden-xxs">&nbsp;</label>
+						<button class="btn btn-primary form-control search-btn-career" type="submit" data-replace-type="js-replace-wrapper"> Search </button>
+					</div>
+				</div>
+				<div class="js-advanced-search hide" ></div>
+			</div><!-- /input-group -->
+		</div>
+		{% if show and show.dhcheckbox %}
+			<div class="col-sm-5 col-xs-5">
+				<input type="checkbox" {{"checked=true" if diversity_hiring=='on'}} name="diversity_hiring" title="Job for Women"> <strong>Show jobs for women</strong> </input>
+			</div>
+		{% endif %}
+	</form>
+</div>
+<br />
+

@@ -1,0 +1,72 @@
+{% extends 'elements/postscript_min.jinja' %}
+
+{% block scripts %}
+
+{% if config.DEBUG == false %}
+    <script src="//cdn.jsdelivr.net/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"></script>
+    <script src="//cdn.jsdelivr.net/underscorejs/1.6.0/underscore-min.js"></script>
+    <script src="//cdn.jsdelivr.net/handlebarsjs/1.0.9/handlebars.js" ></script>
+    {% assets output="gen/packed.js",
+      "js/lib/min/jquery-ui-1.10.3.custom.min.js",
+      "js/lib/min/jquery.jcarousel.min.js",
+      "js/lib/min/bootstrap-switch.min.js",
+      "js/lib/min/EventEmitter.min.js",
+      "js/lib/min/toast.min.js",
+      "js/scripts/barloader.jquery.js",
+      "js/scripts/ticker.jquery.js",
+      "js/scripts/bubbleinput.jquery.js",
+      "js/scripts/facebook.jquery.js",
+      "js/scripts/common.jquery.js",
+      "js/scripts/main.jquery.js",
+      "js/scripts/autocomplete.jquery.js",
+      "js/scripts/ajaxupdate.jquery.js",
+      "js/scripts/search.jquery.js",
+      "js/proto/search.jquery.js",
+      "js/scripts/job.jquery.js",
+      "js/scripts/profile.jquery.js",
+      "js/scripts/splash.jquery.js",
+      "js/scripts/pagetab.jquery.js",
+      "js/scripts/skills.jquery.js",
+      "js/proto/ajaxupdate.jquery.js",
+      "js/proto/apply.jquery.js",
+      "js/proto/handlers/cluster.js",
+      "js/proto/introductions.js",
+      "js/proto/jobs.js",
+      "js/proto/progressbar.js"
+    %}
+    <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% else %}
+    <script src="/static/js/lib/handlebars.1.0.0.js"></script>
+    <script src="/static/js/lib/underscore.1.6.0.js"></script>
+    <script src="/static/js/lib/bootstrap.3.0.js"></script>
+    <script src="/static/js/lib/jquery.cookie.1.4.js"></script>
+    <script src="/static/js/lib/jquery-ui-1.10.3.custom.js"></script>
+    <script src="/static/js/lib/toast.min.js""></script>
+    <script src="/static/js/lib/min/jquery.jcarousel.min.js"></script>
+    <script src="/static/js/lib/min/EventEmitter.min.js"></script>
+    <script src="/static/js/lib/bootstrap-switch.js"></script>
+    <script src="/static/js/scripts/barloader.jquery.js"></script>
+    <script src="/static/js/scripts/ticker.jquery.js"></script>
+    <script src="/static/js/scripts/bubbleinput.jquery.js"></script>
+    <script src="/static/js/scripts/facebook.jquery.js"></script>
+    <script src="/static/js/scripts/common.jquery.js"></script>
+    <script src="/static/js/scripts/main.jquery.js"></script>
+    <script src="/static/js/scripts/autocomplete.jquery.js"></script>
+    <script src="/static/js/scripts/ajaxupdate.jquery.js"></script>
+    <script src="/static/js/scripts/search.jquery.js"></script>
+    <script src="/static/js/proto/search.jquery.js"></script>
+    <script src="/static/js/scripts/job.jquery.js"></script>
+    <script src="/static/js/scripts/profile.jquery.js"></script>
+    <script src="/static/js/scripts/splash.jquery.js"></script>
+    <script src="/static/js/scripts/pagetab.jquery.js"></script>
+    <script src="/static/js/scripts/skills.jquery.js"></script>
+    <script src="/static/js/proto/ajaxupdate.jquery.js"></script>
+    <script src="/static/js/proto/apply.jquery.js"></script>
+    <script src="/static/js/proto/handlers/cluster.js"></script>
+    <script src="/static/js/proto/introductions.js"></script>
+    <script src="/static/js/proto/jobs.js"></script>
+    <script src="/static/js/proto/progressbar.js"></script>
+{% endif %}
+{% endblock scripts %}

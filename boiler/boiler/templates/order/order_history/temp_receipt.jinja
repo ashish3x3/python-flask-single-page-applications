@@ -1,0 +1,72 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+             <div class="navbar-brand " href=""><img class="header_image_icon" src="/static/img/header_icon_order_history.png">Order Receipt</div>
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+<div class="col-md-8 order_summary" >
+
+<header> <h3>Invoice id: 12345</h3> <h3>Date: 18/08/2014</h3> </header>
+
+    <table class="table white-table table-watermark">
+            <thead>
+              <tr class="head_blue">
+                <td>Order Description </td>
+                <td>Wash type </td>
+                <td>Qty</td>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody>
+
+	            <tr>
+	              <td>Shirts</td>
+                <td>Wash & Iron</td>
+	              <td>3</td>
+	              <td>Rs.50</td>
+	            </tr>
+
+	             <tr>
+	              <td>Pants</td>
+                <td>Wash & Iron</td>
+	              <td>3</td>
+	              <td>Rs.60</td>
+	            </tr>
+                 
+
+              <tr class="grey_bg">
+                <td>Subtotal</td>
+                <td></td>
+                <td>6</td>
+                <td>Rs.110</td>
+              </tr>
+              <tr class="grey_bg">
+                <td>Discount</td>
+                <td></td>
+                <td></td>
+                <td>-</td>
+              </tr>
+             
+              <tr>
+                <td><strong>Total</strong></td>
+                <td></td>
+                <td></td>
+
+                <td>
+                  <strong>
+                 Rs.110
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button class="col-md-4 primary" style="float:right;">Pay Now</button>
+
+
+{% endblock main_content %}

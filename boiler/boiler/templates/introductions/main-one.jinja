@@ -1,0 +1,23 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        {#--MAIN CONTENT---#}
+        <div class="{{ section.main }}_{{ section.sub }}">
+            <div class="col-md-9 col-md-push-3">
+
+                    <div>
+                        {% block search_result_block %} {% endblock search_result_block %}
+                    </div>
+            </div>
+
+            <aside class="col-md-3 col-md-pull-9">
+               {% include ('introductions/sidebar.jinja') %}
+            </aside>
+        </div>
+    </div>
+{% endblock content %}

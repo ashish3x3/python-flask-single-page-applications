@@ -1,0 +1,31 @@
+{% extends 'elements/postscript_min.jinja' %}
+
+{% block scripts %}
+
+{% if config.DEBUG == false %}
+    <script src="//cdn.jsdelivr.net/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"></script>
+    {% assets output="gen/packed.js",
+      "js/lib/min/jquery-ui-1.10.3.custom.min.js",
+      "js/lib/underscore.1.6.0.js",
+      "js/lib/backbone.js",
+      "js/scripts/ctab.js",
+      "js/scripts/careerSite.js"
+    %}
+        <script src="{{ ASSET_URL }}" ></script>
+    {% endassets %}
+{% else %}
+    <script src="/static/js/lib/bootstrap.3.0.js"></script>
+    <script src="/static/js/lib/jquery.cookie.1.4.js"></script>
+    <script src="/static/js/lib/jquery-ui-1.10.3.custom.js"></script>
+    <script type="text/javascript" src="/static/js/lib/underscore.1.6.0.js"></script>
+    <script type="text/javascript" src="/static/js/lib/backbone.js"></script>
+    <script src="/static/js/scripts/ctab.js"></script>
+    <script type="text/javascript" src="/static/js/scripts/careerSite.js"></script>
+{% endif %}
+
+{% endblock scripts %}
+
+
+
+

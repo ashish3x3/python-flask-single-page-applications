@@ -1,0 +1,71 @@
+<div id="ember542" class="ember-view">
+
+      <div class="wrapper" data-bindattr-1="1">
+        <div id="ember580" class="ember-view">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper" class="" data-bindattr-2="2">
+      <div class="sidebar-brand">
+            <a id="ember589" class="ember-view" href="/order_schedule">
+              <img src="/static/img/sidebar-logotype.png">
+            </a>
+          </div>
+        <ul class="sidebar-nav">
+       
+          <li>
+            <a id="ember596" class="ember-view active" href="/order_schedule">
+              <span class="icon-white-home"></span>
+              <span class="nav-copy">Order</span>
+            </a>
+          </li>
+
+            <li>
+              <a id="ember621" class="ember-view" href="/orders">
+                <span class="icon-clock"></span>
+                <span class="nav-copy">Order History</span>
+              </a>
+            </li>
+
+            {% if user %}
+              <li>
+                <a id="ember642" class="ember-view" href="/myprofile">
+                  <span class="icon-white-profile"></span>
+                  <span class="nav-copy">Profile &amp; Address</span>
+                </a>
+              </li>
+            {% endif %}
+
+            <li>
+              <a id="ember619" class="ember-view" href="/referfriend">
+                <span class="icon-white-share"></span>
+                <span class="nav-copy">Share &amp; Gift</span>
+              </a>
+            </li>
+
+
+
+            <!-- <li>
+              <a id="ember621" class="ember-view" href="/coupons">
+                <span class="icon-coupon"></span>
+                <span class="nav-copy">Coupons</span>
+              </a>
+            </li>-->
+
+
+          <li>
+            <a id="ember628" class="ember-view" href="/price">
+                <span class="icon-white-prices"></span>
+              <span class="nav-copy">Prices</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a id="ember642" class="ember-view" href="/help">
+              <span class="icon-white-help"></span>
+              <span class="nav-copy">Help</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>

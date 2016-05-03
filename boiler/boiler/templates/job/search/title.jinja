@@ -1,0 +1,35 @@
+<div class="pull-left">
+    {% if pagination %}
+        {% if section.sub == 'job_recommended' %}
+            <strong><span class="main-connection-count">{{ pagination.total }} </span>{{ 'job' | pluralize(pagination.total) }} recommended for you</strong>
+        {% elif pagination.total %}
+
+            {# REFER JOBS #}
+            {% if request.args.get('refer_jobs','') == '1' %}
+                We found <strong>{{ pagination.total }}{{ 'job' | pluralize(pagination.total,"+") }}</strong> where you can refer friends to. <a href="/jobs/search?{{ pagination.auxparams | remove_params_query_string('linked_jobs,refer_jobs') }}"><strong>View all jobs.</strong></a>
+
+            {# LINKED JOBS #}
+            {% elif request.args.get('linked_jobs','') == '1' %}
+                We found <strong>{{ pagination.total }}{{ 'job' | pluralize(pagination.total,"+") }}</strong> where your friends can help improve your chances by 5x. <a href="/jobs/search?{{ pagination.auxparams | remove_params_query_string('linked_jobs,refer_jobs') }}"><strong>View all jobs.</strong></a>
+
+            {% else %}
+                <small>We found <strong>{{ pagination.total }}{{ 'job' | pluralize(pagination.total,"+") }}</strong> for you at <strong>{{ pagination.total_results }}{{ 'company' | pluralize(pagination.total_results) }}</strong>.</small>
+
+                {% if count.linkedcountcompanies and count.linkedcountcompanies != 0 %}
+                    <a href="/jobs/search?{{ pagination.auxparams }}&linked_jobs=1" >Your friends can improve your chances <strong>by 5x at  {{ count.linkedcountcompanies }}{{ 'company' | pluralize(count.linkedcountcompanies, "+" ) }}</strong> </a>.
+                {% endif %}
+
+                {% if count.countnativejobs and count.countnativejobs != 0 %}
+                    <small><a href="/jobs/search?{{ pagination.auxparams }}&refer_jobs=1">You can refer friends to <strong>{{ count.countnativejobs }}{{ 'job' | pluralize(count.countnativejobs,"+") }}.</strong> </a></small>
+                {% endif %}
+
+            {% endif %}
+        {% elif pagination.total_results %}
+            <strong><span class="main-connection-count"> {{ pagination.total_results }} </span>{{ 'job' | pluralize(pagination.total_results) }} found.</strong>
+        {% else %}
+            No jobs found.
+        {% endif %}
+    {% else %}
+        {{ section.title }}
+    {% endif %}
+</div>

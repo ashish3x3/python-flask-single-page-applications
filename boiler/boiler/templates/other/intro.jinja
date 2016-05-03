@@ -1,0 +1,41 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% block content %}
+
+
+
+        <br><br><br>
+        <div class="row">
+            <div class="col-md-5">
+                <img src="/static/img/pictures/search-screen.png" class="img-max-width">
+            </div>
+            <div class="col-md-7 text-center">
+               <h3>MyParichay helps you find jobs through your friends.</h3><br>
+                <p>
+                    We search over <big class="text-success"><b>20 lakh</b></big> jobs across the web so you don&acute;t have to visit any other job board!
+                </p>
+
+                <p>
+                    It’s a different kind of job search, where you find friends to apply through, increasing your chances of hiring by <big  class="text-success"><b>54X</b></big>.
+                </p>
+                <br>
+                <p class="text-center tx-16">
+                    As they say, it&acute;s not just about what you know, it&acute;s also about who you know!
+                </p>
+                <br><br>
+                <p class="">
+                    <a href="/landing" class="btn btn-lg btn-primary">Continue</a>
+                </p>
+                <div class="text-muted">
+                    We do not post your job search related messages on Facebook
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+
+
+    {% endblock content %}

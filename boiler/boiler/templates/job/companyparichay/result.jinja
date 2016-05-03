@@ -1,0 +1,158 @@
+{% extends "job/companyparichay/main.jinja" %}
+{% block search_result_block %}    
+    {% for x in search_result.result %}
+        {% if search_result.result[x].job %}
+            {#--result part---#}
+            <div class="result-box js-row-each" id="job-result-{{ search_result.result[x].job.id }}" >
+
+                <div class="pull-right media-rgt">
+                    <ul class="list-unstyled options">
+                        {% if show.referral_amount == true  and search_result.result[x].job.referral_amount %}
+                            <li class="text-right hidden-xs">
+                                &nbsp;
+                                <a href="/jobs/referlist/{{ search_result.result[x].job.id }}" {{'target=_blank' if isCareerSite}}>
+                                    <div class="refer-earn-box text-center">
+                                        <div class="refer-amt">
+                                            <p class="tx-16">
+                                                <i class="glyphicon glyphicon-{{ search_result.result[x].job.referral_amount.currency  | lower }}"></i>
+                                                <strong>{{ search_result.result[x].job.referral_amount.amount }}</strong>
+                                            </p>
+                                        </div>
+                                        <div class="label label-info">Refer & Earn</div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <div class="btn-group js-dropdown save-btn pull-right">
+                                <button class="btn btn-default dropdown-toggle hidden-xs" data-toggle="dropdown">
+                                     &nbsp; Share  <span class="caret texttop"></span>
+                                </button>
+                                <button class="btn btn-default dropdown-toggle visible-xs" data-toggle="dropdown">
+                                     <i class="glyphicon glyphicon-share-alt"></i>
+                                </button>
+                                 <ul class="dropdown-menu small pull-right social-drop-down">
+                                    <li>
+                                        <ul class="list-unstyled list-inline">
+                                            {% if type== 'PARTNER' %}
+                                                {% set surl = (search_result.result[x].job.url) | string %}
+                                            {% else %}
+                                                {% set surl = config.MP_URL +'job/'+ (search_result.result[x].job.id | string) %}
+                                            {% endif %}
+                                            {% set stitle = search_result.result[x].job.title  %}
+                                            <li>
+                                                {{ html.socialplugins("facebook", surl, stitle) }}
+                                            </li>
+                                            <li>
+                                                {{ html.socialplugins("Linkedin", surl, stitle) }}
+                                            </li>
+                                            <li>
+                                                {{ html.socialplugins("twitter", surl, stitle) }}
+                                            </li>
+                                            <li>
+                                                {{ html.socialplugins("googleplus", surl, stitle) }}
+                                            </li>
+                                            <li>
+                                                {{ html.socialplugins("email", surl, stitle) }}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="media" >
+                    {#<div class="pull-left">
+                        {% if search_result.result[x].job.company %}
+                            {{ html.companyLogo(search_result.result[x].job.company) }}
+                        {% endif %}
+                    </div>#}
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            {% if search_result.result[x].job.diversity_hiring and search_result.result[x].job.diversity_hiring|int %}
+                                <img src="/static/img/icons/mp_diversity_logo.png" title="Job for Women">
+                            {% endif %}
+                            {% if type == 'PARTNER' %}
+                                <a href="{{ search_result.result[x].job.url }}" data-category="{{type}}" data-labels="{{type_id}}" data-action={{"CSJclick" if isCareerSite else "CTJclick"}} data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link js-track-events" role="link" tabindex="0" target="_blank">{{ search_result.result[x].job.title }}</a>
+                            {% else %}
+                                <a href="/job/{{ search_result.result[x].job.id }}?{{ request.url | stringurlencode('searchurl') }}&{{ tracking_url }}" data-category="{{type}}" data-labels="{{type_id}}" data-action={{"CSJclick" if isCareerSite else "CTJclick"}} data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link js-track-events" role="link" tabindex="0" target="_blank">{{ search_result.result[x].job.title }} </a>
+                            {% endif %}
+                        </h4>
+                        <p class="tx-14 clearfix">
+                            {% if search_result.result[x].job.company %}
+                               {{ search_result.result[x].job.company.name }}
+                            {% endif %}
+                            {% if search_result.result[x].job.location %}
+                                <span>at {{ search_result.result[x].job.location }}</span>
+                            {% endif %}
+                        </p>
+                        <div class="clearfix">
+                            {{ search_result.result[x].job.description | truncate(145) }}
+                        </div>
+                        {% if show.referral_amount == true  and search_result.result[x].job.referral_amount %}
+                            <p class="tx-12 clearfix visible-xs">
+                                <a href="/jobs/referlist/{{ search_result.result[x].job.id }}" {{'target=_blank' if isCareerSite}}>
+                                    <span>Refer & Earn </span>
+                                    <i class="glyphicon glyphicon-{{ search_result.result[x].job.referral_amount.currency  | lower }}"></i>
+                                    <strong>{{ search_result.result[x].job.referral_amount.amount }}</strong>
+                                </a>
+                            </p>
+                        {% endif %}
+
+
+                        {# CONNECTIONS #}
+                        {% if show and show.connection != false and user %}
+                            <div class="js-autofill"  href="/jobs/miniconnectionlist?jobid={{ search_result.result[x].job.id }}&company={{ search_result.result[x].job.company.name }}&{{ request.url | stringurlencode('searchurl') }}&clusterview=1&jobstab=1" id="job-search-mini-connection-{{ search_result.result[x].job.id }}"  data-loading-selector="none" data-replace-type= "withouthistory" >
+                                <div class="loader-sm text-left"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                            </div>
+                        {% endif %}
+
+                       {# CLUSTER #}
+                        {% if search_result.result[x].cluster and search_result.result[x].cluster != false %}
+                            <div class="clearfix">
+                                <a href="{{ ('/jobs/search?' + search_result.result[x].job.company.name | stringurlencode('companyname') + '&' + pagination.auxparams) | remove_query_string('view,clusterview') }}&view=minicluster&sub=1&clusterview=1" class="link-blue js-cluster-open" role="link"><i class="sprite glyphicon glyphicon-cluster" ></i>
+                                    Show {{ search_result.result[x].clustered_results_count or '0' }} similar jobs from
+                                    {% if search_result.result[x].job.company %} {{ search_result.result[x].job.company.name }} {% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="row result-empty" >
+           <b> No jobs found matching your criteria</b>
+        </div>
+    {% endfor %}
+
+    {#---PAGINATION---#}
+    {% if show and show.pagination != false %}
+        {% if 'page' in pagination and 'total_results' in pagination  and (pagination.total_results | int ) > 1 %}
+            <div class="row">
+                <div class="pagination-centered js-cs-pagination tx-14">
+                    {{ html.pagination(pagination.auxparams, pagination.total_results, pagination.page, request.path,10,4 if is_mobile else 8) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% if isCareerSite %}
+        <hr class="line1"></hr>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <a href="https://myparichay.in/" target="_blank">
+                    <img alt="Myparichay" src="/static/img/icons/powered-logo.png" width="100">&nbsp;&nbsp;&nbsp;<p></p>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock search_result_block %}
+
+
+
+
+
+

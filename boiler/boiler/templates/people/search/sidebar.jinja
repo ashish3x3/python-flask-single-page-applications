@@ -1,0 +1,129 @@
+<div class="panel panel-default">
+    <form action="/user/search" method="GET"  role="form" class=" ">
+        <div class="side-box">
+            <div class="sidebox-content form-sidebar" >
+                <div class="form-group">
+                    <label for = "people_search_skillJob_ls" title="skill/job title">
+                        Skill/Job Title
+                    </label>
+                    <input type="text" name= "skills" id="people_search_skillJob_ls" value="{{ request.args.get('skills','') | escape  }}" placeholder="eg. Software Engineer" class="form-control">
+                </div>
+                <div class="colapse out" id="main-advance-search"> 
+                    <div class="form-group">
+                        <label for="people_search_name_ls" title="Name" >
+                            Name
+                        </label>
+                        <input type="text" name="name" id="people_search_name_ls" value="{{ request.args.get('name','') | escape  }}" placeholder=""  class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "people_search_company_ls" title="company">
+                            Company
+                        </label>
+                        <input type="text" name ="company" id="people_search_company_ls" value="{{ request.args.get('company','') | escape }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.company }}" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "people_search_Location_ls" title="location">
+                            Location
+                        </label>
+                        <input class="form-control fb-autocomplete" type="text" name= "location" id="people_search_Location_ls" value="{{ request.args.get('location','') | escape  }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.location }}"  data-searchtype="adcity" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "people_search_schoolCollege_ls" title="school/college">
+                            School/College
+                        </label>
+                        <input type="text" name= "school" id="people_search_schoolCollege_ls" value="{{ request.args.get('school','') | escape  }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.school }}" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "people_search_language_ls" title="language">
+                            Language
+                        </label>
+                        <input class="form-control" type="text" name="language" id="people_search_language_ls" value="{{ request.args.get('language','') | escape  }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.language }}"  />
+                    </div>
+                   
+                   {% if facets %} 
+                        <div class="form-group">
+                            <label for = "job_search_gender_ls" title="language">
+                                Gender
+                            </label>
+                            <select name="gender" class="form-control" id="job_search_gender_ls">
+                                {% for x in facets.gender %}
+                                    <option {{ "selected" if facets.gender[x].selected != false }} value="{{ facets.gender[x].value }}" > {{facets.gender[x].name }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+
+                   {% if facets %}
+                        <div class="form-group">
+                            <label for = "job_search_experience_ls" title= "Experience">
+                                Experience Level
+                            </label >
+                            <!-- <select id ="job_search_experience_ls"  name="experience_level" class="form-control">
+                            {% for x in facets.experience %}
+                                <option {{ "selected" if facets.experience[x].selected != false }} value="{{ facets.experience[x].value }}" > {{ facets.experience[x].name }} </option>
+                            {% endfor %}
+                            </select> -->
+                            <div class="clearfix row js-exp-block">
+                                <div class="col-md-6">
+                                    <select id ="job_search_experience_ls" class="form-control js-min-exp" name="min_exp">
+                                        <option value="-1" {% if '-1'== request.args.get('min_exp') %}  selected {% endif %}>Min Exp</option>
+                                        {% for x in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 ] %}
+                                            <option value="{{ x }}" {% if (x | string )== request.args.get('min_exp') %}  selected {% endif %} >
+                                                    {{ x }} years
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control js-max-exp" name="max_exp">
+                                        <option value="-1" {% if '-1'== request.args.get('max_exp') %}  selected {% endif %}>Max Exp</option>
+                                        {% for x in range((request.args.get('min_exp',0)|int|abs),15) %}
+                                            <option value="{{ x }}" {% if (x | string )== request.args.get('max_exp') %}  selected {% endif %} >
+                                                    {{ x }} years
+                                            </option>
+                                        {% endfor %}
+                                        <option value="15" {% if '15'== request.args.get('max_exp') %}  selected {% endif %} >15+</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if facets and facets.show and facets.show.connections != false %}
+                        <div class="form-group">
+                            <label for="job_search_date_posted_ls" title= "Search Options">
+                                Connections
+                            </label >
+                            <select name="professionalconnections" class="form-control" id="job_search_company_filter_ls">
+                                {% for x in facets.connections %}
+                                    <option {{ "selected" if facets.connections[x].selected != false }} value="{{facets.connections[x].value }}" > {{facets.connections[x].name }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+
+                </div>
+                <button type="button" class="btn-link pull-right visible-xs visible-sm js-toggletext" data-toggle="collapse" data-target="#main-advance-search"  data-alt-text="Hide">
+                    Advanced Search
+                </button>
+                {% if request.args.getlist('fbid') %}
+                    {% for x in request.args.getlist('fbid') %}
+                        <input type="hidden" name="fbid" value="{{ x }}" />
+                    {% endfor %}
+                {% endif %}
+                <input type="hidden" name="view" value="{{ request.args.get('view','') }}" />
+                <input type="hidden" name="totalconn" value="{{ show.total_connections }}" />
+                <input type="hidden" name="jobid" value="{{ show.jobid }}" />
+                <input type="hidden" name="total_connected_friends" value="{{ pagination.total_connected_friends }}" />
+            </div>
+            {#----SUBMIT button-------#}
+            <p class="">
+                <button class="btn btn-primary" type= "submit"> Search </button>
+            </p>
+        </div>
+    </form>
+</div>

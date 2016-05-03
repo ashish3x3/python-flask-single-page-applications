@@ -1,0 +1,102 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+<div class="navbar-brand " href=""><img class="header_image_icon" src="/static/img/schedule_icon.png">Review Order</div>
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+<div class="col-md-8 order-page">
+    <div id="applyCoupon" class="col-md-8">
+        <div id="coupon-hero" class="hidden-xs">
+            <h3>&nbsp;</h3>
+        </div>
+
+        <div id="reviewOrder">
+            <div class="panel">
+                <div class="panel-body" style="background-color: rgb(249, 249, 249);padding: 10px 20px;border: 1px solid #E5E5E5;border-radius: 2%;">
+                    <div class="row">
+                        <div class="pickup-drop-block col-md-4 pickup-drop-block-dot-border" style="border:0;">
+                            <h4>Pick up</h4>
+                            <p>{{data.pickup_date}}</p>
+                            <p>{{data.pickup_timings}}</p>
+                        </div>
+
+                        <div class="pickup-drop-block col-md-4 pickup-drop-block-dot-border" style="border:0;">
+                            <h4>Delivery</h4>
+                            <p>{{data.schedule_date}}</p>
+                            <p>{{data.schedule_timings}}</p>
+                        </div>
+                        <div class="pickup-drop-block col-md-4" style="border:0;">
+                            <h4>Pickup/Delivery Address</h4>
+                            <p>{{data.apartment_number}}, {{data.address_1}}, {{data.city}} </p>
+                            <p> Phone: {{data.phone}} </p> 
+                            <p> Type: {{data.washtype|capitalize}} </p> 
+                            <p> Service: {{data.service_type|capitalize}} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <form id="verifycoupon" method="post" action="">
+                    <div class="form-group">
+                        <label class="control-label" for="addCoupon">Coupon</label>
+                        <input id="coupon" name="coupon" class="" type="text" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <button  id="validate_coupon" type="submit" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Placing order">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>  
+</div>
+
+{% endblock main_content %}
+
+{% block misc_space %}
+{% if user %}
+<div class="modal fade confirm" id="coupon-conditions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div id="coupon_terms_conditions">
+            <form id="coupon_terms" method="post" action="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="modal-body-heading"><span>T&amp;C</span></h2>
+                        <div>
+                            <ul id="terms_list">
+
+                            </ul> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="decline_terms" type="button" class="primary" style="position:relative;" value="accept" data-dismiss="modal">Decline</button>
+                        <button id="accept_terms" type="button" class="primary" style="position:relative;" value="accept" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Placing order">Accept</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock misc_space %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    $(function(){
+        $("#decline_terms").click(function(){
+            $.ajax({
+                url: "/invalidatecoupon",
+            })
+        })
+    })
+</script>
+
+{% endblock extra_js %}

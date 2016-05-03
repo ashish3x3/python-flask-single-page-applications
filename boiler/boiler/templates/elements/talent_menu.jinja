@@ -1,0 +1,22 @@
+<ul class="nav-talent nav-margin nav nav-tabs" id="main-menu">
+    <li {% if section and section.sub =='people_search' %} class ="active" {% endif %}><a href="/user/search?talentsearch=1" class="btn btn-default">People</a></li>
+    <li {% if section and section.sub =='profile_saved'%} class ="active" {% endif %}><a href="/user/saved/0?talentsearch=1" class="btn btn-default">Saved profiles</a></li>
+    <li class="dropdown pull-right">
+		<a role="button" data-toggle="dropdown" class="dropdown-toggle js-user-dropdown menu-fix" id="dropdown_user_pictureurl">
+			{{ user.name }} &nbsp;
+			<img src="{{ user.pictureUrl }}" alt="{{ user.name }}" title="{{ user.name }}" height="25" />
+			<b class="caret"></b>
+		</a>
+
+		<ul class="dropdown-menu" role="menu" >
+			<li>
+				<a class="js-confirm-redirect" data-warnmsg="Are you sure you want to disconnect?" href="/disconnect?talentsearch=1&amp;next={{ request.url | urlencode }}">Disconnect</a>
+			</li>
+			<li>
+				<a href="/logout?talentsearch=1&amp;next={{ request.url | urlencode }}">Logout</a>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+

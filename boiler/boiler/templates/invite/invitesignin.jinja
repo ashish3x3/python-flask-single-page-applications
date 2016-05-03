@@ -1,0 +1,59 @@
+{% extends "layout/plainlogo.jinja" %}
+
+{% block content %}
+    <div class="invite-fr-container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="invite-graphic">
+                    <div class="invite-graphic-mask"></div>
+                    <img alt="My Pic" title="My Pic" src="//graph.facebook.com/{{ inviter[0].fb_id }}/picture?width=160&height=160" class="profile-1">
+                    {% for x in friends_fbid %}
+                        <img alt="Friends Pic" title="Friends Pic" src="//graph.facebook.com/{{ x }}/picture?width=160&height=160" class="profile-{{ loop.index+1 }}">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <br><br>
+                <section role="region" aria-labelledby="Welcome_back_heading" class="clearfix">
+                    <header>
+                        <h2 class="tx-big" id="Welcome_back_heading">
+                            {% if inviter | length == 1 %}
+                                {{ inviter[0].name }} trusts you as a valuable professional connection
+                            {% elif inviter | length == 2 %}
+                                {{ inviter[0].name }} and  {{ inviter[1].name }} trust you as a valuable professional connection
+                            {% elif inviter | length >= 3 %}
+                                {{ inviter[0].name }} and  {{ (inviter | length)-1 }} other friends trust you as a valuable professional connection
+                            {% else %}
+                                Your friends trust you as a valuable professional connection
+                            {% endif %}
+                    </header>
+                    <br>
+                    <p class="tx-14">
+                        <strong>
+                            {% if inviter | length == 1 %}
+                                {{ inviter[0].name }} has shared {{ inviter[0].gender }}
+                            {% else %}
+                                They have shared their
+                            {% endif %}
+                            professional connections with you on MyParichay,
+                        </strong><br/>
+                        the talent pool on Facebook. MyParichay analyzes your facebook network and finds valuable insider connections to top companies. Sign-in to share your connections back with
+                        {% if inviter | length == 1 %}
+                            {{ inviter[0].name }}
+                       {% elif inviter | length == 2 %}
+                            {{ inviter[0].name }} and {{ inviter[1].name }}
+                        {% else %}
+                            your friends
+                        {% endif %}
+                        and explore career opportunities at top companies !
+                    </p>
+                    <br><br>
+                </section>
+                <div class="fb-btn clearfix">
+                    {{ html.loginbutton('facebook',request, 'pull-center','Invite Signin') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

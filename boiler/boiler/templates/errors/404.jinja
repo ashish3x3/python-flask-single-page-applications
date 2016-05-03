@@ -1,0 +1,16 @@
+{% extends "layout/error.jinja" %}
+
+{% block content %}
+	<h1>Not found <span frown>:(</span></h1>
+	<div>
+		<p>Sorry, but the page you were trying to view does not exist.</p>
+		<p>It looks like this was the result of either:</p>
+		<ul>
+			<li>a mistyped address</li>
+			<li>an out-of-date link</li>
+		</ul>
+	</div>
+	<div class="center">
+		<a href="{{ config.MP_URL }}landing" target="_top">Go back to Home</a>
+	</div>
+{% endblock content %}

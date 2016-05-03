@@ -1,0 +1,27 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+   Test Page
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+<div class="col-md-8">
+
+
+
+          <section class="fade-in">
+            <span class="hero hero-no-history"></span>
+            <h2>No order history</h2>
+            <h3>Oops, looks like you haven't placed an order yet so there's nothing to show you here.</h3>
+
+            <a id="ember1145" class="ember-view" href="/order"><button class="primary">Place Your First Order</button></a>
+          </section>
+
+      </div>
+
+
+{% endblock main_content %}

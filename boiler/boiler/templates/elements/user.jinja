@@ -1,0 +1,34 @@
+<!-- this file has been decprecated. -->
+<div class="top-user-sec">
+	<a role="button" href="/profile/{{ user.fb_id }}" class="pull-left">
+		{{ user.name }}
+	</a>
+	<div class="user-image">
+		<a role="button" data-toggle="dropdown" class="dropdown-toggle js-user-dropdown" id="dropdown_user_pictureurl">
+			<img src="{{ user.pictureUrl }}" alt="{{ user.name }}" title="{{ user.name }}" width="30" />
+			<b class="caret"></b>
+		</a>
+		<ul class="dropdown-menu pull-right" role="menu" >
+			<li><a href="/jobs/saved" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link">
+				My Jobs
+			</a></li>
+			<li><a href="/user/saved/0" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link">
+				Saved Profiles
+			</a></li>
+			<li><a href="/settings/jobpreferences" class="js-main-container-link">
+				Settings
+			</a></li>
+			<li><a href="/messages/notifications" class="js-main-container-link">
+				Messages
+			</a></li>
+			{% if user.pagetab %}
+				<li><a href="/pagetab/admin/jobs">
+					Hiring Dashboard
+				</a></li>
+			{% endif %}
+			<li><a href="/logout">
+				Logout
+			</a></li>
+		</ul>
+	</div>
+</div>

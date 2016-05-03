@@ -1,0 +1,55 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+   Test Page
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+<div class="col-md-8">
+
+        <header>
+          <h2><a id="ember854" class="ember-view" href="/settings/addresses">‹ My Addresses</a></h2>
+        </header>
+        <form>
+          <fieldset>
+            <div class="input-group">
+              <label class="control-label" for="addAddressAddress">Address</label>
+              <input id="addAddressAddress" class="ember-view ember-text-field" placeholder="Address" type="text" autocomplete="off">
+            </div>
+
+            <div class="input-group special-width">
+              <label class="control-label" for="addApartmentNumber">Apt Number &amp; Zip</label>
+              <input id="addApartmentNumber" class="ember-view ember-text-field radius-left half" placeholder="Apt Number" type="text">
+              <input id="ember857" class="ember-view ember-text-field radius-right half" placeholder="Zip Code" type="number">
+            </div>
+
+            <div class="input-group">
+            <select>           
+              <label class="control-label" for="addLocationName">Location</label>
+              <option id="ember869" class="ember-view" value="Home">Home</option>
+              <option id="ember870" class="ember-view" value="Office">Office</option>
+            </select>           
+
+            </div>
+
+            <div class="input-group">
+              <label class="control-label" for="addAddressNote">Notes</label>
+              <input id="addAddressNote" class="ember-view ember-text-field" placeholder="Note (optional)" type="text">
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="submit-form">
+          <button data-ember-action="14" class="primary">
+             Add Address
+          </button>
+        </div>
+
+      </div>
+
+
+{% endblock main_content %}

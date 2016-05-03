@@ -1,0 +1,6 @@
+<h4>{{ target.name }},</h4>
+{{ candidate.name }} is interested in working at {{ job.company.name }}. {{ 'He' | gender(candidate.gender) | capitalize }}  would like to start a discussion with you about the job opening.
+<br/><br/>
+{{ 'He' | gender(candidate.gender) | capitalize }} has attached {{ 'his' | gender(candidate.gender) }} <a href="{{ candidate.resume_url }}" target="_blank">résumé</a>, along with the <a href="#jobs">job description</a>.
+<br/><br/>
+Thanks!

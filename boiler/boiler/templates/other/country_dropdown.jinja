@@ -1,0 +1,9 @@
+{% for countryCode in locations %}
+    {% set countryData=locations[countryCode] %}
+    <li>
+        <a href="/internationalization?country={{countryCode}}">
+            <span class="flags" style="background-position: -{{countryData.position['x']}}px -{{countryData.position['y']}}px">
+            </span> {{countryData.country['name']}}
+        </a>
+    </li>
+{% endfor %}

@@ -1,0 +1,89 @@
+<div>
+    <div class="visible-xs"><hr></div>
+    {% if job.posted_by %}
+        <p class="text-muted"><strong>Posted By:</strong></p>
+        <div class="clearfix">
+            <div class="pull-left">
+                {{ html.imageWithProfileUrl(job.posted_by) }}
+            </div>
+            <div class="pull-left">&nbsp;&nbsp;</div>
+            <div class="pull-left">
+                <h4>{{ job.posted_by.name }}</h4>
+            </div>
+        </div>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.position %}
+        <p class="text-muted"><strong>Position Offered:</strong></p>
+        <h4>{{ job.position }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.term %}
+        <p class="text-muted"><strong>Term:</strong></p>
+        <h4>{{ job.term }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.location %}
+        <p class="text-muted"><strong>Location:</strong></p>
+            <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                <h4 itemprop="address">{{ job.location }}</h4>
+            </span>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.date %}
+        <p class="text-muted"><strong>Posted:</strong></p>
+        <h4 itemprop="datePosted">{{ job.date | date_display('text_date_full_month') }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if  job.experience %}
+        <p class="text-muted"><strong itemprop="experienceRequirements">Experience Required:</strong></p>
+        <h4>{{  job.experience | min_max }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.industry %}
+        <p class="text-muted"><strong>Industry:</strong></p>
+        <h4 itemprop="industry">{{  job.industry }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.functional_area %}
+        <p class="text-muted"><strong>Functional Area:</strong></p>
+        <h4 itemprop="occupationalCategory">{{ job.functional_area }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.no_of_vacancy != -1 and job.no_of_vacancy  %}
+        <p class="text-muted"><strong>Openings:</strong></p>
+        <h4>{{  job.no_of_vacancy }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.qualification %}
+        <p class="text-muted"><strong>Qualification Required:</strong></p>
+        <h4 itemprop="qualifications">{{  job.qualification }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.salary and job.salary != 'NA' %}
+        <p class="text-muted"><strong>Salary:</strong></p>
+        <h4 itemprop="qualifications">{{  job.salary }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.skill %}
+        <p class="text-muted"><strong>Skills Required:</strong></p>
+        <h4 itemprop="skills">{{  job.skill }}</h4>
+        <hr></hr>
+    {% endif %}
+
+    {% if job.valid_to %}
+        <p class="text-muted"><strong>Last Apply Date:</strong></p>
+        <h4>{{ job.closes_on | date_display('text_date_full_month') }}</h4>
+    {% endif %}
+</div>

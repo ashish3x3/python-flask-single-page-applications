@@ -1,0 +1,24 @@
+{% extends "layout/simplebar.jinja" %}
+
+
+{% block main_content %}
+    <div class="container" id="maincontainer">
+        <div class="col-md-8 clearfix pull-center-nowidth">
+            <p>
+                You will stop receiving the following job related emails at (email id of the candidate)
+            </p>
+            <ul class="unsuselect">
+                <li>
+                    <strong>Job Recommendations:</strong> Emails from recruiters on jobs that are suitable to your profile.
+                </li>
+                <li>
+                    <strong>Job alerts:</strong> Emails on specific job openings, referral status, job application status etc.
+                </li>
+            </ul>
+            <p><a href="/settings/email/unsubscribe/confirm" class="btn btn-primary">Unsubscribe</a></p>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+{% endblock main_content  %}

@@ -1,0 +1,69 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+{% block screen_name %}
+  <div class="navbar-brand "><img class="header_image_icon" src="/static/img/price_tag.png">Pricing</div>  
+{% endblock screen_name %}
+
+{% block main_content %}
+  <div class="col-md-8 order-page pricing">
+    <div>
+      <div class="price-tabs-right">
+        <a href="#" class="minorder">Minimum order: Rs.100</a>
+      </div>
+    </div>
+    <table class="table clickable-table">
+      <tbody data-link="row" class="rowlink">
+        <div>**Service tax exclusive @ 14%</div>
+        <tr>
+          <td class="pricing_header">
+            <div class="items">
+              <h4>Item</h4>
+            </div>
+            <div class="price_info">
+              <h4>Wash & Iron</h4>
+            </div>
+            <div class="price_info">
+              <h4>Dry Wash</h4>
+            </div>
+            <div class="price_info">
+              <h4>Iron</h4>
+            </div>
+          </td>
+        </tr>
+        {% for x in result %}
+          {% if x.isActive %}
+            <tr>
+              <td class="pricing_body">
+                <div class="items">
+                  <img src="{{x.imageUrl}}">
+                  <h4>{{x.title}}</h4>
+                </div>
+                <div class="price_info">
+                  {% if x.price.laundry == "NA" %}
+                    <h4>-</h4>
+                  {% else %}
+                    <h4>Rs.{{x.price.laundry}}</h4>
+                  {% endif %}
+                </div>
+                <div class="price_info">
+                  {% if x.price.dry_cleaning == "NA" %}
+                    <h4>-</h4>
+                  {% else %}
+                    <h4>Rs.{{x.price.dry_cleaning}}</h4>
+                  {% endif %}
+                </div>
+                <div class="price_info">
+                  {% if x.price.iron == "NA" %}
+                    <h4>-</h4>
+                  {% else %}
+                    <h4>Rs.{{x.price.iron}}</h4>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock main_content %}

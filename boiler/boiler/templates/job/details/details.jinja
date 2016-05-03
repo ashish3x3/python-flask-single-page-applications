@@ -1,0 +1,35 @@
+{% import 'elements/macros.jinja' as html %}
+{% if job %}
+    <div class="row" id="jobs">
+        {# NAME COMPANY #}
+        <div class="jd-native-logo col-md-7">
+            {% if job and job.company %}
+                {{ html.companyLogo(job.company, size="large") }}
+            {% endif %}
+            <h2>
+                {{ job.headline if job.headline }} <br />
+                {% if job.company and job.company.name %}
+                    <small class="text-muted">
+                        at {{ job.company.name }}
+                    </small>
+                {% endif %}
+            </h2>
+        </div>
+        {# BUTTONS #}
+        <div class="col-md-5">
+            {% include('job/details/actionbar.jinja') %}
+        </div>
+    </div>
+    <hr></hr>
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="jd-native-body" id="subcontainer">
+                {% block jobcontent %}
+                    <p>{{ job.description if job.description }}</p>
+                {% endblock jobcontent %}
+            </div>
+        </div>
+        {% include('job/details/rightsidebar.jinja') %}
+    </div>
+{% endif %}

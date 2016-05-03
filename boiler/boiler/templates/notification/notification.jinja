@@ -1,0 +1,23 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "notification/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    <div class="clearfix js-message-content-block" >
+        {% for x in messages %}
+            {% include "notification/notification_detail.jinja" %}
+        {% else %}
+            <div class="result-empty">No {{ section.sub }} for you at this moment.</div>
+        {% endfor %}
+    </div>
+
+    {% if 'page' in pagination and 'total' in pagination  and (pagination.total | int ) > 1 %}
+        <div class="row">
+            <div class="pagination-centered">
+                {{ html.pagination('', pagination.total, pagination.page, request.path) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock search_result_block %}

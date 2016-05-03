@@ -1,0 +1,79 @@
+<div class="col-left collaps-col">
+    <form action="/jobs/search?fbid={{ fbid }}" method="GET" role="form">
+        <div class="side-box">
+            <div class="sidebox-content form-sidebar">
+                <div class="form-group">
+                    <label for = "job_search_keyword_ls" title = "Job title" >
+                        Skill/Job Title
+                    </label>
+                    <input type="text" id = "job_search_keyword_ls" name = "keyword" value = "{{ request.args.get('keyword','')  | escape }}" placeholder="eg. Software Engineer" class="form-control">
+                </div>
+                <div class="colapse out" id="main-advance-search">
+                    <div class="form-group">
+                        <label for = "job_search_company_ls" title = "Company">
+                            Company
+                        </label>
+                        <input type="text" id = "job_search_company_ls" name= "company" value = "{{ request.args.get('company','')  | escape }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.company }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for = "job_search_location_ls" title = "Location">
+                            Location
+                        </label>
+                        <input type="text" id = "job_search_location_ls"  name = "location" value = "{{ request.args.get('location','') }}" placeholder="eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.location  | escape  }}" class="form-control fb-autocomplete"  data-searchtype="adcity" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for = "job_search_experience_ls" title = "Experience">
+                            Experience Level
+                        </label >
+                        <select id ="job_search_experience_ls"  name="experience_level" class="form-control">
+                        {% for x in facets.experience %}
+                            <option {{ "selected" if facets.experience[x].selected != false }} value = "{{ facets.experience[x].value }}" > {{ facets.experience[x].name }} </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_search_date_posted_ls" title = "Search Options">
+                            Date Posted
+                        </label >
+                            <select name="posted_date" class="form-control" id="job_search_date_posted_ls">
+                                {% for x in facets.posted_date %}
+                                    <option {{ "selected" if facets.posted_date[x].selected != false }} value="{{facets.posted_date[x].value }}" > {{facets.posted_date[x].name }} </option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_search_date_posted_ls" title = "Search Options">
+                            Jobs From
+                        </label >
+                        <select name="company_jobs"class="form-control" id="job_search_company_filter_ls">
+                            {% for x in facets.company_jobs %}
+                                <option {{ "selected" if facets.company_jobs[x].selected != false }} value="{{facets.company_jobs[x].value }}" > {{facets.company_jobs[x].name }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if facets.show.term == true %}
+                    <div class="form-group">
+                        <label for="job_search_term_ls" title="Term">
+                            Term
+                        </label >
+                        <select  name="term" class="form-control" id="job_search_term_ls">
+                            {% for x in facets.Term %}
+                                <option {{ "selected" if facets.Term[x].selected != false }} value="{{ facets.Term[x].value }}">
+                                    {{facets.Term[x].name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                   {% endif %}
+                </div>
+                <button type="button" class="btn-link pull-right visible-xs visible-sm js-toggletext" data-toggle="collapse" data-target="#main-advance-search"  data-alt-text="Hide">
+                    Advanced Search
+                </button>
+            </div>
+            {#----SUBMIT button-------#}
+            <p class="">
+                <button class="btn btn-primary" type= "submit"> Search </button>
+            </p>
+        </div>
+    </form>
+</div>

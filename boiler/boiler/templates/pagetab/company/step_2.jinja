@@ -1,0 +1,26 @@
+<form enctype=multipart/form-data action="/pagetab/install?step=3" method="post" >
+  <div class="control-group">
+    <label class="control-label" for="jobadd_headline">Email:</label>
+    <div class="controls">
+      <input class="span9" type="text" value="{{ data['user_email'] }}"
+      required name="email" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="jobadd_headline">Company:</label>
+    <div class="controls">
+      <input class="span9" type="text" value="{{ data['company_name'] }}"
+      required name="company_name" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="jobadd_headline">Banner:</label>
+    <div class="controls">
+      <input class="span9" type="file" required name="company_banner" />
+    </div>
+  </div>
+  <input type="hidden" name="company_id" value="{{ data['company_id'] }}">
+  <div class="form-actions clearfix">
+    <input type="submit" class="btn btn-primary" value="Post Job"  name="post">
+  </div>
+</form>

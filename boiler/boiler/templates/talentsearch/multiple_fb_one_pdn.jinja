@@ -1,0 +1,42 @@
+{% extends "talentsearch/main.jinja" %}
+
+{% block main_content %}
+	<div class="col-md-12 padding-35 clearfix">
+		<div class="alert alert-warning tx-14">
+			<span class="glyphicon glyphicon-warning"></span> Your <strong>{{ partner.name if partner }}</strong> account is connected to another facebook account.
+		</div>
+		<p class="spacer">&nbsp;</p>
+		<h4>Hi {{ user.name }}</h4>
+		<p class="tx-13">
+			Looks like your {{ partner.name if partner }} account is already connected to another Facebook account. For security reasons, and to keep our users safe, we do not allow this. You have to login to the other Facebook account and click on ‘Disconnect’. You can then come back here and connect this Facebook account.
+		</p>
+		<p class="spacer">&nbsp;</p>
+		<p class="tx-13">Click on the “<strong>This is not me</strong>” button to proceed. </p>
+		<p class="spacer">&nbsp;</p>
+		<div class="connect-profile col-md-6">
+			<div class="col-md-8">
+				<div class="media sm-media">
+					<div class="pull-left">
+						<div class="logo-blk-img">
+							{{ html.imageWithProfileUrl( conflict_user ) }}
+						</div>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">{{ conflict_user.name }}</h4>
+						<p> Recruiter</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 text-center">
+				<p class="spacer">&nbsp;</p>
+				<p>
+					<a class="btn btn-primary btn-text" href="/logout?next={{ request.args.get('next','/user/search?talentsearch=1') | urlencode }}"><strong>This is not me</strong></a>
+				</p>
+			</div>
+		</div>
+		<div class="col-md-6"></div>
+	</div>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+{% endblock main_content %}

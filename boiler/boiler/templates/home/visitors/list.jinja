@@ -1,0 +1,37 @@
+{% extends "layout/ajax.jinja" %}
+
+{% block main_wrapper %}
+	<div class="pop_up_form">&nbsp;</div>
+	<div class="connections_box js-list-block span10">
+
+		{% for x in users %}
+			<div class="see_connections_list" id="rc_list_each_{{ users[x].fb_id }}">
+				<div class="msg_img span2" style="background-image:url('//graph.facebook.com/{{ users[x].fb_id }}/picture');"></div>
+				<div class="span5 omega margin_top_minus10">
+					<h5 class="cliptext" title="{{ users[x].name }}">
+						{{ users[x].name }}
+					</h5>
+					<div class="cliptext" title="{{ users[x].position }} {{ users[x].company }}">
+						{{ users[x].position }} {{ 'at '+users[x].company if users[x].company }}
+					</div>
+					{% if users[x].time %}
+						<div class="muted ">
+							<small>Visited on : {{ users[x].time }}</small>
+						</div>
+					{% endif %}
+				</div>
+				<div class="span3 omega">
+					<a href="{{ config.APP_URL }}profile/{{ users[x].fb_id }}" target="_top" class="btn btn-small">
+						View Profile
+					</a>
+				</div>
+			</div><!-- See Connections -->
+		{% endfor %}
+
+		{% if users | length == 0 %}
+			<div class="empty">
+				You don't have recent profile visitors
+			</div>
+		{% endif %}
+	</div>
+{% endblock main_wrapper %}

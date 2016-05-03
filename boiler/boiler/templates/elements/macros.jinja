@@ -1,0 +1,151 @@
+{% macro pagination(auxparams, total_results, page=0, link='', results_on_page=10,length=8) %}
+    {% set total = total_results or 0 %}
+    {% set current= (page or 0 | int) %}
+    {% set total_results = results_on_page %}
+    {% set pages = (((total+(results_on_page-1))/results_on_page)|int) %}
+
+    {% if total > total_results %}
+        <ul class="pagination">
+            <li {% if current <= 1 %} class="disabled" disabled{% endif %}>
+                <a href="{{ link }}?page={{ (current - 1) if(current - 1 > 0) else 1 }}&{{ auxparams or 'emptyaux=1' }}&total={{ total }}&sub=1">
+                    &laquo;
+                    <span class="sr-only">prev</span>
+                </a>
+            </li>
+            {% for x in paginationrange(pages, current,length) %}
+                <li {% if current == x %} class="active" {% endif %}>
+                    <a href="{{ link }}?page={{ x }}&{{ auxparams or 'emptyaux=1'  }}&total={{ total }}&sub=1">
+                        {{ x }}
+                        {% if current == x %} <span class="sr-only">current</span> {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            <li {% if current >= pages %} class="disabled"  disabled {% endif %}>
+                <a href="{{ link }}?page={{ (current + 1) if(current < total) else total }}&{{ auxparams  or 'emptyaux=1' }}&total={{ total }}&sub=1">
+                    &raquo;
+                    <span class="sr-only">next</span>
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro companyLogo(company, size='medium',type='') %}
+    {% set pictureUrl = company.pictureUrl %}
+    {% if not company.pictureUrl  %}
+        {% set pictureUrl = (company.name | get_company_logo ) %}
+    {% endif %}
+
+    {% if pictureUrl %}
+        <div class="logo-blk-img {% if size == 'large' %} logo-blk-img-lg {% endif %}">
+            <img src="{{ pictureUrl }}" alt="{{ company.name }}" title="{{ company.name }}" class="media-object" role="img" tabindex="-1">
+        </div>
+    {% elif type != 'PARTNER' %}
+        <div class="hidden-xs">
+            <div class="logo-blk-img logo-blk-name" tabindex="-1">
+                {{ company.name | truncate(25) }}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro flashMessage(params) -%}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="container flash">
+                    <div class="alert alert-{% if category == true %}success{% else %}danger{% endif %}">
+                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endmacro %}
+
+
+{% macro imageWithProfileUrl(user,  urltarget='_self', show_link=true ) -%}
+
+    {% set profileUrl = user.profileUrl %}
+    {% if user.profileUrl and user.profileUrl!='' %}
+       {# Do nothing #}
+    {% elif user.fb_id and (user.fb_id | int != 0 ) and show_link==true %}
+        {% set profileUrl = "/profile/" +  (user.fb_id | string)  %}
+    {% elif user.id and (user.id | int != 0 ) and show_link==true %}
+        {% set profileUrl = "/profile/" +  (user.id | string)  %}
+    {% else %}
+        {% set profileUrl = "javascript:void(0);" %}
+    {% endif %}
+
+    {% set pictureUrl = user.pictureUrl %}
+    {% if pictureUrl %}
+        {# Do nothing #}
+    {% elif user.fb_id and (user.fb_id | int != 0 ) %}
+        {% set pictureUrl = "//graph.facebook.com/"+ (user.fb_id | string) +"/picture"  %}
+    {% elif user.id and (user.id | int != 0 ) %}
+        {% set pictureUrl = "//graph.facebook.com/"+ (user.id | string) +"/picture"  %}
+    {% else %}
+        {% set pictureUrl = "/static/img/pictures/u108_normal.png" %}
+    {% endif %}
+
+    <a href="{{ profileUrl }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="img {% if user.connection_type %}connection-{{ user.connection_type }}{% endif %} js-main-container-link" target="{{ urltarget }}"  >
+        <img src="{{ pictureUrl }}" alt="{{ user.name }}" title="{{ user.name }}" class="tinypic" />
+    </a>
+{%- endmacro %}
+
+
+{% macro loginbutton(type, request, css_classes, label_name) -%}
+    {% if type == "facebook" %}
+        <a href="javascript:void(0);" data-href="{{ request.args.get('next','/landing?'+request.query_string) }}" class="js-login-fb-link js-track-events  {{ css_classes }}" data-category="Login Button" data-action="signup" data-labels="{{ label_name }}">
+            <div class="btn-group btn-social">
+                <div class="btn btn-primary btn-lg btn-icon">
+                    <span class="glyphicon glyphicon-facebook"></span>
+                </div>
+                <div class="btn btn-primary btn-lg btn-text">
+                    Sign-in with <strong>facebook</strong>
+                </div>
+            </div>
+        </a>
+    {% endif %}
+{%- endmacro %}
+
+{% macro socialplugins(type, surl, stitle, campaign_name="share") -%}
+    {% if '?' in surl %}
+        {% set sym='&' %}
+    {% else %}
+        {% set sym='?' %}
+    {% endif %}
+    {% if type == "facebook" %}
+        <a href="javascript:void(0);" onclick="window.open('http://www.facebook.com/sharer.php?{{ (surl +sym+'utm_source=facebook&amp;utm_medium=social&amp;utm_campaign=' + campaign_name ) | stringurlencode('u') }}&amp;display=popup','','width=500,height=500');" data-provider="Facebook" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-fb"></span>
+            <span class="glyphicon glyphicon-facebook glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% elif type == "Linkedin" %}
+        <a href="javascript:void(0);" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&amp;{{ (surl +sym+'utm_source=linkedin&amp;utm_medium=social&amp;utm_campaign=' + campaign_name) | stringurlencode('url') }}','','width=500,height=500');" data-provider="Linkedin" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-linkedin"></span>
+            <span class="glyphicon glyphicon-linkedin glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% elif type == "twitter" %}
+        <a href="javascript:void(0);" onclick="window.open('http://twitter.com/share?{{ (surl +sym+'utm_source=twitter&amp;utm_medium=social&amp;utm_campaign=' + campaign_name )| stringurlencode('url') }}&amp;{{ stitle | stringurlencode('text') }}&amp;via=myparichay&amp;display=popup','','width=500,height=500');" data-provider="Twitter" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-tw"></span>
+            <span class="glyphicon glyphicon-twitter glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% elif type == "googleplus" %}
+        <a href="javascript:void(0);" onclick="window.open('https://plus.google.com/share?{{ (surl +sym+'utm_source=googleplus&amp;utm_medium=social&amp;utm_campaign=' + campaign_name) | stringurlencode('url') }}','','width=500,height=500');" data-provider="Google Plus" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-gp"></span>
+            <span class="glyphicon glyphicon-google-plus glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% elif type == "email" %}
+        <a href="javascript:void(0);"  onclick="window.open('mailto:?{{ stitle | stringurlencode('subject') }}&amp;{{ (surl +sym+'utm_source=email&amp;utm_medium=social&amp;utm_campaign=' + campaign_name +"\n"+ stitle) | stringurlencode('body') }}&amp;display=popup','','width=500,height=500')" data-provider="Email" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-msg"></span>
+            <span class="glyphicon glyphicon-envelope glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% elif type == "aolemail" %}
+        <a href="javascript:void(0);" onclick="window.open('http://share.aol.com/sendmail/aolshare?{{ (surl +sym+'utm_source=aolemail&amp;utm_medium=social&amp;utm_campaign=' + campaign_name) | stringurlencode('pu') }}&amp;{{ stitle | stringurlencode('pt') }}&amp;display=popup','','width=500,height=500');" data-provider="Email" class="glyphicon-stack glyphicon-lg share-link">
+            <span class="glyphicon glyphicon-circle glyphicon-stack-2x color-msg"></span>
+            <span class="glyphicon glyphicon-envelope glyphicon-stack-1x glyphicon-inverse"></span>
+        </a>
+    {% endif %}
+{%- endmacro %}
+

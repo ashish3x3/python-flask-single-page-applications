@@ -1,0 +1,12 @@
+db.categories.drop()
+db.comments.drop()
+db.createCollection({"schedules"})
+db.companies.drop()
+db.createCollection("locations")
+db.createCollection("coupons")
+db.createCollection("items")
+db.createCollection("agents")
+db.createCollection("payments")
+db.createCollection("analytics")
+
+

@@ -1,0 +1,95 @@
+<div class="control-group">
+    <label class="control-label" for="jobadd_headline">Job Title:</label>
+    <div class="controls">
+        <input class="span9" type="text" value="{{ data.job.headline }}"
+        required id="jobadd_headline" name="headline" />
+    </div>
+</div>
+
+
+<div class="control-group">
+    <label for="jobadd_company" class="control-label">Company:</label>
+    <div class="controls">
+        <input type="text" data-searchtype="page" name="company" id="jobadd_company" required="" value="{{ data.account.company_name }}" class="span9 fb-autocomplete" readonly>
+        <input type="hidden" value="{{ data.account.company_fb_id}}" class="prefill" name="company_id">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_location">Location:</label>
+    <div class="controls">
+        <input class="span9 fb-autocomplete" type="text"  value="{{ data.job.location.name }}"
+        required id="jobadd_location" name="location"  data-searchtype="adcity"  />
+        <input type="hidden" name="location_id"  class="prefill" placeholder="City"
+        value="{{ data.job.location.fb_id }}"/>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_experience">Experience:</label>
+    <div class="controls">
+        <select class="span4 margin-right js-min-exp" name="experience_min" id="jobadd_experience" >
+            <option value="-1">Min Exp</option>
+            {% for x in  range(0,16) %}
+            <option value="{{ x }}" {% if data.job.experience.min and x == (data.job.experience.min | int) %} selected {% endif %} >
+                {{ x }}
+            </option>
+            {% endfor %}
+        </select>
+        <select class="span5 margin-right js-max-exp" name="experience_max" >
+            <option value="">Max Exp</option>
+            {% for x in range(1,16) %}
+            <option value="{{ x }}" {% if data.job.experience.max and x == (data.job.experience.max | int) %} selected {% endif %} >
+                {{ x }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_description">Job Details:
+    </label>
+    <div class="controls">
+        <textarea rows="13" class="span9" name="description" id="jobadd_description">{{ data.job.description }}</textarea>
+    </div>
+</div>
+
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_referral_amount">Referral Bonus (in INR):</label>
+    <div class="controls">
+        <input class="span9" type="number" value="{{ data.job.referral_amount }}" max="900000"
+        id="jobadd_referral_amount" name="referral_amount" step="1000" />
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_closing_date">Job Closes On:</label>
+    <div class="controls">
+        <input class="span9 js-datepicker" type="text" value="{{ data.job.closes_on | date_display("default") }}"
+        required  id="jobadd_closing_date" name="closing_date" />
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="jobadd_skill">
+        Skills:
+    </label>
+    <div class="controls">
+        <input class="span9 js-mp-multiple-autocomplete" data-searchtype="skill"
+        type="text" value="{{ data.job.skill }}" required id="jobadd_skill"
+        name="skill" placeholder="eg: PHP Java Tally" />
+    </div>
+</div>
+
+
+<div class="control-group">
+    <label for="jobadd_response" class="control-label">
+        Send Responses to:
+    </label>
+    <div class="controls">
+        <input type="email" placeholder="Your Email" name="response" id="jobadd_response" required="" value="{{ data.account.user_email }}" class="span9" readonly>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+{% if search_result.result|count == 0 %}
+	No jobs found
+{% else %}
+	<strong>{{ pagination.total_results }} Jobs matching your criteria</strong>
+{% endif %}

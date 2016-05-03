@@ -1,0 +1,58 @@
+{% extends "pagetab/main.jinja" %}
+
+{% block search_result_block %}
+<div class="panel-body">
+    <p><strong>Job Sharing enables you to automatically post and share jobs on Facebook, LinkedIn and Twitter expanding the reach of your jobs by 5X</strong></p>
+ <br><br>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <form class="form-horizontal" role="form">
+        <p><strong>Facebook :</strong></p>
+        <div class="form-group">
+            <label class="col-md-3 control-label font-normal"> My Wall :</label>
+            <div class="col-md-4">
+                <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if data.share.options.user_wall }} data-href="/pagetab/wall/{{'unauth' if data.share.options.user_wall else 'auth'}}?next={{data.next}}" />
+            </div>
+        </div>
+        {% for page_id, page_details in data.share.options.pages.items() %}
+             <div class="form-group">
+                <label class="col-md-3 control-label font-normal"> {{ page_details.name }}</label>
+                <div class="col-md-4">
+                    <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if page_details.share }} data-href="/pagetab/page/{{ page_id }}/{{'unauth' if page_details.share else 'auth'}}?next={{data.next}}" />
+                </div>
+            </div>
+        {% endfor %}
+          <p>
+            <strong>Twitter :</strong>
+          </p>
+        <div class="form-group">
+            <label class="col-md-3 control-label font-normal">
+                {% if data.share.options.twitter %}
+                    {{ data.share.usernames.twitter }}
+                {% else %}
+                    <span class="glyphicon glyphicon-twitter"><i class="sprite glyphicon"> </i></span>
+                    &nbsp;  Add a Twitter Account
+                {% endif %}
+            </label>
+            <div class="col-md-4">
+                <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if data.share.options.twitter }} data-href="/pagetab/twitter/{{'unauth' if data.share.options.twitter else 'auth'}}?next={{data.next}}" />
+            </div>
+        </div>
+        <p>
+            <strong>LinkedIn :</strong>
+        </p>
+        <div class="form-group">
+            <label class="col-md-3 control-label font-normal">
+                {% if data.share.options.linkedin %}
+                    {{ data.share.usernames.linkedin }}
+                {% else %}
+                    <span class="glyphicon glyphicon-linkedin"><i class="sprite glyphicon"> </i></span> &nbsp; Add a LinkedIn Account
+                {% endif %}
+            </label>
+            <div class="col-md-4">
+                <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if data.share.options.linkedin }} data-href="/pagetab/linkedin/{{'unauth' if data.share.options.linkedin else 'auth'}}?next={{data.next}}" />
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock search_result_block %}

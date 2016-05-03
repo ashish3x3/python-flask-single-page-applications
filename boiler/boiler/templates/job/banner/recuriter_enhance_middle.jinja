@@ -1,0 +1,118 @@
+{% extends "layout/ajax.jinja" %}
+
+{% block ajaxcontent %}
+
+<div class="js-row-each padding-muted">
+    <div class="contactfix-wrap-contact height-auto">
+        <div class="row margin10">
+            <div class="{% if show.incentivise_and_win %}col-md-10{%else%}col-md-12{%endif%} col-sm-12 col-xs-12 padding-muted">
+                <div class="col-md-12">
+                    <div class="col-md-4 col-sm-4 col-xs-12 padding-muted">
+                        <div class="media box-non-arrow panel panel-default">
+                            <div class="pull-left hidden-xs hidden-sm">
+                                {{ html.imageWithProfileUrl(contact.recruiter) }}
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a role="link" class="link-blue" href="{{ contact.recruiter.profileUrl }}">
+                                        {{ contact.recruiter.name }}
+                                    </a>
+                                </h4>
+                                    {% if contact.recruiter.company %}
+                                        <p class="tx-12 margin-muted">{{ contact.recruiter.company }}</p>
+                                    {% endif %}
+                                    {% if contact.recruiter.position %}
+                                        <p class="tx-12 margin-muted">{{ contact.recruiter.position }}</p>
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12 padding-muted">
+                        <p class="tx-12 text-center pad-leftright10 padtop5"><strong>{{ contact.recruiter.name }}</strong> would like to get introduced to <strong>{{ contact.candidate.name }}</strong> for the job opening below.</p>
+                        <p class="text-center intro-btn-sec">
+                            <span class="border-dash hidden-xs"></span>
+                            {% if status_referred == True %}
+                                <button class="btn btn-success disabled">
+                                    Introduced &nbsp; <i class="glyphicon glyphicon-check"></i>
+                                </button>
+                            {% else %}
+                                {% if show.incentivise_and_win %}
+                                    <a class="btn btn-primary js-introduced-btn" onclick="window.open('{{ introducefwdurl }}', '', 'width=500,height=300');">
+                                        Introduce and Win
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary js-introduced-btn" onclick="window.open('{{ introducefwdurl }}', '', 'width=500,height=300');">
+                                        Introduce
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 padding-muted">
+                        <div class="panel panel-default box-non-arrow media">
+                            <div class="pull-left hidden-xs hidden-sm">
+                                {{ html.imageWithProfileUrl(contact.candidate) }}
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a role="link" class="link-blue" href="{{ contact.candidate.profileUrl }}">
+                                        {{ contact.candidate.name }}
+                                    </a>
+                                </h4>
+
+                                {% if contact.candidate.company %}
+                                    <p class="tx-12 margin-muted">{{ contact.candidate.company }}</p>
+                                {% endif %}
+
+                                {% if contact.candidate.position %}
+                                    <p class="tx-12 margin-muted">{{ contact.candidate.position }}</p>
+                                {% endif %}
+                            </div>
+                            {% set success_message = 'You identified ' +  contact.candidate.name + ' as not a fit.' %}
+                            {% if show.notfitforintro != True %}
+                                <div class="dropdown notfit-pos js-parent-to-remove">
+                                    <a data-toggle="dropdown" data-toggle="tooltip" data-placement="top" title="Is your friend {{ contact.candidate.name }} not a fit for this job?" href="#" class="intro-tooltip js-job-action-visibility" data-jav-param="hash">
+                                        Not a fit? <i class="glyphicon glyphicon-info-circle"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>You have mentioned that your friend <strong>{{ contact.candidate.name }}</strong> is not a fit for this job. Please click on ‘Yes’ to confirm.</li>
+                                        <li>
+                                            <button class="btn btn-primary pull-left js-job-action" data-job-action='ajax' data-url="/splash/notfitforintro/" data-param-append="hash" data-success-message="{{success_message}}">Yes</button>
+                                            <button class="btn btn-default pull-left">No</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <p class="idendifytxt">{{success_message}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 pull-left">
+                    <p class="tx-12">
+                        {% if show.incentivise_and_win %}
+                            <strong>About this introduction request: </strong> <br /> {{ contact.recruiter.name }} is a recruiter and is interested in your friend {{ contact.candidate.name }} for a job opening. Send this job to {{ contact.candidate.name }} and help them get connected. Collect points with every introduction and win exciting gifts. <a data-toggle="modal" href="#modal" data-remote="/popup/recruiterhelptext?" title="Know more">Know more.</a>
+                        {% else %}
+                            <strong>About this introduction request: </strong> <br /> {{ contact.recruiter.name }} is a recruiter and is interested in your friend {{ contact.candidate.name }} for a job opening. Send this job to {{ contact.candidate.name }} by clicking on the "Introduce" button and help them get connected. <a data-toggle="modal" href="#modal" data-remote="/popup/recruiterhelptext?" title="Know more">Know more.</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            {% if show.incentivise_and_win %}
+            <div class="col-md-2 col-sm-12 col-xs-12 pull-left">
+                <p class="tx-12 margin-muted txt-gab">
+                    <strong>Introduce a friend</strong> <br />
+                    and receive exciting gift vouchers...
+                     <a data-toggle="modal" data-remote="/introductions/redeem/knowmore" data-target="#modal" href="#modal">Know more</a></small>
+                    <br />
+                    <a href="https://www.myparichay.in/website/incentive-terms-and-condition/" target="_blank"><small class="text-muted">Terms &amp; Condition</small></a><br>
+                    <img src="/static/img/pictures/gift-img-if.jpg" width="155" />
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock ajaxcontent %}

@@ -1,0 +1,24 @@
+{% set show_footer = false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th width="80%">Name</th>
+            <th colspan="2" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resume in resumes %} 
+        <tr>
+            <td> {{ loop.index }} </td>
+            <td width="80%">{{ resume.name }}</td>
+            <td> <a href="http://docs.google.com/viewer?{{ (config.MP_URL + 'resume/fetch/' + (resume.id | seal_id)) | stringurlencode('url') }}" target="_blank">View</a> </td>
+            <td> <a href="/resume/fetch/{{ resume.id | seal_id }}" target="_blank">Download</a> </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

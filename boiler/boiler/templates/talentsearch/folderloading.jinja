@@ -1,0 +1,46 @@
+{% extends "talentsearch/main.jinja" %}
+
+{% block main_content %}
+	<div class="col-md-12 padding-35 clearfix">
+		<div  class="" >
+			<div class="col-md-12 clearfix padding-muted">
+				<h5><strong>Please wait while MyParichay is setting up your account</strong></h5>
+			</div>
+			<div class="progress progress-striped active" data-href="/talentsearch/folderstatus/{{ partner.id }}/{{ user.partner_rec_id }}/{{ access_key }}" data-redirect="{{ request.args.get('next','/user/saved/0?talentsearch=1') }}" id="initialprogressbar" data-statusdelay="{{ statusdelay or 30000 }}" data-barupdatedelay="{{ barupdatedelay or 1000 }}" data-valuemax="94">
+				<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;" ></div>
+			</div>
+			<p class="spacer">&nbsp;</p>
+			<div class="col-md-12 clearfix text-center">
+				<div class="col-md-3 hidden-sm hidden-xs"></div>
+				<div class="col-md-6 col-sm-12 col-xs-12">
+					<p class="tx-13">
+						You can continue using MyParichay while we are setting up your account. Folders associated with your account will be available only after your account is set. Click on Continue to proceed further.
+					</p>
+				</div>
+				<div class="col-md-3 hidden-sm hidden-xs"></div>
+			</div>
+			<p class="spacer">&nbsp;</p>
+			<div class="text-center">
+				<a href="{{ request.args.get('next','/user/saved/0?talentsearch=1') }}" class="btn btn-primary">
+				Continue
+				</a>
+			</div>
+		</div>
+		<div class="" style="display:none;">
+			<div class="alert alert-warning text-center">Process incomplete you may continue.</div>
+			<div class="text-center">
+				<a href="{{ request.args.get('next','/user/saved/0?talentsearch=1') }}" class="btn btn-primary">
+				Continue
+				</a>
+			</div>
+		</div>
+		<p class="spacer">&nbsp;</p>
+		<p class="tx-13">
+			MyParichay helps recruiters and HR managers to amplify their current talent pool using the Facebook Social Graph. Using Social Retargeting<sup>TM</sup>, our proprietary technology, you can now reach out, attract and engage with quality talent with ease.
+		</p>
+		<p class="spacer">&nbsp;</p>
+	</div>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+{% endblock main_content %}

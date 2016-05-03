@@ -1,0 +1,35 @@
+{% extends "layout/simplebar.jinja" %}
+
+
+{% block main_content %}
+    <div class="container" id="maincontainer">
+        <form role="form" action="/settings/email/unsubscribe" method="POST">
+        	<div class="col-md-8 clearfix pull-center-nowidth">
+        		<div class="col-md-12 alert alert-warning">
+        			As requested by you, we have removed your email address from our list. We are sorry to see you go. We value your opinion and would request you to tell us why you decided to unsubscribe:
+        		</div>
+        		<div class="unsuselect">
+        			<div class="checkbox">
+    					<label>
+      						<input type="checkbox" name="unsubscribe" value="1"> I find these irrelevant
+    					</label>
+  					</div>
+  					<div class="checkbox">
+    					<label>
+      						<input type="checkbox" name="unsubscribe" value="2">I find these irrelevant and intrusive
+    					</label>
+  					</div>
+  					<div class="checkbox">
+    					<label>
+      						<input type="checkbox" name="unsubscribe" value="3">I find these intrusive and don't want to be spammed
+    					</label>
+  					</div>
+  				</div>
+        		<p><button type="submit" class="btn btn-primary">Submit</button></p>
+        		<br>
+        		<br>
+        		<br>
+        	</div>
+        </form>
+	</div>
+{% endblock main_content  %}

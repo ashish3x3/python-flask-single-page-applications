@@ -1,0 +1,148 @@
+<div class="media result-box" {% if messages[x].id %} id="msg_{{ messages[x].id }}" {% endif %}>
+	<div class="pull-left">
+		{% if messages[x].user %}
+			{{ html.imageWithProfileUrl(messages[x].user) }}
+		{% else %}
+			<div  style="min-width:60px;">&nbsp;</div>
+		{% endif %}
+
+	</div> <!-- width, height, background(coming in)-->
+	<div class="pull-right media-rgt">
+		<div>
+			{% if messages[x].type == 'activity_apply' or
+				  messages[x].type == 'activity_refer' or
+				  messages[x].type == 'activity_apply_referred' or
+				  messages[x].type == 'activity_introduce' or
+				  messages[x].type == 'activity_ask_introduction' or
+				  messages[x].type == 'notification_apply_status' or
+				  messages[x].type == 'notification_introduce_accept' or
+				  messages[x].type == 'notification_introduce_forward' or
+				  messages[x].type == 'notification_friend_apply_status' or
+				  messages[x].type == 'notification_refer' or
+				  messages[x].type == 'request_introduce_forwarded' or
+				  messages[x].type == 'request_introduce_final' %}
+				<a class="btn btn-default pull-right" href="/job/{{ messages[x].job.id }}">
+					View Job
+				</a>
+			{% endif %}
+
+
+			{% if messages[x].type == 'activity_save_job' %}
+				<a class="btn  btn-default btn-mini" href="/job/{{ messages[x].job.id }}">
+					View Saved Job
+				</a>
+			{% endif %}
+		</div>
+	</div>
+	<div class="media-body">
+		<p>
+
+
+			{% if messages[x].type == 'activity_refer' %}
+				You referred
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.
+
+			{% elif messages[x].type == 'activity_ask_introduction' %}
+				You requested for
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a>’s help in getting introduced to
+				<a href="/profile/{{ messages[x].candidate.id }}" title="{{ messages[x].candidate.name }}">
+					{{ messages[x].candidate.name }}
+				</a> for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.
+
+			{% elif messages[x].type == 'activity_introduce' %}
+				You introduced
+				<a href="/profile/{{ messages[x].candidate.id  }}" title="{{ messages[x].candidate.name }}">
+					{{ messages[x].candidate.name }}
+				</a> to
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.<br />
+
+			{% elif messages[x].type == 'activity_apply' %}
+				You applied to {{ messages[x].job.company }}, {{ messages[x].job.location }} for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>.
+
+
+			{% elif messages[x].type == 'activity_apply_referred' %}
+				You applied for the role
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> had referred you to -
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}, {{ messages[x].job.location }}.
+
+
+			{% elif messages[x].type == 'activity_apply_getreferred' %}
+				You requested
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> to refer you for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}, {{ messages[x].job.location }}.
+
+
+			{% elif messages[x].type == 'activity_save_job' %}
+				You saved the following job -
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.
+
+
+			{% elif messages[x].type == 'notification_refer' %}
+
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> accepted your request to refer you for the job <a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a> at {{ messages[x].job.company }} in {{ messages[x].job.location }}.
+
+
+			{% elif messages[x].type == 'notification_introduce_forward' %}
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a> has forwarded your Introduction request to
+				<a href="/profile/{{ messages[x].candidate.id  }}" title="{{ messages[x].candidate.name }}">
+					{{ messages[x].candidate.name }}
+				</a>
+				for the role of  <a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				 at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.
+
+
+			{% elif messages[x].type == 'notification_introduce_accept' %}
+				You are now connected to
+				<a href="/profile/{{ messages[x].candidate.id  }}" title="{{ messages[x].candidate.name }}">
+					{{ messages[x].candidate.name }}
+				</a> for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				at {{ messages[x].job.company }}  in {{ messages[x].job.location }}.
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a>
+				helped you in this process.
+
+
+			{% elif messages[x].type == 'notification_apply_status' %}
+				Your application status for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				{{ messages[x].job.company }}, {{ messages[x].job.location }} has been updated to  {{ messages[x].job.status }}.
+
+
+			{% elif messages[x].type == 'notification_friend_apply_status' %}
+				The application status of
+				<a href="/profile/{{ messages[x].user.id }}" title="View {{ messages[x].user.name }}`s Profile">
+					{{ messages[x].user.name }}
+				</a>, whom you had referred for the role of
+				<a href="/job/{{ messages[x].job.id }}" title="View Job">{{ messages[x].job.position }}</a>
+				{{ messages[x].job.company }}, {{ messages[x].job.location }} has been updated to  {{ messages[x].job.status }}.
+			{% endif %}
+		</p>
+		<p class="text-muted">{{ messages[x].date | date_display('text_date_full_month') }} </p>
+	</div>
+</div>

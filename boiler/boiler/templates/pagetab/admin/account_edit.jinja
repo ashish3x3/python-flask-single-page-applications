@@ -1,0 +1,33 @@
+{% extends "pagetab/admin/settings.jinja" %}
+
+{% block settings_content %}
+<div id="job_listings account_details_wrap" class="span12 alpha omega">
+  <div class="job  alpha omega">
+    <div class="job_padding_wrap account_details_wrap_inner">
+      <div class="span9 margin_10 omega">
+        <div class="info_block_cp_content_form">
+          <h2>Account Details</h2>
+          <form action="/pagetab/admin/account" method="post" enctype="multipart/form-data">
+            <div class="float_lefto">
+              <p>
+                <label for="companyname" class="pull-left margin_right26">Company Name</label>
+                <input name="keyword" class="span6 alpha margin-right form_height_cp" type="text" value="{{ data.account.company_name }}" required="required">
+              </p>
+              <br>
+              <p>
+                <label for="contact" class="pull-left margin_right30">Preferred Email</label>
+                <input type="email" name="keyword" class="span6 alpha margin-right form_height_cp" type="text" style="" value="{{ data.account.user_email }}" required="required">
+              </p>
+              <br>
+              <label for="companyname">Upload Company Logo</label><input type="file" name="company_banner" size="25">
+              <br><br>
+              <input type="submit" class="btn btn-small btn-primary pull-right margin_top_10 float_lefto" value="&nbsp; Save &nbsp;">
+              <br>
+            </div>
+          </form>
+        </div><!-- info_block -->
+      </div><!-- span9 -->
+    </div><!-- job_padding_wrap -->
+  </div><!-- Job -->
+</div><!-- account_details_wrap -->
+{% endblock settings_content %}

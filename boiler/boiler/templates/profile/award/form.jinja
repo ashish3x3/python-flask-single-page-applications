@@ -1,0 +1,46 @@
+<form method="post" class="form-horizontal js-award-form js-track-analytics js-replace-form js-write-permission" onsubmit="return false;"  action="/profile/award/edit/{{ ID }}" data-getperm="{% if user.write_permission == false %}true{% endif %}">
+	<fieldset>
+		<div class="form-group">
+			<label class=" col-md-2 control-label" for="award_name_{{ ID }}">Name:</label>
+			<div class="col-md-9">
+				<input class="form-control" type='text' value="{{ award.name }}" required
+					id="award_name_{{ ID }}" name="name" maxlength="255"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="award_from_{{ ID }}">From:</label>
+			<div class="col-md-9">
+				<input class="form-control" type='text' value="{{ award.from }}" required
+					id="award_from_{{ ID }}" name="from" maxlength="255"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="award_year_{{ ID }}">Year:</label>
+			<div class="col-md-9">
+				<select class="form-control" name="year" id="award_year_{{ ID }}"  required>
+						<option value="">Year</option>
+						{% for x in range(1940, 2015) | reverse %}
+						<option value="{{ x }}" {% if x == award.year %} selected {% endif %}>
+							{{ x }}
+						</option>
+						{% endfor %}
+					</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="award_summary_{{ ID }}">Summary:</label>
+			<div class="col-md-9">
+				<textarea class="form-control" name="summary" rows="5" maxlength="500" id="award_summary_{{ ID }}">{{ award.summary }}</textarea>
+			</div>
+		</div>
+
+		<div class="form-actions clearfix">
+			<button type="submit" class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}">Save</button>&nbsp;&nbsp;
+			<a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-write-permission','','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Save</a>
+			<button type="button" class="btn js-landing-cancel">Cancel</button>
+		</div>
+	</fieldset>
+</form>

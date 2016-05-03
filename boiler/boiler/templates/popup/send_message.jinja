@@ -1,0 +1,17 @@
+{% set show_footer = false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+<div class="js-ajax-replace-wrapper js-row-each">
+    <div class="row">
+        <ol>
+            <li>Save candidate profile to the appropriate job folder</li>
+            <li>You can send messages to the candidate from the folder. To save time MyParichay™ automatically includes the job link and a message</li>
+            <li>To prevent SPAM you may be prompted to enter a CAPTCHA</li>
+        </ol>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary pull-right js-replace-action" href="{{ request.args.get('next') }}&sub=1" method="GET">Save to Folder</button>
+    </div>
+</div>
+{% endblock content %}

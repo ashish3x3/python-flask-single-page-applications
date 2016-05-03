@@ -1,0 +1,23 @@
+{% extends "talentsearch/main.jinja" %}
+
+{% block main_content %}
+	<div class="col-md-12 padding-35 clearfix">
+		<div class="alert alert-warning tx-14">
+			<span class="glyphicon glyphicon-warning"></span> Your <strong>Facebook</strong> account is already connected to another <strong>{{ partner.name if partner }}</strong> account.
+		</div>
+		<p class="spacer">&nbsp;</p>
+		<h4>Hi {{ user.name }}</h4>
+		<p class="tx-13">
+			Looks like you have already connected this Facebook account to another Partner account - {{ previous_account.username }}. For security reasons, and to keep our users safe, we do not allow this.
+		</p>
+		<p class="spacer">&nbsp;</p>
+		<p class="tx-13">You can go ahead login to the account, disconnect Facebook and come back here. Click on "Log in as {{ previous_account.username }}" button to proceed further.</p>
+		<p class="spacer">&nbsp;</p>
+		<p>
+			<a class="btn btn-primary btn-text" href="/logout?next={{ request.args.get('next','/user/search?talentsearch=1') | urlencode }}"><strong>Log in as {{ previous_account.username }}</strong></a>
+		</p>
+	</div>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+	<p class="spacer">&nbsp;</p>
+{% endblock main_content %}

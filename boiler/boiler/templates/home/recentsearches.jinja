@@ -1,0 +1,32 @@
+{% if tabs %}
+<div class="panel panel-default" id="home_recent_searches">
+    <header class="panel-heading">
+        <h4 class="pull-left">Your Recent Job Searches</h4>
+    </header>
+
+    <div class="panel-body panel-padding-muted recent-searches">
+        <ul class="nav nav-tabs" id="tabs" role="tablist">
+            {% for x in tabs %}
+                <li  role="presentation" class= "{{ 'active' if loop.index == 1 }}"><a href="#tab{{ loop.index }}" data-href="/jobs/search?{{ tabs[x].auxparams }}&sub=1&view=mini&recentsearch=1" id="recent-search-tab-{{ loop.index }}" data-toggle="tab" class="js-track-analytics">{{ tabs[x].title }} </a></li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
+            {% for x in tabs %}
+                <div class="tab-pane {{ 'active' if loop.index == 1 else 'not_filled'}} js-prepend" id="tab{{ loop.index }}" role="tabpanel" aria-labelledby="tab{{ loop.index }}"  >
+                    {% if loop.index == 1 %}
+                        <div class="js-autofill js-content" href="/jobs/search?{{ tabs[x].auxparams }}&sub=1&view=mini&recentsearch=1&analytics=off" data-loading-selector="none">
+                            <div class="loader-lg"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                        </div>
+                    {% else %}
+                        <div class="loader-lg"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+                    {% endif %}
+                    {# VIEW ALL #}
+                    <footer class="panel-footer">
+                        <div class="pull-right"><a href="/jobs/search?{{ tabs[x].auxparams }}" role="link" class="link js-main-container-link" data-menu-item="{{ constants.MENU_ITEMS.JOB }}">View All</a></div>
+                    </footer>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

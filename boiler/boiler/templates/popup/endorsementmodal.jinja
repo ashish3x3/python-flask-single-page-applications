@@ -1,0 +1,18 @@
+{% set show_footer = false %}
+{% set show_title = false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+    <h2 class="tx-big">Like {{ profile_user.name }}'s Skills?</h2>
+    <div class="text-muted tx-16"><strong>{{ endorsementModal.strSkills }}...</strong></div>
+    </br></br></br>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="pull-left">
+                Post a job on MyParichay and reach millions of candidates </br>
+                through social networks.
+            </p>
+            <a href="/jobs/edit/0?{{ endorsementModal.strSkills | stringurlencode('skill') }}" class="btn btn-primary btn-lg pull-right">Post a Job (Free)</a>
+        </div>
+    </div>
+{% endblock content %}

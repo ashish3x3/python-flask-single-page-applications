@@ -1,0 +1,107 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% block content %}
+<div class="{{ section.main }}_{{ section.sub }}">
+    <div class="row">
+        {# LEFT SIDE #}
+        <div class="col-md-7">
+            {# company, Keywords.. #}
+            <div class="row" id="home_search_bar">
+                <form action="/jobs/search" role="form">
+                    <div class="col-md-12 home-search-box" >
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5 search-box">
+                                <label for="main_job_search_keyword" class="sr-only">&nbsp;Skill/Job Title</label>
+                                <input type="text" class="form-control input-lg" id="main_job_search_keyword" placeholder="Skill/Job Title eg. Sales" name="keyword" required />
+                            </div>
+                            <div class="col-md-5 col-sm-5 search-box">
+                                <label for="main_job_search_location" class="sr-only">&nbsp;Location</label>
+                                <input type="text" class="form-control input-lg" id="main_job_search_location" placeholder="Location eg. {{ constants.SUPPORTED_LOCATIONS[user.country or 'IN'].placeholder.location  | escape  }}" name="location">
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button class="btn btn-info btn-lg" type="submit">Find Jobs</button>
+                            </div>
+                        </div><!-- /input-group -->
+                    </div>
+                </form>
+            </div>
+
+            {% if (show and show.skill_capture) %}
+            <a data-toggle="modal" href="#modal" class="js-auto-popup" data-remote="/skill/capture"></a>
+            {% endif %}
+
+            {# INVITE POPUP #}
+            {% if (show and show.invite_popup) %}
+            <a data-toggle="modal" href="#modal" class="js-auto-popup" data-remote="/invite/popup"></a>
+            {% endif %}
+
+            {# ADD YOUR SKILLS #}
+            {% if show and show.skills %}
+            <div class="panel panel-default skill-box"  id="home_add_your_skills">
+                <div class="panel-body row">
+                    <div class="skills-wrap js-row-each">
+                        <h4>Add your professional skills</h4>
+                        <form action="/skill/add?location=home" role="form" type="" class="form-horizontal js-add-to-list-form js-write-permission" data-getperm="{% if user.write_permission == false %}true{% endif %}" onsubmit="return false;">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <input placeholder="Add your professional skills (Eg. Marketing, Product Management etc)" type="text" class="form-control" name="skill" required>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" type="submit">Add</button>
+                                        <a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-write-permission','','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Add</a>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
+                        </form>
+                        <div class="tags">
+                            <ul class="list-unstyled js-list list-inline">
+                                {% for x in skills %}
+                                {% set skill = skills[x] %}
+                                <li class="js-row-each">
+                                    {% include 'profile/skill/skillbutton.jinja' %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div >
+                            <a class="pull-right text-muted" href="/profile/{{ user.fb_id }}"> See All </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {# RECENT SEARCHES #}
+            {% if tabs %}
+                {% include('home/recentsearches.jinja') %}
+            {% endif %}
+            {% include('home/recommended.jinja') %}
+            {% include('home/openings.jinja') %}
+        </div>
+
+        {# RIGHT SIDE #}
+        <div class="col-md-5">
+            <div class="col-box ticker ticker-muted" id="home_ticker">
+                <blockquote  class="js-ticker" data-href="/ticker"></blockquote>
+            </div>
+            <hr class="line1"></hr>
+
+            {# Marketing #}
+            {% include('introductions/home_banner.jinja') %}
+
+            {# who viewd my profile #}
+            <div class="col-box" id="home_profileviews">
+                <div class="js-autofill js-content"  href="/user/minivisitorlist"  data-loading-selector="none"></div>
+            </div>
+
+            {# Professional connectivity #}
+            <div class="js-autofill js-content"  href="/professionalconnection" data-loading-selector="none">
+                <div class="loader-lg"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

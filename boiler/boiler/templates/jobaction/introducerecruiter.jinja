@@ -1,0 +1,78 @@
+{% extends 'layout/defaultlayout.jinja' %}
+
+{% block content%}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default main-splash">
+            <div class="panel-body">
+                <div class="clearfix">
+                    <div class="col-md-4">
+                        <div class="media sm-media" title="{{ recruiter.name }}">
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(recruiter,'_blank') }}
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="pull-left">
+                                    <h4 class="media-heading">
+                                        <strong>{{ recruiter.name }}</strong>
+                                    </h4>
+                                    <strong>{{ recruiter.position }}</strong>
+                                    <p>
+                                        {{ recruiter.company }}<br>
+                                        {{ 'at '+recruiter.location if recruiter.location }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr></hr>
+                        <div class="media sm-media" title="{{ candidate.name }}">
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(candidate,'_blank') }}
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="pull-left">
+                                    <h4 class="media-heading">
+                                        <strong>{{ candidate.name }}</strong>
+                                    </h4>
+                                    <strong>{{ candidate.position }}</strong>
+                                    <p>
+                                     {{ candidate.company }}<br>
+                                     {{ 'at '+candidate.location if candidate.location }}
+                                     {{ candidate.phone }}<br>
+                                     <!-- {{ candidate.email }} -->
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        {% include 'jobaction/help/introducerecruiter_message.jinja' %}
+                        <div  class="clearfix">
+                            <a class="btn btn-primary js-introducefirst-link js-track-analytics" data-href="/splash/forwardsharejobreq/{{ ID }}?{{ request.query_string }}" data-userid="{{ candidate.id }}">
+                                Send job to {{ candidate.name }}
+                            </a>
+                        </div>
+                        <hr></hr>
+                        {% include 'jobaction/help/introducerecruiter_nextstep.jinja' %}     
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <p>&nbsp;</p>
+                    <h4 class="text-center">About the job</h4>
+                    <p>&nbsp;</p>
+                    {% include 'job/details/details.jinja' %}
+                     <a href="/job/{{ job.id }}?{{ request.url | stringurlencode('searchurl') }}" class="pull-left btn btn-default">
+                        Open the full job description
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}

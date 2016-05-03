@@ -1,0 +1,65 @@
+{% extends "pagetab/admin/settings.jinja" %}
+
+{% block settings_content %}
+<div id="manage-jobs">
+    <div id="job-listing">
+        <div class="div-left"><a href="/pagetab/admin/jobs/new" class="btn-company btn-green" id="post-a-job">Post a Job</a></div>
+        <div class="div-clear-height"></div>
+        <div class="tab-pane active js-more-content-block">
+            <div class="js-search-result">
+                <div class="alpha omega" id="top">
+                    <h4>{{ data.posted_jobs.pagination.total_results }} Jobs Posted by you</h4>
+                </div>
+                {% for x in data.posted_jobs.jobs %}
+                <div class="alpha omega" id="job_listings">
+                    <div class="job  alpha omega clearfix">
+                        <div class="job_padding_wrap">
+                            <div class="span9 margin_10 omega">
+                                <a href="{{ config.APP_URL }}job/{{ data.posted_jobs.jobs[x].id }}"  target="_blank">
+                                    <h4>
+                                        <b>{{ data.posted_jobs.jobs[x].title }}</b>
+                                    </h4>
+                                </a>
+                                <h5 class="job_listings_company_name">
+                                    {{ data.posted_jobs.jobs[x].company.name }}
+                                    {% if data.posted_jobs.jobs[x].location %}
+                                        at {{ data.posted_jobs.jobs[x].location }}
+                                    {% endif %}  <br />
+                                </h5>
+                                <h6>
+                                    {% if data.posted_jobs.jobs[x].date %}
+                                        Posted on : {{ data.posted_jobs.jobs[x].date }}
+                                    {% endif %}
+                                </h6>
+                            </div>
+                            <div class="actions_job span2 omega alpha">
+                                <ul>
+                                    <li>
+                                        <a href="/jobs/delete/{{ data.posted_jobs.jobs[x].id }}"
+                                            data-message="Are you sure you want to remove this job from Posted Jobs?"
+                                            class="js-jobsearch-unsave ignore_cross"  title="Delete this job">
+                                            x
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/pagetab/admin/jobs/{{ data.posted_jobs.jobs[x].id }}/edit">
+                                            <i class="icons_img icon_edit span2 omega alpha">&nbsp;</i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- job_padding_wrap -->
+                    </div>
+                    <!-- Job Listings -->
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="div-clear"></div>
+    </div>
+</div>
+{% import 'elements/macros.jinja' as html %}
+{{ html.jobpaginationLinksOthers(data.posted_jobs.pagination.page, data.posted_jobs.pagination.total_results, '/pagetab/admin/jobs' ) }}
+{% endblock settings_content %}

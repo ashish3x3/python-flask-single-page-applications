@@ -1,0 +1,319 @@
+{% if request.is_xhr  and request.args.get('sub','') == '1' %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "people/main.jinja" %}
+{% endif %}
+
+
+
+{% block search_result_block %}
+    <div id="search-results">
+    {% for x in search_result.result %}
+        {% if search_result.result[x].user and search_result.result[x].user.connectionLevel > 0  %}
+            {#--result part---#}
+            <div class="result-box js-row-each {{ 'selected' if (show.controls == true and search_result.result[x].user.selected == true) }}" id="people-result-{{ search_result.result[x].user.fb_id }}">
+                {% if search_result.result[x].user.savedInFolders|length > 0 %}
+                <div class="arrow-pos">
+                    {% if search_result.result[x].user.otherSavedInFolders|length > 0 %}
+                    <a class="arrow-right" rel="popover" data-html="true" data-toggle="popover" data-placement="left" data-content="{{ search_result.result[x].user.savedInFolders|join(', ') }}<span> and </span><a data-other-folders='{{search_result.result[x].user.otherSavedInFolders|join(', ')}}' class='js-toggle-other-folders'>{{search_result.result[x].user.otherSavedInFolders|length}} other folders</a>">&nbsp;</a>
+                    {% else %}
+                    <a class="arrow-right" rel="popover" data-html="true" data-toggle="popover" data-placement="left" data-content="{{ search_result.result[x].user.savedInFolders|join(', ') }}">&nbsp;</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="pull-right media-rgt">
+                    <ul class="list-unstyled pull-right">
+                        <li class="pull-right">
+                            <div class="btn-group js-dropdown ">
+                                {% if section.sub == "people_search" %}
+                                    <button type="button" data-toggle="modal" data-remote="/user/save?id={{ search_result.result[x].user.fb_id }}" data-target="#modal" title="Save this User" data-popup-text="Saving Profile" href="#modal" class="js-popup-loader btn btn-default">
+                                        Save
+                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                {% elif section.sub == "profile_saved" and search_result.result[x].show.sendmessage == true and folderID != 0 %}
+                                    <button class="btn btn-default" onclick="window.open('{{ search_result.result[x].user.sendmsgurl or JCONSTANTS.FB_SENDMESSAGE_URL }}', '', 'width=500,height=300');" >
+                                        <span class="hidden-xs">
+                                            Send Facebook Message &nbsp;
+                                        </span>
+                                        <span class="visible-xs">
+                                            FB Message
+                                        </span>
+                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                {% endif %}
+
+
+                                <ul class="dropdown-menu small pull-right" role="menu">
+                                    {% if search_result.result[x].show %}
+                                        <li>
+                                            <a href="{{ search_result.result[x].user.profileUrl }}">
+                                                View Profile
+                                            </a>
+                                        </li>
+                                        {% if search_result.result[x].show.connections == true %}
+                                            <li>
+                                                <a href="/user/search?view=contacts&fbid={{ search_result.result[x].user.fb_id }}" target="_blank"  class="js-no-popout-link">
+                                                    In-Network Search
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if section.sub == "profile_saved" and folderID != 0 %}
+                                            <li>
+                                                <a class="js-remove-action js-track-analytics" role="link" href="/user/unsave?fbid={{ search_result.result[x].user.fb_id }}&folderId={{ folderID }}" >
+                                                    Unsave &nbsp;
+                                                </a>
+                                            </li>
+                                        {% elif section.sub == "people_search" %}
+                                            <li>
+                                                <a data-toggle="modal" href="#modal" data-remote="/popup/sendmessage?{{ ('/user/save?id=' + search_result.result[x].user.fb_id) | stringurlencode('next') }}">
+                                                    Send Facebook Message
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            {% if search_result.result[x].user.resumes %}
+                                <div class="btn-group resume-download">
+                                    <a data-toggle="dropdown" role="dropdown">
+                                        <span class="glyphicon glyphicon-download"></span> <b>Resume</b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% for resume in search_result.result[x].user.resumes %}
+                                            <li>
+                                                <a href="{{ (config.MP_URL + 'resume/fetch/' + (resume.id | seal_id)) }}" target="_blank" download="{{ resume.name }}">
+                                                    {{ resume.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </li>
+                            <li>
+                                {% if search_result.result[x].user.last_contacted %}
+                                    <div data-toggle="tooltip" data-placement="bottom" title="Last Contacted {{ search_result.result[x].user.last_contacted }}" class="glyphicon text-info glyphicon-check-circle tx-16 pull-right"></div>
+                                {% endif %}
+                            </li>
+                    </ul>
+                </div>
+                <div class="media">
+                    <div class="pull-left pull-right">
+                        <div class="logo-blk-img">
+
+                            {% if show and (show.multicontact or show.multisearch or show.multisave) %}
+                                <div class="img-checkbox" data-selector=".result-box" >
+                                    <!-- form with autocomplete off is important for consistent browser behaviour -->
+                                    <form autocomplete="off">
+                                        <input type="checkbox" class="js-multi-select" value="{{ search_result.result[x].user.fb_id }}"  {{ 'checked' if (search_result.result[x].user.selected == true) }}  name="{{ multi_select_name }}" data-type="{{ 'psave' if show.multisave else 'pcontact' }}" data-details="{{ search_result.result[x].user.details }}" data-tags="all,{{ search_result.result[x].user.tags }}"/>
+                                    </form>
+                                </div>
+                            {% endif %}
+                            {% if search_result.result[x].user %}
+                                {{ html.imageWithProfileUrl(search_result.result[x].user) }}
+                            {% endif %}
+                        </div>
+
+                        {% if search_result.result[x].show and search_result.result[x].show.invite == true %}
+                            <br/><div class="clearfix visible-xs saved-invitebtn">
+                                <a class="btn btn-primary btn-block" onclick="window.open('{{ JCONSTANTS.FB_SENDMESSAGE_URL }}&to={{ search_result.result[x].user.fb_id }}','','width=500,height=250');"  title="Invite to access candidate network">
+                                    Invite
+                                </a>
+                            </div>
+                        {% endif %}
+                        <!--
+                        <div class="connectivity-index">
+                            <button class="btn btn-primary btn-sm btn-width">Access his<br>Network</button>
+                        </div>
+                        -->
+                    </div>
+                    <div class="media-body">
+                        {# USERNAME #}
+                        <h4 class="media-heading">
+                            <a href="{{ search_result.result[x].user.profileUrl }}" class="js-main-container-link link-blue {{ 'js-focus' if loop.index == 1 }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}"  role="link">
+                                {% if search_result.result[x].user %}
+                                    {{ search_result.result[x].user.name }}
+                                {% endif %}
+                            </a>
+                            {% if search_result.result[x].user.connectionLevel  < 3 %}
+                                <span class="label label-info label-small" title="Connection Level between you">{{ search_result.result[x].user.connectionLevel }}</span>
+                            {% endif %}
+                        </h4>
+
+                        {# QUALIFICATIONS #}
+                        <div class="clearfix">
+                            {% if search_result.result[x].user.displayPosition and not (search_result.result[x].user.displayPosition.isspace()) %}
+                                <div class="cliptext"   title="{{ search_result.result[x].user.displayCompany }}">
+                                    <span class="glyphicon glyphicon-briefcase text-muted"></span>
+                                    <span class="color_grey">
+                                    {% if search_result.result[x].user.current %}
+                                        Works as
+                                    {% else %}
+                                        Worked as
+                                    {% endif %}
+                                    </span>
+                                    <span class="color_grey">
+                                        {{ search_result.result[x].user.displayPosition }}
+                                        {% if search_result.result[x].user.displayCompany and not (search_result.result[x].user.displayCompany.isspace()) %}
+                                            at</span>
+                                            <b>{{ search_result.result[x].user.displayCompany }}</b>
+                                        {% else %}
+                                    </span>
+                                        {% endif %}
+                                </div>
+                            {% elif search_result.result[x].user.displayCompany and not (search_result.result[x].user.displayCompany.isspace()) %}
+                                <div class="cliptext"  title="{{ search_result.result[x].user.displayCompany }}">
+                                    <span class="glyphicon glyphicon-briefcase text-muted"></span>
+                                    <span class="color_grey">
+                                    {% if search_result.result[x].user.current %}
+                                        Works at
+                                    {% else %}
+                                        Worked at
+                                    {% endif %}
+                                    </span>
+                                    <b>{{ search_result.result[x].user.displayCompany }}</b>
+                                </div>
+                            {% endif %}
+
+                            <!--education details-->
+                            {% if search_result.result[x].user.displaySchool and not (search_result.result[x].user.displaySchool.isspace()) %}
+                                <div class="cliptext" title="{{ search_result.result[x].user.displaySchool }}">
+                                    <span class="glyphicon glyphicon-book text-muted"></span>
+                                    <span class="color_grey">Studied at </span>
+                                    <b>{{ search_result.result[x].user.displaySchool }}</b>
+                                </div>
+                            {% endif %}
+
+                            <!--location details-->
+                            {% if (search_result.result[x].user.currentLocation and search_result.result[x].user.currentLocation[0]!="") and not (search_result.result[x].user.currentLocation[0].isspace()) %}
+                                <div class="cliptext"  title="{{ search_result.result[x].user.currentLocation[0] }}">
+                                    <span class="glyphicon glyphicon-crosshairs text-muted"></span>
+                                    <span class="color_grey">Lives in </span>
+                                    <b>{{ search_result.result[x].user.currentLocation[0] }}</b>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <hr class="line-sm"></hr>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left pull-right hidden-xs">
+                        <div class="logo-blk-img-enh">
+                            {% if session.product != 'talentsearch' %}
+                                {% if search_result.result[x].user.isMp %}
+                                    <div class="connectivity-index hidden-xs">
+                                        <a href="/user/search?view=contacts&fbid={{ search_result.result[x].user.fb_id }}" target="_blank">
+                                            <img src="/static/icons/16x16.png" title="MyParichay User"/>
+                                            {% if search_result.result[x].user.pci_score %}
+                                                <b> {{ search_result.result[x].user.pci_score }} </b>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% if search_result.result[x].show and search_result.result[x].show.invite == true %}
+                                <div class="saved-invitebtn clearfix hidden-xs">
+                                    <a class="btn btn-primary btn-block" onclick="window.open('{{ JCONSTANTS.FB_SENDMESSAGE_URL }}&to={{ search_result.result[x].user.fb_id }}','','width=500,height=250');"  title="Invite to access candidate network">
+                                        Invite
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <div class="col-md-12 clearfix padding-muted">
+                            <div class="col-md-7 col-sm-7 col-xs-12 padding-muted">
+                                <div class="clearfix">
+                                    {% if "friends" in search_result.result[x] and search_result.result[x].friends.count  > 0 %}
+                                        {% set friends = search_result.result[x].friends  %}
+                                        {% set more_id = search_result.result[x].user.fb_id %}
+                                        {% include ('people/miniconnections.jinja') %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-5 col-xs-12 padding-muted">
+                                <div class="clearfix">
+                                    {% if "appeared_through" in search_result.result[x] and "count" in search_result.result[x].appeared_through and search_result.result[x].appeared_through.count  > 0 %}
+                                        {% set friends = search_result.result[x].appeared_through  %}
+                                        {% set more_id = search_result.result[x].appeared_through.connector_ids %}
+                                        {% include ('people/appeared.jinja') %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                {# skills #}
+                {% if search_result.result[x].user.skills %}
+                <div class="note clearfix ">
+                    <div class=" label label-default label-sm hoverclip">Skills</div>
+                    <ul class="list-inline">
+                        {% for skill in search_result.result[x].user.skills %}
+                            <li>
+                                {% include 'profile/skill/skillview.jinja' %}
+                            </li>
+                        {% endfor %}
+                        {% if search_result.result[x].user.skillsMore %}
+                        <li>
+                            <a href="{{ search_result.result[x].user.profileUrl }}" class="btn btn-default btn-xs pull-left">
+                                &nbsp;{{ search_result.result[x].user.skillsMore }} +&nbsp;
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {#NOTE#}
+                {% if search_result.result[x].user.note %}
+                <div class="note clearfix justify">
+                    <div class="label label-info label-sm hoverclip ">Note</div>
+                    <p class="note-txt">
+                        {{ search_result.result[x].user.note }}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="row-fluid result-empty" >
+            {% if section.sub == "profile_saved" %}
+                <b>You haven't saved any profile. Find your </b><a href="/user/search" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link">Professional connections.</a>
+            {% elif section.sub == "people_search"  %}
+                <b>Please enter your search criteria.</b>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="row pagination-box">
+        <div class="col-md-12 clearfix">
+            <div class="col-md-10 col-sm-10 col-xs-12">
+                {% if show and show.pagination != false %}
+                    {% if 'page' in pagination and 'total_results' in pagination  and (pagination.total_results | int ) > 1 %}
+                        <div class="pagination-left people-result">
+                            {{ html.pagination(pagination.auxparams, pagination.total_results , pagination.page,request.path, results_on_page=50) }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+                {% set dropdown_class = 'dropup' %}
+                {% include 'people/multiselected_user_options.jinja' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock search_result_block %}

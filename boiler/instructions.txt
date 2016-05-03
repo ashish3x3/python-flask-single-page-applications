@@ -1,0 +1,9 @@
+to start mongo server
+ mongod --config /etc/mongod.conf
+
+remove mongod.lock if issue happens because of shutdown
+
+
+install geoip2 that is used for nudgespot api
+pip install geoip2
+

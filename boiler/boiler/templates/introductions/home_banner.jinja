@@ -1,0 +1,27 @@
+
+{% if show.incentivise_and_win %}
+<div class="land-redeem-banner">
+    <div class="land-gift-bg col-md-4 col-sm-4 hidden-xs padding-muted"></div>
+    <div class="col-md-12 col-sm-12 col-xs-12 padding-muted wave-border">
+        <div class="col-md-12 col-sm-12 col-xs-12 padding-muted">
+            <div class="col-md-4 col-sm-3 col-xs-4 padding-muted text-center total-points-right">
+                <label class="text-right grey-txt">Total Points<br>Earned</label>
+                <strong class="header-txt">{{incentivise_and_win.total_points}}</strong>
+            </div>
+            <div class="col-md-8 col-sm-9 col-xs-8 padding-muted land-know-more">
+                <a href="/introductions/redeem" class="btn btn-primary">Redeem Points</a>
+                <a class="js-track-analytics" data-toggle="modal" data-remote="/introductions/redeem/knowmore" data-target="#modal"><em>Know More</em></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12 padding-muted">
+        <a href="https://www.myparichay.in/website/incentive-terms-and-condition/" target="_blank">
+            <small class="text-muted pull-right">
+                Terms &amp; Conditions
+            </small>
+        </a>
+    </div>
+</div>
+<hr class="line1"></hr>
+{% endif %}

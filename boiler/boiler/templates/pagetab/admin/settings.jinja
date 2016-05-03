@@ -1,0 +1,26 @@
+{% if request.is_xhr %}
+{% extends "layout/ajax.jinja" %}
+{% else %}
+{% extends "layout/defaultlayout.jinja" %}
+{% endif %}
+
+{% block main_wrapper %}
+<div class="span18" id="messages_wrapper">
+    <div id="messages">
+        <div class="company-tabs" style="margin-left:0px;">
+            <div class="div-left">
+                <ul>
+                    <li class="{% if data.type == 'jobs'%}active{% endif %}"><a href="/pagetab/admin/jobs" class="js-dynamic-content-link" id="tab1">Manage Jobs</a></li>
+                    <li class="{% if data.type == 'share'%}active{% endif %}"><a href="/pagetab/admin/share" class="js-dynamic-content-link" id="tab2">Job Sharing</a></li>
+                    <li class="{% if data.type == 'account'%}active{% endif %}"><a href="/pagetab/admin/account" class="js-dynamic-content-link" id="tab3">Account Settings</a></li>
+                </ul>
+            </div>
+            {% if data.career_page_url %}
+                <div class="div-right"><a href="{{ data.career_page_url }}" target="_new" class="btn-company btn-green">Open Company Career Tab</a></div>
+            {% endif %}
+            <div class="div-clear-height"></div>
+            {% block settings_content %}
+            {% endblock settings_content %}
+        </div>
+    </div>
+    {% endblock main_wrapper %}

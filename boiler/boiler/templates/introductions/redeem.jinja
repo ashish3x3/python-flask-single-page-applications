@@ -1,0 +1,62 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "introductions/main-one.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+{% if data.redemptions|length > 0 %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-12 col-sm-12 col-xs-12 padding-muted wave-border">
+            <div class="col-md-12 col-sm-12 col-xs-12 padding-muted">
+                <div class="col-md-9 col-sm-9 col-xs-9 padding-muted redeem-reward">You can redeem any one of the below rewards
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3 padding-muted text-right total-points-right">
+                    <label class="text-right grey-txt">Total Points<br>Earned</label>
+                    <strong class="header-txt">{{data.total_points}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<!-- E-GIFT VOUCHER BOXES -->
+<div class="row">
+{% for redemption in data.redemptions %}
+    <div class="col-md-12 padding-muted">
+        <div class="col-md-3 col-sm-4 col-xs-12 {% if not redemption.redeemed %} egift-box {% else %} egift-nonact-box {% endif %}">
+            <div class="panel panel-default col-md-12 padding-muted">
+                <div class="text-center">
+                    <img src="/static/img/pictures/companies-regular/{{redemption.pictureUrl}}" class="imgwid">
+                </div>
+                <div class="text-left gift-txt">{{redemption.type}}<br>
+                    <strong class="price-txt {% if not redemption.redeemed %} text-danger {% else %} text-muted {% endif %}"><i class="glyphicon glyphicon-inr"></i>{{redemption.value}}</strong>
+                </div>
+                <div class="highlight">
+                    {% if not redemption.redeemed %}
+                    <a class="btn btn-primary pull-left js-redeem-coupon js-track-analytics" data-toggle="modal" data-remote="/introductions/redeem/claim" data-target="#modal" title="Redeem this Coupon" data-points="{{redemption.points}}" data-value="{{redemption.value}}" data-giftid="{{redemption.gift_id}}" data-giftname="{{redemption.name}}">Redeem</a>
+                    {% else %}
+                    <a class="btn btn-primary pull-left" title="This coupon has been redeemed">Redeem</a>
+                    {% endif %}
+                    <span class="pull-right"><strong>{{redemption.points}}</strong> Points</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% else %}
+<div class="col-md-9 col-sm-9 col-xs-12 text-center pull-center-nowidth margintop50 marginbot50">
+    <div class="text-success tx-20 text-center">
+        <i class="glyphicon glyphicon-check-circle glyphicon-3x"></i>
+    </div>
+    <h3 class="text-center">
+        <strong>You’ve successfully redeemed your rewards</strong>
+    </h3>
+    <p class="text-center text-muted">
+        <strong>Email/gift coupons will be delivered to you by email in the next 10 days . If you do not receive gift coupons within this period please contact us at <a href="mailto:rewards@myparichay.in">rewards@myparichay.in</a></strong>
+    </p>
+</div>
+{% endif %}
+{% endblock search_result_block %}

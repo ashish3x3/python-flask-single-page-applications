@@ -1,0 +1,42 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "introductions/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+{% if data.redemptions|length > 0 %}
+    <div class="clearfix js-message-content-block introduction" >
+        {% for redemption in data.redemptions %}
+        <div class="media result-box">
+            <div class="pull-left">
+                <a class="img" href="#">
+                    <img class="tinypic" src="/static/img/pictures/companies-small/{{redemption.pictureUrl}}">
+                </a>
+            </div>
+            <div class="pull-right circle-badge-grey">{{redemption.gift_points}}</div>
+            <div class="col-md-7 col-sm-6 col-xs-4 padding-muted">
+                <p class="tx-14">You redeemed <strong>{{redemption.company_name}} {{redemption.gift_type}}</strong></p>
+                <p class="text-muted">{{redemption.redeemed_on}}</p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-4 text-right pull-right">
+                <span class="text-danger tx-20"><i class="glyphicon glyphicon-inr"></i>
+                <strong>{{redemption.gift_value}}</strong></span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if 'page' in pagination and 'total' in pagination  and (pagination.total | int ) > 1 %}
+    <div class="row">
+        <div class="pagination-centered">
+            {{ html.pagination('', pagination.total, pagination.page, request.path) }}
+        </div>
+    </div>
+    {% endif %}
+{% else %}
+    <div style="padding: 12px 10px;">
+        <p class="text-info">You have not redeemed any coupons yet!</p>
+    </div>
+{% endif %}
+{% endblock search_result_block %}

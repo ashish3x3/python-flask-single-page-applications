@@ -1,0 +1,54 @@
+{% extends "layout/defaultlayout.jinja" %}
+
+
+
+{% block screen_name %}
+   Test Page
+{% endblock screen_name %}
+
+
+{% block main_content %}
+
+     <div class="col-md-8 order-page">
+
+        <div class="col-md-8">
+
+          <header>
+            <h2 style="margin-top:10px">
+              <span class="icon-user"></span> About Me
+            </h2>
+          </header>
+
+          <form method="post">
+            <fieldset class="cf">
+              <div class="input-group">
+                <label class="control-label" for="editAccountFirstname">First Name</label>
+                <input id="editAccountFirstname" class="ember-view ember-text-field" placeholder="First Name" type="text">
+              </div>
+
+              <div class="input-group">
+                <label class="control-label" for="editAccountLastname">Last Name</label>
+                <input id="editAccountLastname" class="ember-view ember-text-field" placeholder="Last Name" type="text">
+              </div>
+
+              <div class="input-group">
+                <label class="control-label" for="editAccountEmail">Email</label>
+                <input id="editAccountEmail" class="ember-view ember-text-field" placeholder="Email" type="email">
+              </div>
+
+              <div class="input-group">
+                <label class="control-label" for="editAccountPhone">Phone</label>
+                <input id="editAccountPhone" class="ember-view ember-text-field input-telephone" placeholder="Phone Number" type="tel" pattern="\d*">
+              </div>
+            </fieldset>
+
+            <div class="submit-form">
+              <button type="submit" data-ember-action="13" class="primary" value="Save">Save</button>
+            </div>
+          </form>
+
+        </div>
+          
+      </div>
+
+{% endblock main_content %}

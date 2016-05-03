@@ -1,0 +1,17 @@
+{% import 'elements/macros.jinja' as html %}
+{% if friends.users %}
+    <strong class="text-muted">Mutual friends</strong class="text-muted">
+    <div class="img-connection">
+            {% for y in friends.users %}
+                {% if loop.index <= 5 %}
+                    {{ html.imageWithProfileUrl(friends.users[y]) }}
+                {% endif %}
+            {% endfor %}
+        {% if friends.count > 5 %}
+            <a href="/user/search?view=contacts&fbid={{ more_id }}{{ '&facet_connectionlevel=sharedcontacts' if section.sub == 'people_search' }}" class="btn btn-primary more-img more-img-small">
+               {{ friends.count  }}+
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+

@@ -1,0 +1,63 @@
+{% import 'elements/macros.jinja' as html %}
+<!doctype html>
+
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="" lang="en" xml:lang="en">
+<!--<![endif]-->
+<head>
+    {% include 'elements/head.jinja' %}
+
+    {% block og_tags %}{% endblock og_tags %}
+    <script>{% block prescript %}{% endblock prescript %}</script>
+</head>
+<body>
+
+    <a class="sr-only" href="#contentbegins">Skip to main content</a>
+
+    {#--top navigation start--#}
+    {% if talentsearch == true or session.product  == 'talentsearch' %}
+        {% include 'elements/header_talentsearch.jinja' %}
+    {% elif user and user.fb_id != 0 %} {# if user is loggedin #}
+        {% include 'elements/header_loggedin.jinja' %}
+    {% else %}
+        {% include 'elements/header_logout.jinja' %}
+    {% endif %}
+
+    {#--top navigation end--#}
+    <main>
+        <div class="main-container {{'landing-container' if section and section.sub == 'login'}}" id="contentbegins">
+            {{ html.flashMessage() }}
+        {#--content start-#}
+        {% block main_content %}
+            <div class="container-full" id="maincontainer">
+               {% block content %} {% endblock content  %}
+            </div>
+        {% endblock main_content  %}
+        {#--content end-#}
+        </div>
+    </main>
+
+    <div class="modal fade" id="modal" role="dialog" aria-hidden="true"></div>
+    <div id="mpNotification" style="display: none;">
+    </div>
+
+    <div class="loader-lg tx-white popupLoader hidden" id="modal-loader">
+        <i class="glyphicon glyphicon-spinner glyphicon-spin"></i>
+        <div class="text-muted" style="font-size:12px;"></div>
+    </div>
+    {#--footer start--#}
+
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/mywash.css" rel="stylesheet" type="text/css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/mywash.js"></script>
+ {#--footer end--#}
+</body>
+</html>
+

@@ -1,0 +1,16 @@
+<div class="container">
+	<div class="row">
+		<div class="jd-no-connection jd-logout hidden-xs">
+			<div class="pull-left sprite glyphicon glyphicon-no-connection"></div>
+			<div class="pull-left">
+				<h4>You must sign-in to see who you know here.</h4>
+				<a data-toggle="modal" href="#modal" data-remote="/popup/login?{{ ('/job/'+  job.id) | stringurlencode('next') }}" >
+					Sign-in to MyParichay via Facebook.
+					<span class="icon-round ">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,74 @@
+{% set query_string = (request.query_string | remove_params_query_string('next')) %}
+{% set nexturl = request.args.get("next","/invite?"+query_string) %}
+{% if 'request_ids' in request.args: %}
+    {% set nexturl = "/messages?"+query_string %}
+{% endif %}
+<html>
+<head>
+    <title>MyParichay - Facebook Recruiting - Find Jobs through friends - Job Search - Job Vacancies!</title>
+    <meta name="description" content="MyParichay is a Social Recruiting Site. Find the Best Jobs on Facebook. Search for Job Vacancies across Top Companies in India and abroad. Get referred by your facebook friends to get your Dream Job!" /><meta name="Keywords" content="Facebook jobs, skills, Refer friends, jobs, job, latest jobs, career openings, jobs in India, Fresher jobs, it jobs, software jobs, job search, online jobs, accounting jobs, part time jobs, banking jobs, finance jobs, call center jobs, marketing jobs, Government Jobs, jobs in Delhi, jobs in Bangalore, jobs in Mumbai, jobs in Gurgaon, Free Resume writing " />
+    <meta name="author" content="MyParichay" />
+
+    <meta property="og:title" content="{{ meta.og_title }}" />
+    <meta property="og:type" content="website" />
+    {% if meta and meta.og_url %}
+        <meta property="og:url" content="{{ meta.og_url }}" />
+    {% endif %}
+    <meta property="og:image" content="{{ meta.og_image }}" />
+    <meta property="og:description" content="{{ meta.og_description }}" />
+
+    <meta http-equiv="refresh" content="10; url=/login?{{ query_string }}&meta=1">
+    <style>
+        .center{width:100px; height:100px; position:absolute; top:0; bottom:0; left:0; right:0; margin:auto;}
+    </style>
+</head>
+<body>
+    <div id="fb-root"></div>
+    <h1 class="center">Loading...</h1>
+    <script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
+    <script type="text/javascript">
+        //var hasFBSource = {% if 'fb_source' in request.args %} true  {% else %} false {% endif %};
+        setTimeout(function(){
+            document.location='/login?next='+encodeURIComponent('{{ nexturl }}')+'&{{ query_string }}';
+        },5000);
+        if (window.top != window.self){
+            //window.top.location = document.location;
+        }
+
+        function getUrlFromObj(obj, url){
+            var urlStr = [];
+            for(i in obj){
+                if(obj[i] === false){
+                    urlStr.push(i);
+                }else{
+                    urlStr.push(i+'='+obj[i]);
+                }
+            }
+            return urlStr.join('&');
+        }
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '{{ config.APP_ID }}', // App ID from the app dashboard
+                status: true, // Check Facebook Login status
+                xfbml: true  // Look for social plugins on the page
+            });
+            FB.getLoginStatus(function(response) {
+
+                if (response.status === 'connected') {
+                    response.authResponse['access_token'] = response.authResponse['accessToken'];
+                    delete response.authResponse['accessToken'];
+                    document.location='/login/fbresponse?'+getUrlFromObj(response.authResponse)+'&next='+encodeURIComponent('{{ nexturl }}')+'&{{ query_string }}';
+                } else {
+                    if (response.status === 'not_authorized') {
+                        document.location = '/login?next='+encodeURIComponent('/landing?{{ query_string }}')+'&{{ query_string }}';
+                    }
+                    else{
+                        document.location = '/login?next='+encodeURIComponent('{{ nexturl }}')+'&{{ query_string }}';
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

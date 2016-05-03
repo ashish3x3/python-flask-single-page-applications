@@ -1,0 +1,28 @@
+{% extends "pagetab/wizard/install.jinja" %}
+
+{% block step_content %}
+<div class="text-center">
+        <h4 class="tx-16 text-muted"><strong>Step 1 of 3: Select your Pages</strong></h4>
+
+        <div class="step-bar col-md-12 clearfix">
+            <div class="blue-bg col-md-4">&nbsp;</div>
+            <div class="col-md-4">&nbsp;</div>
+            <div class="col-md-4">&nbsp;</div>
+        </div>
+
+        <div class="text-center pagetab-center">
+            <p>
+                <span class="tx-16"> Tell us where to add your Careers page:</span>
+                <a class="btn btn-primary" href="{{ data.install_url }}" target="_top" >Select company Page</a>
+            </p>
+            <p class="text-muted">
+                Note: if you select multiple pages, they will all receive identical Careers sections.
+            </p>
+        </div>
+        
+        <small class="text-muted">
+            Or, if you don't already have a page, you can 
+            <a href="https://www.facebook.com/pages/create.php" target="_new" >create one now.</a>
+        </small>
+</div>
+{% endblock step_content %}

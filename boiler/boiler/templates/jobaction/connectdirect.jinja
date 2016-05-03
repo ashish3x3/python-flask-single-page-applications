@@ -1,0 +1,64 @@
+{% extends 'layout/defaultlayout.jinja' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default main-splash">
+            <div class="panel-body">
+                <div class="clearfix">
+                    <div class="col-md-4">
+                        <div class="media sm-media" title="{{ candidate.name }}">
+                            <div class="pull-left">
+                                <div class="logo-blk-img">
+                                    {{ html.imageWithProfileUrl(candidate,'_blank') }}
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="pull-left">
+                                    <h4 class="media-heading">
+                                        <strong>{{ candidate.name }}</strong>
+                                    </h4>
+                                    <strong>{{ candidate.position }}</strong>
+                                    <p>
+                                     {{ candidate.company }}<br>
+                                     {{ 'at '+candidate.location if candidate.location }}
+                                     {{ candidate.phone }}<br>
+                                     {{ candidate.email }}
+                                    </p>
+
+                                    <a class="btn btn-default btn-sm js-msg-user-add" href="{{ candidate.resume_url }}" title="download resume" target="_blank">Download Resume</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        {% include 'jobaction/help/connectdirect_message.jinja' %}
+                        {% if show.accept == True %}
+                            <div  class="clearfix">
+                                {% if status_refered == True %}
+                                    <button class="pull-right btn btn-success disabled">
+                                        Acknowledged &nbsp; <i class="glyphicon glyphicon-check"></i>
+                                    </button>
+                                {% else %}
+                                    <a href="/splash/acceptdirect/{{ ID }}" class="pull-right js-introduce-acknowledge btn btn-primary" onClick="return false">Acknowledge</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <hr></hr>
+                        {% include 'jobaction/help/connectdirect_nextstep.jinja' %}
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                    <p>&nbsp;</p>
+                    <h4 class="text-center">About the job</h4>
+                    <p>&nbsp;</p>
+                    {% include 'job/details/details.jinja' %}
+                    <a href="/job/{{ job.id }}?{{ request.url | stringurlencode('searchurl') }}" class="pull-left btn btn-default">Open the full job description</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

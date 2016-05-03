@@ -1,0 +1,62 @@
+{% set show_footer = false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block modal_body %}
+<div class=" js-row-each">
+	<div class="modal-body modal-body-withfooter">
+		<div class="js-replace-wrapper">
+			<div class="clearfix">
+				<div class="swatch">Step 1 of 2</div>
+			</div>
+			<br >
+			<div class="row">
+				<div class="skills-wrap js-row-each">
+					<form action="/skill/add?location=home&popup=1" role="form" class="form-horizontal js-add-to-list-form js-skill">
+						<div class="col-md-12">
+							<div class="input-group">
+								<input placeholder="Add your professional skills (Eg. Marketing, Product Management etc)" type="text" class="form-control js-skill-field" name="skill" required  />
+								<span class="input-group-btn">
+									<button class="btn btn-primary" type="submit">Add</button>
+								</span>
+							</div><!-- /input-group -->
+						</div>
+					</form>
+					<div class="tags">
+						<ul class="list-unstyled js-list"></ul>
+					</div>
+				</div>
+				<form action="/skill/capture" role="form" class="form-horizontal js-replace-form" data-replace="true" data-replace-type=".js-replace-wrapper" >
+					<input type="hidden" name="skills"  id="skill-field-hidden"/>
+					<hr class="clearfix"></hr>
+					<div class="col-md-12">
+						<label class="sr-only" for=""> Location</label>
+						<div>
+							<input class="form-control" type="text" name="location" placeholder="Which city do you want to work at?" value="{{ user.location if user.location }}">
+						</div>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class="control-label col-md-5" for=""> Are you actively looking for jobs?</label>
+						<div class="col-md-6 list-inline">
+							<li>
+								<label class="radio">
+									<input type="radio" value="YES" id="option1" name="options" checked > Yes
+								</label>
+							</li>
+							<li>
+								<label class="radio">
+									<input type="radio" value="NO" id="option2" name="options"> No
+								</label>
+							</li>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<p class="pull-left text-muted">You can always update this information under profile</p>
+						<button type="submit" class="btn btn-primary pull-right">Continue</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock modal_body %}

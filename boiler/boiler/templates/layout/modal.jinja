@@ -1,0 +1,40 @@
+ {% import 'elements/macros.jinja' as html %}
+ <div class="modal-dialog {{ modal_class }}" role="dialog">
+        <div class="modal-content">
+            {% if show_title is not defined or show_title == true %}
+                <div class="modal-header">
+                    {% block modal_header %}
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        {% block modal_title %}
+                            <h4 class="modal-title" id="lModalLabel">
+                                {% if modal_title %}
+                                    {{ modal_title }}
+                                {% elif section and section.title %}
+                                    {{ section.title }}
+                                {% else %}
+                                    MyParichay
+                                {% endif %}
+                            </h4>
+                        {% endblock modal_title %}
+                    {% endblock modal_header %}
+                </div>
+            {% endif %}
+
+            {% block modal_body %}
+                <div class="modal-body">
+                    {% if show_title == false %}
+                        <button type="button" class="close popup-close" data-dismiss="modal" aria-hidden="true">×</button>
+                    {% endif %}
+                    {% block content%}{% endblock content%}
+                </div>
+            {% endblock modal_body %}
+
+            {% if show_footer is not defined or show_footer == true  %}
+                {% block modal_footer %}
+                    <div class="modal-footer">
+                        {% block footercontent %}{% endblock footercontent%}
+                    </div>
+                {% endblock modal_footer %}
+            {% endif %}
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->

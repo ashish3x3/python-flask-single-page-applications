@@ -1,0 +1,7 @@
+{% if skill %}
+    <div class="btn-group taggie" title="{{ skill.name }}">
+        <span class="label label-muted label-sm">
+            {{ skill.name | truncate(15,true) }}&nbsp;
+        </span>
+    </div>
+{% endif %}

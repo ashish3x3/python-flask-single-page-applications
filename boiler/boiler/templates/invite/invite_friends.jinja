@@ -1,0 +1,25 @@
+{% set modal_class = 'invite-friends-modal'%}
+{% set show_footer =  false %}
+{% set show_title =  false %}
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+    {% if not bannertype %}
+        <div class="col-md-12">
+            <div class="row">
+                    <h2><strong>Connect with a friend, double your access into companies.</strong></h2>
+                    <p class="tx-16">By connecting, you will combine your friend's network with your own.</p>
+            </div>
+        </div>
+    <br>
+    {% endif %}
+    <div class="panel panel-default">
+        {% if bannertype %}
+            <div class="">
+                <img src="/static/img/pictures/{{ bannertype }}.png" alt="Banner" title="banner" width=100% /></br>
+            </div>
+        {% endif %}
+        <iframe src="/invitefriendscontent" height="400" width="100%" frameborder="0" class="iframe-loader" scrollbar="no"></iframe>
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,35 @@
+{% if request.is_xhr  and request.args.get('sub','') == 1 %}
+    {% extends "layout/ajax.jinja" %}
+{% else %}
+    {% extends "settings/main.jinja" %}
+{% endif %}
+
+{% block search_result_block %}
+    <div class="col-md-12 js-row-each">
+        <div class="alert hide"></div>
+        <form method="" class="form-horizontal js-update-append-form js-track-analytics" role="form" action="/settings/subscriptions" onsubmit="return false;">
+            <div class="form-group">
+                <label  class="col-md-5 control-label" for="job_requests" title ="Job Requests">
+                    I want to receive job notifications from recruiters:
+                </label >
+                <div class="col-md-4 js-check-parent">
+                    <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if subscriptions.jobrequest }} />
+                    <input type="hidden" class="js-check" value={{ 'yes' if subscriptions.jobrequest else 'no'  }} name="jobrequest" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-5 control-label" for="Requests_Introductions" title ="Requests for Introductions">
+                    I would like to introduce my friends to recruiters:
+                </label >
+                <div class="col-md-4 js-check-parent">
+                    <input type="checkbox" data-switch-checkbox='.js-check' {{ 'checked' if subscriptions.RequestsIntroductions }}/>
+                    <input type="hidden" class='js-check' value={{ 'yes' if subscriptions.RequestsIntroductions else 'no'  }} name="RequestsIntroductions" />
+                </div>
+            </div>
+            <div class="form-actions actionblock clearfix">
+                <button type="submit" class="btn btn-primary js-submit-button"> Save </button>
+                <a href="/landing" data-menu-item="{{ constants.MENU_ITEMS.PEOPLE }}" class="js-main-container-link btn btn-default"> Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock search_result_block %}

@@ -1,0 +1,26 @@
+<div class="pull-right hide  js-profile-sub-single-edit">
+	<a href="/profile/award/delete/{{ award.id }}" class="glyphicon glyphicon-trash-o js-remove-action"></a>
+	<span class="text-muted">&nbsp;|&nbsp;</span>
+	<a href="/profile/award/edit/{{ award.id }}" class="glyphicon glyphicon-pencil-square-o js-replace-action js-profile-edit-link"  method="GET"></a>
+</div>
+
+{% if award.name  %}
+<h4>
+	{{ award.name }}
+</h4>
+{% endif %}
+
+{% if award.year or award.from %}
+<p>
+	{{ award.year }}
+	{% if award.from %}
+		| {{ award.from }}
+	{% endif %}
+</p>
+{% endif %}
+
+{% if award.summary %}
+<p>
+	{{ award.summary }}
+</p>
+{% endif %}

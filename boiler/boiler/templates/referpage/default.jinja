@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>{{ og.title }}</title>
+        <meta property="og:title" content="{{ og.title }}">
+        <meta property="og:description" content="{{ og.description }}">
+        <meta property="og:url" content="{{ og.url }}">
+        <meta property="og:image" content=" https://mem2.myparichay.in/static/icon.png ">
+        <script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+        <style>
+        body {
+            font-family:arial;
+            font-size:12px;
+        }
+        .redirectDiv {
+            position:absolute;
+            left:0;
+            right:0;
+            top:50%;
+            margin-top:-10px;
+            text-align: center;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="redirectDiv">Redirecting to job in.. <span id="timer">5</span>s<br>
+        <a href='{{ redirectUrl }}' target="_top">Click here</a>, if you don't want to wait.
+    </div>
+        <script type="text/javascript">
+    var timer = 4;
+    var timerInterval = setInterval(function(){
+        $('#timer').text(timer--);
+        if(timer<0){
+            if (window.top!=window.self) {
+                console.log('window.top');
+                window.top.location = '{{ redirectUrl }}';
+            }else{
+                console.log('not window.top');
+                document.location = '{{ redirectUrl }}';
+            }
+            clearInterval(timerInterval);
+        }
+    },1000);
+        </script>
+    </body>
+</html>

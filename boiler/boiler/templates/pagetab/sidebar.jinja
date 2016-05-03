@@ -1,0 +1,16 @@
+<div class="col-left">
+    <div class="side-box">
+        <h4>Career Tab</h4>
+    </div>
+    <ul class="nav nav-pills nav-stacked js-sub-tab">
+        <li {% if section.sub == "manage_jobs" %}class="active" {% endif %} ><a href="/pagetab/admin/jobs"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Manage Jobs</a></li>
+        <li {% if section.sub == "job_sharing" %}class="active" {% endif %}><a href="/pagetab/admin/share"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Job Sharing</a></li>
+        <li {% if section.sub == "account_settings" %}class="active" {% endif %}><a href="/pagetab/admin/account"><span class="glyphicon glyphicon-chevron-right pull-right"></span>Account Settings</a></li>
+    </ul>
+    <p>&nbsp;</p>
+     <div class="side-box">
+        {% if data.career_page_url %}
+            <a href="{{ data.career_page_url }}" target="_new" class="btn btn-primary">Open Company Career Tab</a>
+        {% endif %}
+    </div>
+</div>

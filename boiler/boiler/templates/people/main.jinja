@@ -1,0 +1,55 @@
+
+
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        <div class="{{ section.main }}_{{ section.sub }}">
+
+            {# MAIN CONTENT #}
+
+            {# LEFT-SIDEBAR #}
+            <aside class="col-md-3">
+                    {% if (show and show.connectionMulti) %}
+                        <div class="panel panel-default">
+                            {% include('people/profile_connections_enhance.jinja') %}
+                        </div>
+                    {% endif %}
+                    {% if (show and show.connectionSingle) %}
+                        <div class="panel panel-default">
+                            {% include('people/profile_connections.jinja') %}
+                        </div>
+                    {% endif %}
+                    {% if section.sub == "people_search" %}
+                        {% include ('people/search/sidebar.jinja') %}
+                    {% else %}
+                        {% include ('people/listing/sidebar.jinja') %}
+                    {% endif %}
+            </aside>
+
+            {# CENTER PART #}
+            <div  class="{{ 'col-md-6' if (show and show.right_sidebar) else 'col-md-9' }}">
+                <section class="panel panel-default">
+                    <header class="panel-heading">
+                            {% include ('people/title.jinja') %}
+                    </header>
+                    <div id="subcontainer" class="panel-body panel-padding-muted">{% block search_result_block %} {% endblock search_result_block %}</div>
+                </section>
+            </div>
+
+
+            {# sectionRIGHT-SIDE #}
+            {% if show and show.right_sidebar %}
+                <div class="col-md-3">
+                    <div class="panel panel-default">
+                        {% include ('people/search/right_sidebar.jinja') %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

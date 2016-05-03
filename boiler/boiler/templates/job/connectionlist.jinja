@@ -1,0 +1,76 @@
+{% extends "layout/ajax.jinja" %}
+
+{% block ajaxcontent %}
+
+    {% if  (connections and (connections[1].users or connections[2].users or connections[3].users or connections[4].users))  %}
+        <div class="jd-connections container js-row-each jd-connections-band">
+            <div class="row text-center">
+                <h4>
+                    {% if section.sub == "recommendedCandidates" %}
+                        You have connections who can be good match for this job.<span class="text-muted"> View their profiles now!</span>
+                    {% else %}
+                        You have connections at this company ! Click for help. <span class="text-muted">(5x better chances of getting hired with a referral)</span>
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="jd-scroll-wrap">
+                <div class="row jd-scroll">
+                    <ul class="jcarousel-skin-tango list-unstyled js-carousel" style="width:5000px">
+                        {% for x in connections %}
+                            {% if connections[x].users %}
+                                <li class="jd-img-space">
+                                    {% if connections[x].title  %}
+                                    <div class="jd-connect-thumb-title" style="width:{{ (connections[x].users | length) * 100 + 50 }}px; ">
+                                        <p>
+                                            <span> {{ connections[x].title }} </span>
+                                        </p>
+                                        <span class="dot-line"></span>
+                                    </div>
+                                    {% endif %}
+                                </li>
+
+                                {% for y in connections[x].users %}
+                                <li class="img-connection" style="width:100px;">
+                                    {% if section.sub == "recommendedCandidates" %}
+                                        {{ html.imageWithProfileUrl(connections[x].users[y]) }}
+                                    {% else %}
+                                    	{% if connections[x].users[y].connection_type == 'linkedin' %}
+                                    		<a href="/jobs/askreferral/{{ jobID }}/{{ connections[x].users[y].id }}?{{ connections[x].users[y].params }}&{{ params }}">
+                                                <img src="{{ connections[x].users[y].pictureUrl }}" alt="{{ connections[x].users[y].name }}" title="{{ connections[x].users[y].name }}"  />
+                                            </a>
+                                    	{% else %}
+                                            <a class="js-jd-introducelist-link" action="/jobs/introductionlist/{{ jobID }}/{{ connections[x].users[y].fb_id }}?{{ connections[x].users[y].params }}&{{ params }}" href="#">
+                                                <img src="{{ connections[x].users[y].pictureUrl }}" alt="{{ connections[x].users[y].name }}" title="{{ connections[x].users[y].name }}"  />
+                                            </a>
+                                    	{% endif %}
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="js-introducelist"></div>
+        </div>
+    {% else %}
+        <div class="jd-connections container">
+            <div class="row">
+                <div class="jd-no-connection hidden-xs">
+                    <div class="pull-left sprite glyphicon glyphicon-no-connection"></div>
+                    <div class="pull-left">
+                    {% if section.sub == "recommendedCandidates" %}
+                        <h4> No Candidates Found </h4>
+                    {% else %}
+                        <p class="tx-14">You're not yet connected at this company. </p>
+                        <a href="#" onclick="window.open('/fbinviteredirect?start=1&redirect_uri=/job/{{ jobID }}','', 'width=500,height=250');" class="tx-14" >
+                            Connect with friends to see who they know here.
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock ajaxcontent  %}

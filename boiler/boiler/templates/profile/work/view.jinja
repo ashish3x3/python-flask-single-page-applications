@@ -1,0 +1,50 @@
+<div class="pull-right hide  js-profile-sub-single-edit">
+	<a href="/profile/work/delete/{{ work.id }}" class="glyphicon glyphicon-trash-o js-remove-action "></a>
+	<span class="text-muted">&nbsp;|&nbsp;</span>
+	<a href="/profile/work/edit/{{ work.id }}" class="glyphicon glyphicon-pencil-square-o js-replace-action js-profile-edit-link"  method="GET"></a>
+</div>
+<h4>
+	{{ work.company }}
+</h4>
+{% set months = { 1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'Jun',
+								  7:'Jul', 8:'Aug', 9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec' } %}
+<p>
+	<strong>
+		{% if work.position %}
+			{{ work.position }}
+		{% endif %}
+	</strong>
+
+<br>
+	{% if work.from_year != '0000' %}
+		{{ months[work.from_month|int] }} {{ work.from_year }}
+	{% endif %}
+
+	{% if work.present and work.from_year != '0000' and work.from_year != '' %}
+		till Present
+	{% else %}
+		{% if work.to_year != '0000' and work.to_year != '-' and work.to_year != '' and work.to_month %}
+			till {{ months[work.to_month|int] }} {{ work.to_year }}
+		{% endif %}
+	{% endif %}
+<br>
+
+{% if work.location %}
+	{{ work.location }}
+{% endif %}
+</p>
+{#
+{% if work.industry or work.functional_area %}
+<h5 class="color_grey">
+	{{ work.industry }}
+		{% if work.industry and work.functional_area %} , {% endif %}
+	{{ work.functional_area }}
+</h5>
+{% endif %}
+#}
+
+{% if work.summary %}
+<p>
+	{{ work.summary }}
+</p>
+{% endif %}

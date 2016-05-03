@@ -1,0 +1,25 @@
+{% extends "layout/default_enterprise_layout.jinja" %}
+{% block main_content %}
+          
+<img id="ad" src="/static/img/mob_app_add.png">
+<div class="col-md-5 login" style="text-align:center;">
+  <a href="/enterprise"><img src="/static/img/sidebar-logotype.png"></a>
+  <div id="login_enterprise" class="col-md-8">
+        <form id="enterprise_login" method="post" action="" >
+            <div class="form-group">
+                <label class="control-label" for="email">Email</label>
+                <input id="email" name="email" class="" type="text" placeholder="email">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input id="password" name="password" class="" type="text" placeholder="password">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="entLogin"></label>
+                <button  id="btn_login_enterprise" type="button" data-ember-action="13" class="primary" style="position:relative;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Logging In">Login</button>
+            </div>
+        </form>
+    </div> 
+</div>
+{% endblock main_content %}

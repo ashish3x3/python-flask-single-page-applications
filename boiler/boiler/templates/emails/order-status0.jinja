@@ -1,0 +1,148 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <td bgcolor="#f7f7f9">
+        <table width="" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#68c1ec" style="background:#68c1ec;margin-bottom: 30px;">
+          <tbody>
+            <tr>
+              <td valign="top">
+                <a href="#146a39c5dc1b770c_140839483da7d746_">
+                  <img border="0" style="margin:0px;padding:0px;display:block" src="https://c2.staticflickr.com/4/3941/14915340643_dd66d0d89c_z.jpg" alt="MyWash - Clean clothes, at the tap of a button">
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table width="581" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#f7f7f9" style="border-bottom: 1px solid #E1E1E1;margin-bottom: 30px;">
+          <tbody>
+            <tr>
+              <td valign="top" style="font-family:Helvetica,Arial,sans-serif">
+                <table cellpadding="0" cellspacing="0" width="100%" style="background: #f7f7f9;">
+                  <tbody>
+                    <tr>
+                      <td style="padding-bottom:10px">
+                        <h2 style="font-size:22px;font-weight:bold; color: #666666; font-family: 'Myriad Pro','Arial',sans-serif;  font-weight: 300;">
+                          <span class="il">Dear</span> {{emails.user}},
+                        </h2>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666666;font-size: 16px;padding-bottom:17px;font-family: 'Myriad Pro','Arial',sans-serif;font-weight: 300;font-weight: 2;">
+                        Thank you for placing your order with MyWash! Our folks shall arrive at your address to pick up your clothes in the requested time slot.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666666;font-size: 16px;padding-bottom:17px;font-family: 'Myriad Pro','Arial',sans-serif;font-weight: 300;font-weight: 2;">
+                        If you need any assistance with your order, please write to us at support@mywash.com
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666666;font-size: 16px;padding-bottom:17px;font-family: 'Myriad Pro','Arial',sans-serif;font-weight: 300;font-weight: 2;">
+                        Regards, <br> Team MyWash
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table width="581" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse;height:30px">
+          <tbody>
+            <tr>
+              <td style="text-align:center;font-size:18px;color: #666666;padding-bottom: 17px; font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;font-size: 16px;">
+                <h2 style="float:left; font-size:22px;display:block; font-weight:400;">
+                  Order ID: #{{emails.orderid}}
+                </h2>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table width="581" border="0" align="center" bgcolor="#f7f7f9" style="border-top: 1px solid #E1E1E1;margin-bottom: 30px;background: #fff;border-bottom: 1px solid #E1E1E1;">
+          <tbody>
+            <tr>
+              <td valign="top" style="padding: 0px 13px 10px 14px;font-family:Helvetica,Arial,sans-serif">
+                <table width="581">
+                  <thead style="">
+                    <tr style="height: 50px;border: 0;padding: 0;margin: 0;font-family: 'Myriad Pro','Arial',sans-serif;font-size: 20px;font-weight: 300;color: #12b8db;">
+                      <td style="border: 0;margin: 0;">Pick up Address</td>
+                      <td style="margin: 0;padding: 0;/* display: none; */">Pick up Time</td>
+                      <td style="margin: 0;padding: 0;/* display: none; */">Delivery time</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;width: 45%;">
+                        {{emails.pickup_address.result[0].apartment_number}}
+                        {{emails.pickup_address.result[0].address_1}}
+                        {{emails.pickup_address.result[0].pincode}}
+                        {{emails.pickup_address.result[0].city}}
+                        {{emails.pickup_address.result[0].state}}<br>
+                        Ph- {{emails.phone}}<br>
+                        Wash type - {{emails.type}}
+                      </td>
+                      <td style="font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;margin: 0;padding: 0;vertical-align: top;">
+                        {{emails.pickup.result[0].schedule_date}}<br>
+                        {{emails.pickup.result[0].schedule_time}}
+                      </td>
+                      <td style="font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;margin: 0;padding: 0;vertical-align: top;">
+                        {{emails.delivery.result[0].schedule_date}}<br>
+                        {{emails.delivery.result[0].schedule_time}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table width="581" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse;height:30px">
+          <tbody>
+            <tr>
+              <td style="text-align:center;font-size:18px;color: #666666; font-size: 16px; padding-bottom: 17px; font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;">
+                Follow Us for Offers and Updates
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- begins -->
+        <table width="100" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse;height:70px;text-align:center;border-bottom:1px solid #e1e1e1;margin-bottom:30px">
+           <tbody>
+            <tr>
+              <td width="30">
+                <a href="https://www.facebook.com/mywashapp" style="text-decoration:none">
+                  <img width="30" height="30" border="0" src="http://www.ala.org/news/sites/ala.org.news/files/content/facebook-icon.png" style="text-decoration:none;display:block;outline:none" class="CToWUd">
+                </a>
+              </td>
+              <td width="30">
+                <a href="https://twitter.com/mywashapp" style="text-decoration:none">
+                  <img width="30" height="30" border="0" src="http://www.phonodelsol.com/wp-content/themes/SCRN/images/icn-twitter-intro.png" style="text-decoration:none;display:block;outline:none" class="CToWUd">
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+         <!-- ends -->
+        <table width="581" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse;height:30px">
+          <tbody>
+            <tr>
+              <td style="text-align:center;font-size:18px;color: #666666; font-size: 16px; padding-bottom: 17px; font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;">
+                <small>
+                  Service tax @ 14% is applicable
+                </small>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:center;font-size:18px;color: #666666; font-size: 16px; padding-bottom: 17px; font-family: 'Myriad Pro','Arial',sans-serif; font-weight: 300;">
+                <small>&copy; MyWash Technologies Pvt Limited, Bangalore</small>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table width="581" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse;height:30px">
+          <tbody><tr></tr></tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

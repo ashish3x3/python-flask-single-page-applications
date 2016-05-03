@@ -1,0 +1,7 @@
+{% if aboutme %}
+    <p>{{ aboutme }}</p>
+{% elif profile_user.fb_id == user.fb_id %}
+    <div class="profile_contents empty-list">Write about yourself</div>
+{% else  %}
+    <div class="profile_contents empty-list">No Information added</div>
+{% endif %}

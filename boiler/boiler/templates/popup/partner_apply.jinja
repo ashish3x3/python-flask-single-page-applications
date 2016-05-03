@@ -1,0 +1,23 @@
+{% extends 'layout/modal.jinja' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12 partnership-logo-block">
+		<img src="{{ applybanner }}" title="Partnered With MyParichay" width="100%" />
+		<p>&nbsp;</p>
+	</div>
+</div>
+<div>
+	<p>
+		<strong>Sign in and find out what Professional Diversity Network’s partnership with MyParichay can do for you:</strong>
+	</p>
+	<p>MyParichay helps you leverage the power of your valuable Facebook connections to build a network that helps you succeed. You have a lot of friends and they have a lot of friends who work for great companies. Put these connections to work for you! MyParichay is completely private and secure. So sign up today and learn about positions that match your qualifications. We’ve done the work, now you reap the benefits.</p>
+</div>
+{% endblock content %}
+
+
+{% block footercontent %}
+<div class="text-center">
+	{{ html.loginbutton('facebook',request, 'pull-center','BannerOrange') }}
+</div>
+{% endblock footercontent %}

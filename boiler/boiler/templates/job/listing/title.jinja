@@ -1,0 +1,18 @@
+
+<div class="pull-left">
+    <strong>
+        {% if pagination %}
+            <span class="main-connection-count"> {{ pagination.total_results }} </span> {{ 'job' | pluralize(pagination.total_results) }}
+        {% else %}
+            {{ section.title }}
+        {% endif %}
+    </strong>
+</div>
+
+<div class="pull-right">
+    {% if section.sub=="posted_jobs" %}
+        <a href="/jobs/edit/0" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link" id="post_a_job_right">Post a Job</a>
+    {% elif section.sub=="manage_jobs" %}
+        <a href="/pagetab/admin/jobs/new" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" class="js-main-container-link" >Post a Job</a>
+    {% endif %}
+</div>

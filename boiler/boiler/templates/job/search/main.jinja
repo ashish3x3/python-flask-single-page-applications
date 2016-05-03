@@ -1,0 +1,28 @@
+{% if not request.is_xhr %}
+    {% extends "layout/defaultlayout.jinja" %}
+{% else %}
+    {% extends "layout/ajax_content.jinja" %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        {#--MAIN CONTENT---#}
+        <div class="{{ section.main }}_{{ section.sub }}">
+            <aside class="col-md-3">
+               {% include ('job/search/sidebar.jinja') %}
+            </aside>
+            
+            {# RESULT PART #}
+            <div class="col-md-9">
+                <section class="panel panel-default">
+                    {#--HEADING PART-#}
+                    <header class="panel-heading">{% include ('job/search/title.jinja') %}</header>
+                    <div id="subcontainer" class="panel-body panel-padding-muted">
+                        {% block search_result_block %} {% endblock search_result_block %}</div>
+                </section>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock content %}

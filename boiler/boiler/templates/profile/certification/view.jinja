@@ -1,0 +1,21 @@
+<div class="pull-right hide  js-profile-sub-single-edit">
+	<a href="/profile/certification/delete/{{ certification.id }}" class="glyphicon glyphicon-trash-o js-remove-action"></a><span class="text-muted">&nbsp;|&nbsp;</span>
+	<a href="/profile/certification/edit/{{ certification.id }}" class="glyphicon glyphicon-pencil-square-o js-replace-action js-profile-edit-link" method="GET"></a>
+</div>
+{% if certification.name %}
+<h4>
+	{{ certification.name }}
+</h4>
+{% endif %}
+
+{% if certification.year %}
+<p>
+	{{ certification.year }}
+</p>
+{% endif %}
+
+{% if certification.summary %}
+<p>
+	{{ certification.summary }}
+</p>
+{% endif %}

@@ -1,0 +1,23 @@
+<div class="side-box">
+    <div class="sidebox-content">
+        <div class="list-group">
+            <span class="list-group-item active" class="pull-right">
+                {{ pagination.total_connected_friends }} candidates found 
+            </span>
+            
+            {% if connectionsmulti %}
+            <span class="list-group-item" class="pull-right">
+                Through <br />
+                <b>{{ connectionsmulti.candidates }} candidates</b>
+            </span>
+            {% endif %}
+            
+            {% if job.id %}
+            <span class="list-group-item" class="pull-right">
+                For the job <br />
+                <b><a href="/job/{{ job.id }}" target="_blank">{{ job.headline }}</a></b>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>

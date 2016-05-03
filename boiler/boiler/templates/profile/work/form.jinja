@@ -1,0 +1,124 @@
+<form method="post" class="form-horizontal js-work-form js-track-analytics js-replace-form js-write-permission" onsubmit="return false;"  action="/profile/work/edit/{{ ID }}" data-getperm="{% if user.write_permission == false %}true{% endif %}">
+	<fieldset>
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_company_{{ ID }}">Company:</label>
+			<div class="col-md-9">
+				<input class="form-control" type="text" value="{{ work.company }}"  maxlength="255"
+					required id="work_company_{{ ID }}" name="company" data-searchtype="page"  />
+				<input type="hidden" name="company_id" class="prefill"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_position_{{ ID }}">Position:</label>
+			<div class="col-md-9">
+				<input class="form-control"type="text"  value="{{ work.position }}"
+					required id="work_position_{{ ID }}" name="position"   />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_location_{{ ID }}">Location:</label>
+			<div class="col-md-9">
+				<input class="form-control"type="text"  value="{{ work.location }}"
+					required id="work_location_{{ ID }}" name="location"  data-searchtype="adcity"  />
+				<input type="hidden" name="location_id"  class="prefill"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_from_month_{{ ID }}">Duration:</label>
+			<div class="col-md-9 year_from_to">
+				<span class="start-date">
+					{% set months = { 1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'Jun',
+									  7:'Jul', 8:'Aug', 9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec' } %}
+					<select class="form-control" name="from_month" id="work_from_month_{{ ID }}" >
+						<option value="">Mon</option>
+						{% for x in months %}
+						<option value="{{ x }}" {% if x == (work.from_month | int) %} selected {% endif %}>
+							{{ months[x] }}
+						</option>
+						{% endfor %}
+					</select>
+					<select class="form-control" name="from_year" id="work_from_year_{{ ID }}"  required>
+						<option value="">Year</option>
+						{% for x in range(1940, 2015) | reverse %}
+						<option value="{{ x }}" {% if x == (work.from_year | int)  %} selected {% endif %}>
+							{{ x }}
+						</option>
+						{% endfor %}
+					</select>
+				</span>
+				<span> to </span>
+				<span class="end-date" style="display: inline-block">
+					<span class="{% if work.present %} hide {% else %} show {% endif %}">
+						<select class="form-control" name="to_month" id="work_to_month_{{ id }}" >
+							<option value="">Mon</option>
+							{% for x in months %}
+								<option value="{{ x }}" {% if x == (work.to_month | int)  %} selected {% endif %}>
+									{{ months[x] }}
+								</option>
+							{% endfor %}
+						</select>
+						<select class="form-control" name="to_year" id="work_to_year_{{ ID }}"  >
+							<option value="">Year</option>
+							{% for x in range(1940, 2015) | reverse  %}
+							<option value="{{ x }}" {% if x == (work.to_year | int) %} selected {% endif %}>
+								{{ x }}
+							</option>
+							{% endfor %}
+						</select>
+					</span>
+					<span class="{% if not work.present %} hide {% else %} show {% endif %}"> <b>Present</b> </span>
+				</span>
+				<label class="checkbox">
+					<input type="checkbox" name="present" value="1" id="work_present_{{ ID }}"
+					{% if work.present %} checked {% endif %} class="current">
+					I currently work here
+				</label>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_industry_{{ ID }}">Industry:</label>
+			<div class="col-md-9">
+				<select class="form-control" name="industry" id="work_industry_{{ ID }}">
+					<option value="">Select</option>
+					{% for x in industry %}
+					<option value="{{ industry[x].id }}" {% if industry[x].id == work.industry %} selected {% endif %}>
+						{{ industry[x].name }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_functional_area_{{ ID }}">Functional Area:</label>
+			<div class="col-md-9">
+				<select class="form-control" name="functional_area" id="work_functional_area_{{ ID }}">
+					<option value="">Select</option>
+					{% for x in functional_area %}
+					<option value="{{ functional_area[x].id }}"
+						{% if functional_area[x].id == work.functional_area  %} selected {% endif %} "">
+						{{ functional_area[x].name }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="work_summary_{{ ID }}">Summary:</label>
+			<div class="col-md-9">
+				<textarea class="form-control"name="summary" rows="5" maxlength="500" id="work_summary_{{ ID }}">{{ work.summary }}</textarea>
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary {% if user.write_permission == false %}hide{% endif %}" >Save</button>
+			<a onclick="window.open('{{ JCONSTANTS.FB_PERMISSIONS_URL }}%3F%26submitform%3D.js-write-permission','','width=500,height=500');" class="btn btn-primary js-perm-button {% if user.write_permission != false %}hide{% endif %}">Save</a>
+			<button type="button" class="btn js-landing-cancel">Cancel</button>
+		</div>
+	</fieldset>
+</form>

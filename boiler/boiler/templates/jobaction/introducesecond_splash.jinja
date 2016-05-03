@@ -1,0 +1,32 @@
+{% extends 'layout/defaultlayout.jinja' %}
+
+{% block title%}
+    <h3>Candidate Introduction</h3>
+{% endblock title%}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default main-splash">
+            <div class="panel-body text-center text-muted">
+                <br><br><br>
+                <p>
+                    <img src="/static/img/pictures/connections_large.png" width="" height="" />
+                    <br><br>
+                </p>
+                <p class="tx-16">
+                    <strong class="text-info">{{ introducer.name }}</strong> would like to introduce {{ 'his' | gender(introducer.gender) }} friend <strong class="text-info">{{ candidate.name }}</strong>.
+                </p>
+                <p class="tx-16">
+                    <strong>{{candidate.name }} is interested in a current job opening at {{ job.company.name }}.</strong>
+                </p><br><br>
+                <p>
+                    <a class="btn btn-primary" href="/detail/introducesecond/{{ ID }}"> Open this request </a>
+                </p>
+                <br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

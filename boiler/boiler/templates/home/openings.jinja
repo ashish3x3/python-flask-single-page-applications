@@ -1,0 +1,24 @@
+<div class="panel panel-default" id="home_openings">
+    <header class="panel-heading">
+        <h4 class="pull-left">Openings at your Firm: {{ user.company.name if user.company else 'NA' }}</h4>
+        <div class="pull-right"><small>Not your current employer? <a href="/profile/{{ user.fb_id }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link">Update</a> Employer</small></div>
+    </header>
+
+    {% if (user.company and user.company.name) %}
+         <div  class="panel-body panel-padding-muted js-autofill js-content" href="/jobs/search?{{ user.company.name | stringurlencode('companyname') }}&clusterview=1&sub=1&view=mini&selfcompany=1&analytics=off" data-loading-selector="none">
+            <div class="loader-lg"><i class="glyphicon glyphicon-spinner glyphicon-spin"></i></div>
+        </div>
+    {% else %}
+        <div class="panel-body">
+            <div class="result-empty">
+             You have no Employers listed on your profile. <a href="/profile/{{ user.fb_id }}" data-menu-item="{{ constants.MENU_ITEMS.PROFILE }}" class="js-main-container-link">Please update your profile</a> to see jobs to which you can refer your friends and earn referral rewards.
+            </div>
+        </div>
+    {% endif %}
+
+    {% if user.company and user.company.name %}
+    <footer class="panel-footer">
+        <div class="pull-right"><a href="/jobs/search?{{ user.company.name | stringurlencode('companyname') }}&selfcompany=1&clusterview=1" role="link" class="link js-main-container-link" data-menu-item="{{ constants.MENU_ITEMS.JOB }}" >View All</a></div>
+    </footer>
+    {% endif %}
+</div>

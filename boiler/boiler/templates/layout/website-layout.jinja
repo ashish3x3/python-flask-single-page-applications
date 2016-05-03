@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+  <!-- Basic Page Needs
+  ================================================== -->
+  <meta charset="utf-8">
+  <title>MyWash - Clean clothes at the tap of a button</title>
+
+
+  <!-- Mobile Specific Metas
+  ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="/static/web-css/base.css">
+  <link rel="stylesheet" href="/static/web-css/skeleton.css">
+  <link rel="stylesheet" href="/static/web-css/layout.css">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <!-- Favicons
+  ================================================== -->
+  <link rel="shortcut icon" href="/static/img/favicon.ico">
+  <link rel="apple-touch-icon" href="/static/web-images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/static/web-images/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/static/web-images/apple-touch-icon-114x114.png">
+
+
+    <!-- for Google -->
+     <meta name="description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash.in is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta name="keywords" content="" />
+
+     <meta name="author" content="" />
+     <meta name="copyright" content="" />
+     <meta name="application-name" content="" />
+
+     <!-- for Facebook -->         
+     <meta property="og:title" content="MyWash - Clean clothes at the tap of a button" />
+     <meta property="og:image" content="https://c2.staticflickr.com/6/5598/15349058409_c04348f281.jpg" />
+     <meta property="og:url" content="www.mywash.in" />
+     <meta property="og:description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="850">
+     <meta property="og:image:height" content="313">
+
+     <!-- for Twitter -->         
+     <meta name="twitter:card" content="summary" />
+     <meta name="twitter:title" content="MyWash" />
+     <meta name="twitter:description" content="MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash is simply the best  laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand" />
+     <meta name="twitter:image" content="http://c2.staticflickr.com/4/3952/15349058449_5b50b9b007.jpg" /> 
+
+  <script src="/static/web-js/jquery.js"></script>
+
+</head>
+<body>
+
+
+
+  <!-- Primary Page Layout
+  ================================================== -->
+
+  <!-- Delete everything in this .container and get started on your own site! -->
+
+
+<div id="nav-wrapper" >
+  <div class="container">
+    <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+
+    <div id="navigation" class="eight columns">
+
+      <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+      <a id="menu" href="#"><img src="/static/web-images/menu.png" title="dry cleaning service near kormangala" alt="dry cleaning service near me"></a>
+
+
+      <ul>
+        <li><a href="#home">Home<img id="onclick" src='/static/web-images/hanger-small.png' title="Mywash - wash and iron service" alt="Mywash dry cleaning service India"></a></li>
+        <li><a href="#howitworks">How it works</a></li>
+        <li><a  href="#areas">Areas we serve</a></li>
+        <li><a  href="#price">Pricing</a></li>
+        {% if  session.access_token %} 
+         <li><a href="/logout">Log Out</a>  </li>
+        {% else %} 
+        <li><a  href="/login">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+{% block clothes_modal %}{% endblock %}
+
+
+<div id="footer">
+
+  <div class="container">
+
+    <div class="four columns">
+
+      <h4>Company</h4>
+      <h5><a href="#">About</a></h5>
+      <h5><a href="#">How MyWash works?</a></h5>
+      <h5><a href="#">Terstimonials</a></h5>
+      <h5><a href="#">Terms & Conditions</a></h5>
+      <h5><a href="#">Policy</a></h5>
+
+      <br>
+      <br>
+
+      <h4>Phone</h4>
+      <h5>9999 8888</h5>
+
+    </div>
+
+
+    <div class="four columns">
+
+      <h4>Follow us</h4>
+      <h5><a href="#">Facebook</a></h5>
+      <h5><a href="#">Twitter</a></h5>
+      <h5><a href="#">Google Plus</a></h5>
+      <h5><a href="#">LinkedIn</a></h5>
+
+    </div>
+
+    <div class="eight columns">
+
+      <a id="mobile-logo" href="#"><img src="/static/web-images/logo.png" title="Online Laundry Service At Doorstep" alt="Mywash- Online Laundry Service"></a>
+      <h4>MyWash.in - Online Laundry & Dry cleaning India</h4>
+      <p>MyWash.in is the best online laundry service & online dry washing service in India. MyWash is the easiest way to get your laundry & dry cleaning done in India. We do your laundry and dry cleaning and deliver at just the tap of a button. MyWash.in is simply the best laundry & dry cleaning service in India. We provide laundry and dry cleaning services on-demand. MyWash.in picks up your dirty laundry and dry cleaning, and returns them clean, ironed, and folded within about a day.</p>
+
+      <p>Through MyWash app you can place an order on your phone or tablet, including pickup and drop-off time scheduling. A MyWash agent will arrive at the time you scheduled to pick up your laundry and dry cleaning, and within 48-72 hours your clothes are delivered in reusable non-plastic bags, washed and folded. MyWash.in is the online laundry service, online dhobi, awesome laundry service, one-stop laundry center, laundry app, dry cleaning service, laundry & dry cleaning service, you have been waiting for. We are currently providing our online laundry & dry cleaning service in Bangalore - Koramangala, HSR, BTM, Bellandur, Domlur, Indiranagar (stretch), Bannerghatta / J.P Nagar (stretch), Adugodi, & Ejipura.
+
+</p>
+
+    </div>
+
+
+  </div>
+
+</div>
+  <script type="text/javascript" src="/static/web-js/mywash.js"></script>
+
+<!-- End Document
+================================================== -->
+
+
+
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/static/css/mywash.css" rel="stylesheet" type="text/css">
+<link href="/static/css/estimator.css" rel="stylesheet" type="text/css">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/mywash.js"></script>
+<script src="/static/js/social-likes.min.js"></script>
+
+<script src="http://amsul.ca/pickadate.js/lib/picker.js"></script>
+<script src="http://amsul.ca/pickadate.js/lib/picker.date.js"></script>
+<script src="http://amsul.ca/pickadate.js/lib/picker.time.js"></script>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment.js"></script>
+
+<script src="/static/js/ajax.js"></script>
+
+</body>
+</html>
+
