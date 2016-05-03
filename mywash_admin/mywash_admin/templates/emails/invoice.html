@@ -1,0 +1,139 @@
+<body style="margin:0; padding:0;">
+	<div style="width:100%; font-family:Impact, Charcoal, sans-serif;">
+		<table style="width:600px; background:#fff;border:1px dotted #dadada; color: #585858" align="center">
+			<tr>
+				<td width="100%">
+					<table width="100%">
+						<tbody>
+							<tr>
+								<td width="60%">
+									<img src="{{image_server}}" style="width:150px">
+								</td>
+								<td width="">
+									<span style="font-size:35px;">Invoice</span>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<span style="font-size:15px;">Invoice number: {{customer_details.order_id}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<span style="font-size:15px;">Date: {{current_date}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="font-size:15px;">
+					<div>Name: {% if customer_details.user.name %}{{customer_details.user.name|capitalize}}{% else %}Customer{% endif %}</div>
+					<div>Phone: {{customer_details.user.phone}}</div>
+					<div>Service type: {{customer_details.service_type|capitalize}}</div>
+					<div>OrderId: #{{customer_details.order_id}}</div>
+				</td>
+			</tr>
+			<td><td><br></td></td>
+			<tr>
+				<td style="font-size:15px;">
+					<div>Greetings from Mywash!</div>
+					<div>Dear {% if customer_details.user.name %}{{customer_details.user.name|capitalize}}{% else %}Customer{% endif %},</div>
+					<div>Your invoice amount for the order #{{customer_details.order_id}} is &#x20b9;{{customer_details.cost.total}}</div>
+				</td>
+			</tr>
+			<td><td><br></td></td>
+			<tr>
+				<td style="font-size:15px;">
+					<span style="font-style:italic; width:20%;">Order details</span>
+					<span style="width:80%; color:#12b8db;font-size:30px;">_____________________________
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="font-size:15px; padding:0px 20px 20px 80px;">
+					<table  style="text-align:center; font-family:Impact, Charcoal, sans-serif; font-size:15px; width:100%;" >
+						<tr style="border-radius: 4px 4px 0 0; color:#585858;">
+							<td style="padding:5px;">Product</td>
+							<td style="padding:5px;">No. of pieces</td>
+							<td style="padding:5px;">Unit price (&#x20b9;)</td>
+							<td style="padding:5px;">Total (&#x20b9;)</td>
+						</tr>
+						{% for item in data %}
+							{% if item.final_cost %}
+							<tr style="border-radius: 4px 4px 0 0; font-size:13px;">
+								<td style="padding:5px;">{{item.title}}</td>
+								<td style="padding:5px;">
+									{% if item.quantity.laundry %}{{item.quantity.laundry}}{% else %}0{% endif %}-{% if item.quantity.dryclean %}{{item.quantity.dryclean}}{% else %}0{% endif %}-{% if item.quantity.iron %}{{item.quantity.iron}}{% else %}0{% endif %}
+								</td>
+								<td style="padding:5px;">
+									{% if item.price.laundry %}{{item.price.laundry}}{% else %}0{% endif %}-{% if item.price.dry_cleaning %}{{item.price.dry_cleaning}}{% else %}0{% endif %}-{% if item.price.iron %}{{item.price.iron}}{% else %}0{% endif %}
+								</td>
+								<td style="padding:5px;">
+									{{item.final_cost}}
+								</td>
+							</tr>
+							{% endif %}
+						{% endfor %}
+					</table>
+					<br>
+					<br>
+					<br>
+					<table  style="text-align:center; font-family:Impact, Charcoal, sans-serif; font-size:13px; width:100%;" >
+						<tr style="text-align:right;">
+							<td colspan="2"></td>
+							<td>Subtotal:</td>
+							<td>{{customer_details.cost.sub_total}} &#x20b9;</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td colspan="2"></td>
+							<td>Discount:</td>
+							<td>{{customer_details.discount.total}} &#x20b9;</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td colspan="2"></td>
+							<td>Service tax ({{customer_details.service_tax.rate}}%):</td>
+							<td>{{customer_details.service_tax.amount}} &#x20b9;</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td colspan="2"></td>
+							<td>Credits:</td>
+							<td>{{customer_details.credits.used}} &#x20b9;</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td colspan="2"></td>
+							<td style="font-size:17px">Amount Payable:</td>
+							<td>{{customer_details.cost.total}} &#x20b9;</td>
+						</tr>
+						{% if 'is_paid' in customer_details and customer_details.is_paid == 'paid' %}
+							<tr style="text-align:right;">
+								<td colspan="2"></td>
+								<td style="font-size:13px">Payment Status</td>
+								<td style="font-size:15px">Paid</a></td>
+							</tr>
+						{% else %}
+							<tr style="text-align:right;">
+								<td colspan="2"></td>
+								<td style="font-size:13px">Make Online Payment</td>
+								<td><a style="color:#fff; text-decoration: none; padding:5px; background-color:#1195aa; border-radius: 3px;" href="{{ pay_now }}">Pay Now</a></td>
+							</tr>
+						{% endif %}
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:center; background-color:#0d8aa5; font-size: 12px; color:#fff;padding:5px;">
+					<i>For further questions please contact 080-39591212 or write to us at <a style="color:#fff;" href="mailto:team@mywash.com">team@mywash.com</a>.</i>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:center; font-size:30px; background-color:#1195aa; padding:20px; color:#fff">
+					<i>Thank You For Your Order!</i>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</body>

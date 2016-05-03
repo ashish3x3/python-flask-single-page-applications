@@ -1,0 +1,556 @@
+{% raw %}
+<div class="row no-print" id='all-orders'>
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10 col-xs-10 col-sm-10">
+                        All orders
+                    </div>
+                    <div class="col-md-2 col-xs-2 col-sm-2">
+                        Total: {{rowCount}}
+                    </div>
+                </div>
+            </header>
+            <div class="panel-body">
+                <div class="btn-row col-lg-3">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-primary" type="button" can-click="pickupPrevday" title="Prev day">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button class="btn btn-danger order-datepicker datepicker-here" type="button" title="Choose day">
+                            <i class="fa fa-calendar"></i>
+                            {{#getFormattedDate orderDate}}{{/getFormattedDate}}
+                        </button>
+                        <button class="btn btn-warning btn-refresh" type="button" can-click="orderRefresh" title="Refresh">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                        <button class="btn btn-primary" type="button" can-click="pickupNextday" title="Next day">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-9" style="font-size:30px; text-align:center;">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-filter"></i> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li can-click="selectSearchOption" data-option="name">
+                                    <a href="javascript:void(0)"><i class="fa fa-user"></i> Name</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="email">
+                                    <a href="javascript:void(0)">@ Email</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="phone">
+                                    <a href="javascript:void(0)"><i class="fa fa-phone"></i> Phone</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="oid">
+                                    <a href="javascript:void(0)"># </i> Order Id</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" placeholder="Search Here (example- email:xyz or name:xyz)" class="form-control search-input" style="z-index:0" can-keyup="captureEnterKey">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-search-go" can-click="searchOrders"> Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <table class="table table-striped table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <button class="btn btn-default btn-xs" can-click="toggleRowCheck"><i class="fa fa-check check-all"></i></button>
+                        </th>
+                        <th><i class="fa fa-user"></i> Name</th>
+                        <th># Order Id</th>
+                        <th><i class="fa fa-inr"></i> Cost</th>
+                        <th><i class="fa fa-edit"></i> Status</th>
+                        <th><i class="fa fa-building-o"></i> Hub</th>
+                        <th><i class="fa fa-cloud-download"></i> Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each orderData}}
+                    <tr index="{{order_id}}" style="cursor: pointer">
+                        <td>
+                            <button class="btn btn-default btn-xs pickup-checkbox" can-click="toggleRowCheck"><i class="fa fa-check"></i></button>
+                        </td>
+                        
+                        <td><a class="openOrderModal" href="#">{{#if user_info.name}}{{#capitalize user_info.name }}{{/capitalize}}{{else}}&lt;NO-NAME&gt;{{/if}}</a></td>
+                        <td>
+                            {{#if real_order_id}}
+                                {{real_order_id}}
+                            {{else}}
+                                <span style="font-weight:bold; font-size:16px;">-</span>
+                            {{/if}}
+                        </td>
+                         <td>
+                        {{#ifEqual is_paid "paid"}}
+                                <span class="label label-success label-mini">
+                                {{cash_collected}}/{{total_price}}
+                                </span>
+                        {{else}}
+
+                            {{#ifEqual is_paid "excess_paid"}}
+                                <span class="label label-primary label-mini">  
+                                 
+                                
+                                    {{cash_collected}}/{{total_price}}
+                                </span> 
+                            {{/ifEqual}} 
+                            {{#ifEqual is_paid "not_paid"}}
+                                <span class="label label-danger label-mini">
+                                
+                                {{cash_collected}}/{{total_price}}
+                                </span>
+                            {{/ifEqual}}
+                             {{#ifEqual is_paid "partially_paid"}}
+                                <span class="label label-warning label-mini"> 
+
+                                  
+                                  
+                                    {{cash_collected}}/{{total_price}}
+                                </span>
+                            {{/ifEqual}}
+
+                        {{/ifEqual}}
+
+                        
+                        </td>
+                        
+                        <td>
+                            <span class="label label-{{status_color}} label-mini">
+                                {{#capitalize status_formal}}{{/capitalize}}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="label label-primary label-mini" title="{{#if hub}}{{hub.name}}{{else}}Anepalya{{/if}}">
+                                {{#if hub}}{{hub.short}}{{else}}ANY{{/if}}
+                            </span>
+                            {{#ifEqual service_type "express"}}
+                            <span class="label label-danger label-mini" title="Express">
+                                <i>Express</i>
+                            </span>
+                            {{/ifEqual}}
+                        </td>
+                        <td>
+                            {{#if real_order_id}}
+                                <a class="label label-success label-mini" href="https://s3-ap-southeast-1.amazonaws.com/{% endraw %}{{config.AWS_CREDS.bucket}}{% raw %}/{{real_order_id}}.pdf" target="_blank">
+                                    Download Invoice
+                                </a>
+                            {{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
+                {{#isEmpty orderData}}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">Oops... no data found!!!</td>
+                    </tr>
+                {{/isEmpty}}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+{{! --------------------------- PRICES MODAL --------------------------------- }}
+<div class="modal fade modal-wide" id="all-orders-order-details-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h4 class="modal-title">{{#capitalize modalCustomerDetails.data.user.name}}{{/capitalize}}</h4>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-row tab-buttons" align="center">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#all-orders-modal-quantity"> Quantity
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#all-orders-modal-details"> Details
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#all-orders-modal-payments"> Payments
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#all-orders-modal-others"> Others
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" align="right">
+                        <button type="button" class="btn btn-primary btn-sm" can-click="saveOrderChanges" data-loading-text="Saving">Save</button>
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm" type="button" can-click="closeModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-body" style="height: 400px;">
+                <div id="all-orders-modal-quantity">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Laundry</th>
+                                <th>Dryclean</th>
+                                <th>Iron</th>
+                                <th><i class="fa fa-inr"></i> Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#each cleaningItems}}
+                            <tr item-index="{{@index}}">
+                                <td>{{title}}</td>
+                                <td>
+                                    <div class="input-group input-group-sm laundry-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.laundry}}" min="0" {{#isNum price.laundry}}{{else}}disabled{{/isNum}} disabled="disabled">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm dryclean-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.dryclean}}" min="0" {{#isNum price.dry_cleaning}}{{else}}disabled{{/isNum}} disabled="disabled">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm iron-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.iron}}" {{#isNum price.iron}}{{else}}disabled{{/isNum}} disabled="disabled">
+                                    </div>
+                                </td>
+                                <td class="item-cost">
+                                    {{#isSet final_cost}}
+                                        {{final_cost}}
+                                    {{else}}
+                                        0
+                                    {{/isSet}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="all-orders-modal-details">
+                    <div class="col-sm-6">
+                        <section class="panel">
+                            <div class="list-group">
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">
+                                        Customer details
+                                    </h4>
+                                    <p class="list-group-item-text" id="modal-customer-name">
+                                        Name- {{modalCustomerDetails.data.user.name}}<br>
+                                        Phone- {{modalCustomerDetails.data.user.phone}}<br>
+                                        Email- {{modalCustomerDetails.data.user.email}}<br>
+                                        Created date- {{#getFormattedDateTime modalCustomerDetails.data.created_date}}{{/getFormattedDateTime}}<br>
+                                        Wash types - 
+                                        {{#each modalCustomerDetails.data.wash_type}}
+                                        <span class="label label-mini
+                                        {{#ifEqual . 'laundry'}}label-info{{/ifEqual}}
+                                        {{#ifEqual . 'dryclean'}}label-primary{{/ifEqual}}
+                                        {{#ifEqual . 'iron'}}label-success{{/ifEqual}}
+                                        ">
+                                            {{#capitalize .}}{{/capitalize}}
+                                        </span>
+                                        {{/each}}
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Address</h4>
+                                    <p class="list-group-item-text">
+                                        {{modalCustomerDetails.data.address.apartment_number}},&nbsp;
+                                        {{modalCustomerDetails.data.address.address_1}}<br>
+                                        {{modalCustomerDetails.data.address.address_2}}<br>
+                                        {{modalCustomerDetails.data.address.city}},&nbsp;
+                                        {{modalCustomerDetails.data.address.state}}<br>
+                                        {{#if modalCustomerDetails.data.address.pincode}}
+                                            PIN- {{modalCustomerDetails.data.address.pincode}}
+                                        {{/if}}
+                                        Locality - {{modalCustomerDetails.data.address.locality.map_string}}
+                                    </p>
+                                </a>
+                                <!--<a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <div class="input-group date form_datetime-component input-group-sm">
+                                            <span class="input-group-addon">Date</span>
+                                            <input type="text" class="form-control" readonly="" value="{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}">
+                                            
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger date-set modal-pickup-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon">Time</span>
+                                            <select class="form-control" can-change="pickupTimeSlotChange">
+                                                <option>Pick timeslot</option>
+                                                {{#each getTimeSlots}}
+                                                <option value="{{@key}}" {{#ifEqual . modalCustomerDetails.data.schedules.pickup.schedule_time}}selected{{/ifEqual}}>{{.}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Delivery time</h4>
+                                    <p class="list-group-item-text">
+                                        <div class="input-group date form_datetime-component input-group-sm">
+                                            <span class="input-group-addon">Date</span>
+                                            <input type="text" class="form-control" readonly="" value="{{#getFormattedDate modalCustomerDetails.data.schedules.delivery.schedule_date}}{{/getFormattedDate}}">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger date-set modal-delivery-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon">Time</span>
+                                            <select class="form-control" can-change="deliveryTimeSlotChange">
+                                                <option>Pick timeslot</option>
+                                                {{#each getTimeSlots}}
+                                                <option value="{{@key}}" {{#ifEqual . modalCustomerDetails.data.schedules.delivery.schedule_time}}selected{{/ifEqual}}>{{.}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </p>
+                                </a>-->
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label> <span>{{modalCustomerDetails.data.schedules.pickup.schedule_time}}</span>
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Delivery time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.delivery.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label><span>{{modalCustomerDetails.data.schedules.delivery.schedule_time}}</span>
+                                    </p>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="order-remark col-sm-6">
+                        <div class="summernote"></div>
+                    </div>
+                </div>
+
+                <div id="all-orders-modal-payments">
+                    <div>
+                        <section class="panel col-md-6 ">
+                            <div class="panel-body">
+                                <div class="input-group m-bot15">
+                                <span class="input-group-addon">Payment Status</span>
+                                    <select id="delivery-payment-status" class="form-control" can-change="changePaymentStatus" disabled="disabled">
+                                        <option value="" {{#ifNot modalCustomerDetails.data.is_paid }}selected{{/ifEqual}}>Select Payment Status</option>
+                                        <option value="not_paid"
+                                        {{#ifEqual modalCustomerDetails.data.is_paid "not_paid" }}selected="selected"{{/ifEqual}}
+                                        >Not paid</option>
+                                        <option value="paid"
+                                        {{#ifEqual modalCustomerDetails.data.is_paid "paid" }}selected="selected"{{/ifEqual}}
+                                        >Paid</option>
+                                        <option value="partially_paid"
+                                        {{#ifEqual modalCustomerDetails.data.is_paid "partially_paid" }}selected="selected"{{/ifEqual}}
+                                        >Partially paid</option>
+                                        <option value="excess_paid"
+                                        {{#ifEqual modalCustomerDetails.data.is_paid "excess_paid" }}selected="selected"{{/ifEqual}}
+                                        >Excess Paid</option>
+                                    </select>
+                                </div>
+
+                                {{#ifEqual modalCustomerDetails.data.is_paid "paid" }} 
+                                    <div id="payment_collected" class="input-group m-bot15">
+                                        <span class="input-group-addon">Cash Collected (&nbsp;<i class="fa fa-inr">&nbsp;)</i></span>
+                                        <input id="cashCollected" type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" can-change="changeCashCollected" can-keyup="changeCashCollected" value="{{modalCustomerDetails.data.cash_collected}}" disabled="disabled" min="0" max="{{modalCustomerDetails.data.cost.total}}">
+                                    </div>
+                                {{else}}
+                                    {{#ifEqual modalCustomerDetails.data.is_paid "excess_paid"}}
+                                        <div id="payment_collected" class="input-group m-bot15">
+                                            <span class="input-group-addon">Cash Collected (&nbsp;<i class="fa fa-inr">&nbsp;)</i></span>
+                                            <input id="cashCollected" type="number" class="form-control" placeholder="{{modalCustomerDetails.data.cost.total}}" aria-describedby="sizing-addon3" can-change="changeCashCollected" can-keyup="changeCashCollected"  value="{{modalCustomerDetails.data.cash_collected}}" min="{{modalCustomerDetails.data.cost.total}}" disabled="disabled">
+                                        </div>
+                                    {{else}}
+                                        {{#if modalCustomerDetails.data.is_paid }}
+                                            <div id="payment_collected" class="input-group m-bot15">
+                                                <span class="input-group-addon">Cash Collected (&nbsp;<i class="fa fa-inr">&nbsp;)</i></span>
+                                                <input id="cashCollected" type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3"  can-change="changeCashCollected" can-keyup="changeCashCollected" value="{{modalCustomerDetails.data.cash_collected}}" 
+                                                {{#if modalCustomerDetails.disable_amt}} disabled="disabled"{{/if}}
+                                                 min="0" max="{{modalCustomerDetails.data.cost.total}}" disabled="disabled">
+                                            </div>
+
+                                            <div id="reason" class="input-group m-bot15">
+                                                <span class="input-group-addon">Reason</span>
+                                                <select id="failure_reason" required class="form-control" can-change="changeFailureReason" disabled="disabled">
+                                                    <option value="" {{#ifEqual modalCustomerDetails.data.failure_reason.partial_payment.reason "none"}}selected{{/if}}>Select reason</option>
+                                                    {{#each failureReasons}}
+                                                    <option value="{{str_id}}" {{#ifEqual modalCustomerDetails.data.failure_reason.partial_payment.reason str_id}}selected{{/if}}>{{reason}}</option>
+                                                    {{/each}}
+                                                    <option value="other"
+                                                    {{#ifEqual modalCustomerDetails.data.failure_reason.partial_payment.reason "others"}}selected{{/ifEqual}}
+                                                    >Other</option>
+                                                </select>
+                                            </div>
+                                            
+                                            {{#ifEqual modalCustomerDetails.data.reason.type "others"}}
+                                            <textarea class="form-control" placeholder="Reason" can-keyup="changeOtherReason" value="{{modalCustomerDetails.data.failure_reason.partial_payment.full_reason}}" disabled="disabled"></textarea>
+                                            {{/ifEqual}}
+                                        {{/if}}
+                                    {{/ifEqual}}
+
+                                {{/ifEqual}}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                
+                <div id="all-orders-modal-others">
+                    <div>
+                        <section class="panel">
+                            <div class="panel-heading">
+                                Bags
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Wash &amp; iron</span>
+                                    </div>
+                                    <input type="text" class="bag-laundry">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Dryclean</span>
+                                    </div>
+                                    <input type="text" class="bag-dryclean">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Iron</span>
+                                    </div>
+                                    <input type="text" class="bag-iron">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div>
+                        {{! ------------ STATUS ---------------- }}
+                        <section class="panel col-md-6">
+                            <div class="panel-heading">
+                                Order Status
+                            </div>
+                            <div class="panel-body">
+                                <select class="form-control" can-change="changeOrderStatus">
+                                    <option>Change Status</option>
+                                    {{#each orderStatusHash}}
+                                        <optgroup label="{{#capitalize group_name}}{{/capitalize}}" index="{{group_id}}">
+                                            {{#each status}}
+                                                <option value="{{name_id}}"
+                                                {{#ifEqual modalCustomerDetails.data.status name_id}}
+                                                selected="selected" 
+                                                {{/ifEqual}}
+                                                >{{#capitalize formal_name}}{{/capitalize}}</option>
+                                            {{/each}}
+                                        </optgroup>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer" style="text-align:left">
+                <div class="row">
+                    {{! -------------- COUPON APPLIED -------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Coupon</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{modalCustomerDetails.data.coupon.name}}">
+                        </div>
+                    </div>
+
+                    {{! -------------- MAX-DISCOUNT -------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15" tooltip="Applicable only for percentage discount.">
+                            <span class="input-group-addon">Max discount (<i class="fa fa-inr"></i>)</span>
+                            <input type="number" class="form-control modal-discount-max-amount" placeholder="0" can-change="changeMaxDiscount" can-keyup="changeMaxDiscount" value="{{modalCustomerDetails.data.discount.max}}" min="0" disabled="disabled">
+                        </div>
+                    </div>
+
+                    {{! -------------- DISCOUNT -------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Discount</span>
+                            <input type="number" class="form-control modal-discount-amount" placeholder="0" can-change="changeDiscount" can-keyup="changeDiscount" value="{{modalCustomerDetails.data.discount.amount}}" min="0" disabled="disabled">
+                            <span class="input-group-addon">
+                                {{#if modalCustomerDetails.data.discount.percentage}}
+                                    %
+                                {{else}}
+                                    <i class="fa fa-inr"></i>
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+                     {{! ------------ MINIMUM ORDER ---------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15" tooltip="Applicable only for percentage discount.">
+                            <span class="input-group-addon">Min Order(<i class="fa fa-inr"></i>)</span>
+                            <input type="number" class="form-control modal-discount-min-order" placeholder="0" can-change="changeMinOrder" can-keyup="changeMinOrder" value="{{modalCustomerDetails.data.discount.min_order}}" min="0" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {{! -------------- CREDITS -------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Credits used</span>
+                            <input type="number" disabled class="form-control" placeholder="0" value="{{modalCustomerDetails.data.credits.used}}" min="0">
+                        </div>
+                    </div>
+
+                    {{! ------------ TOTAL QUANTITY ---------------- }}
+                    <div class="col-lg-3">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Quantity</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{getTotalQuantity}}" placeholder="0">
+                        </div>
+                    </div>
+                    
+                    {{! -------------- SUB-TOTAL -------------- }}
+                    <div class="col-lg-3" style="font-size:16px; font-weight:bold;">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Sub-total (<i class="fa fa-inr"></i>)</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{allCosts.sub_total_cost}}" placeholder="0">
+                        </div>
+                    </div>
+
+                    {{! -------------- SUB-TOTAL -------------- }}
+                    <div class="col-lg-3" style="font-size:16px; font-weight:bold;">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Service tax (<i class="fa fa-inr"></i>)</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{allCosts.service_tax}}" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                {{! -------------- TOTAL COST -------------- }}
+                    <div class="col-lg-3" style="font-size:16px; font-weight:bold;">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Total (<i class="fa fa-inr"></i>)</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{allCosts.total_cost}}">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endraw %}

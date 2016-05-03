@@ -1,0 +1,396 @@
+{% raw %}
+<div class="row no-print" id='pickup-orders'>
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10 col-xs-10 col-sm-10">
+                        Pickups
+                    </div>
+                    <div class="col-md-2 col-xs-2 col-sm-2">
+                        Total: {{rowCount}}
+                    </div>
+                </div>
+            </header>
+            <div class="panel-body">
+                <div class="btn-row col-lg-6">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-primary" type="button" can-click="pickupPrevday" title="Prev day">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button class="btn btn-danger order-datepicker datepicker-here" type="button" title="Choose day">
+                            <i class="fa fa-calendar"></i>
+                            {{#getFormattedDate orderDate}}{{/getFormattedDate}}
+                        </button>
+                        <button class="btn btn-warning btn-refresh" type="button" can-click="orderRefresh" title="Refresh">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                        <button class="btn btn-primary" type="button" can-click="pickupNextday" title="Next day">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-row col-lg-6 text-right">
+                    <button class="btn btn-primary" type="button" can-click="showPrintConfirmDialog"><i class="fa fa-print"></i> Print PS</span></button>
+                </div>
+                {{! <div class="btn-row col-lg-6 text-right">
+                    <div class="btn-group">
+                        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button" aria-expanded="false">Actions <span class="caret"></span></button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li can-click="showPrintConfirmDialog"><a href="javascript:void(0)">Print pickup sheet</a></li>
+                            <li can-click="javascript:void(0)"><a href="javascript:void(0)">Change status</a></li>
+                        </ul>
+                    </div>
+                </div> }}
+            </div>
+
+
+            <table class="table table-striped table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <button class="btn btn-default btn-xs" can-click="toggleRowCheck"><i class="fa fa-check check-all"></i></button>
+                        </th>
+                        <th><i class="fa fa-user"></i> Name</th>
+                        <th># Order Id</th>
+                        <th><i class="fa fa-phone"> Phone</th>
+                        <th>Assigned to</th>
+                        <th><i class=" fa fa-edit"></i> Status</th>
+                        <th><i class=" fa fa-file"></i> PS status</th>
+                        <th><i class=" fa fa-building-o"></i> Hub</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                {{#each orderData}}
+                    {{#isNotEmpty .}}
+                    <tr>
+                        <td colspan="7" style="text-align:center; background-color:{{#timeslotBackColor @key variableDate}}{{/timeslotBackColor}}; font-weight: bold;">
+                            {{#timeRangeFormat @key}}{{/timeRangeFormat}}
+                        </td>
+                        <td colspan="1" style="text-align:center; background-color:{{#timeslotBackColor @key variableDate}}{{/timeslotBackColor}}; font-weight: bold;">
+                            Count: {{#length .}}{{/length}}
+                        </td>
+                    </tr>
+                    {{/isNotEmpty}}
+                    {{#each .}}
+                    <tr index="{{order_id}}" style="cursor: pointer">
+                        <td>
+                            <button class="btn btn-default btn-xs pickup-checkbox" can-click="toggleRowCheck"><i class="fa fa-check"></i></button>
+                        </td>
+                        <td><a href="javascript:void(0)" class="openOrderModal">{{#if user_info.name}}{{#capitalize user_info.name }}{{/capitalize}}{{else}}&lt;NO-NAME&gt;{{/if}}</a></td>
+                        <td>
+                            {{#if real_order_id}}
+                                {{real_order_id}}
+                            {{else}}
+                                <span style="font-weight:bold; font-size:16px;">-</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <span class="label label-danger label-mini">
+                                {{phone}}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" class="click-to-assign">
+                            {{#if assigned_to}}
+                                {{#capitalize assigned_to.name}}{{/capitalize}}
+                            {{else}}
+                                <p style="color:#E42222">Click to assign</p>
+                            {{/if}}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="label label-{{status_color}} label-mini">
+                                {{#capitalize status}}{{/capitalize}}
+                            </span>
+                        </td>
+                        <td>
+                        {{#if pickup_sheet_printed}}
+                            <span class="label label-success label-mini">Printed</span>
+                        {{else}}
+                            <span class="label label-danger label-mini">Not printed</span>
+                        {{/if}}
+                        </td>
+                        <td>
+                       
+                            <span class="label label-primary label-mini click-to-assign-hub" title="{{#if hub}}{{hub.name}}{{else}}Anepalya{{/if}}">
+                                {{#if hub}}{{hub.short}}{{else}}ANY{{/if}}
+                            </span>
+                            {{#ifEqual service_type "express"}}
+                            <span class="label label-danger label-mini" title="Express">
+                                <i>Express</i>
+                            </span>
+                            {{/ifEqual}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                {{/each}}
+                {{#isEmpty orderData}}
+                    <tr>
+                        <td colspan="8" style="text-align:center;">Oops... no data found!!!</td>
+                    </tr>
+                {{/isEmpty}}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+{{! --------------------------- PRINT SETTINGS MODAL --------------------------------- }}
+<div class="modal fade in" id="pickup-print-settings-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="padding-right: 15px;">
+    <div class="modal-backdrop fade in" style="height: 459px;"></div>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="modal-title">Print settings</h4>
+                    </div>
+                    <div class="col-lg-6" align="right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm cancel-action" type="button">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Copies</span>
+                            <input class="form-control number-of-copies" type="number" can-keyup="changeNumberPrintCopies" can-change="changeNumberPrintCopies" value="{{getNumberPrintCopies}}">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default cancel-action" type="button">Cancel</button>
+                <button can-click="printPickupSheet" class="btn btn-danger" type="button">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{! --------------------------- PRICES MODAL --------------------------------- }}
+<div class="modal fade modal-wide" id="pickup-order-details-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h4 class="modal-title">{{#capitalize modalCustomerDetails.data.user.name}}{{/capitalize}}</h4>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-row tab-buttons" align="center">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#pickup-modal-others"> 
+                                    <i class="fa fa-cog"></i> Settings
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#pickup-modal-details"> Details
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" align="right">
+                        <button type="button" class="btn btn-primary btn-sm" can-click="saveOrderChanges" data-loading-text="Saving">Save</button>
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm" type="button" can-click="closeModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-body" style="height: 500px;">
+                
+                <div id="pickup-modal-details">
+                    <div class="col-sm-6">
+                        <section class="panel">
+                            <div class="list-group">
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Customer details</h4>
+                                    <p class="list-group-item-text" id="modal-customer-name">
+                                        Name- {{modalCustomerDetails.data.user.name}}<br>
+                                        Phone- {{modalCustomerDetails.data.user.phone}}<br>
+                                        Email- {{modalCustomerDetails.data.user.email}}<br>
+                                        Created date- {{#getFormattedDateTime modalCustomerDetails.data.created_date}}{{/getFormattedDateTime}}<br>
+                                        Wash types - 
+                                        {{#each modalCustomerDetails.data.wash_type}}
+                                        <span class="label label-mini
+                                        {{#ifEqual . 'laundry'}}label-info{{/ifEqual}}
+                                        {{#ifEqual . 'dryclean'}}label-primary{{/ifEqual}}
+                                        {{#ifEqual . 'iron'}}label-success{{/ifEqual}}
+                                        ">
+                                            {{#capitalize .}}{{/capitalize}}
+                                        </span>
+                                        {{/each}}
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Address</h4>
+                                    <p class="list-group-item-text">
+                                        {{modalCustomerDetails.data.address.apartment_number}},&nbsp;
+                                        {{modalCustomerDetails.data.address.address_1}}<br>
+                                        {{modalCustomerDetails.data.address.address_2}}<br>
+                                        {{modalCustomerDetails.data.address.city}},&nbsp;
+                                        {{modalCustomerDetails.data.address.state}}<br>
+                                        {{#if modalCustomerDetails.data.address.pincode}}
+                                            PIN- {{modalCustomerDetails.data.address.pincode}}
+                                        {{/if}}
+                                        Locality - {{modalCustomerDetails.data.address.locality.map_string}}
+                                    </p>
+                                </a>
+{% endraw %}
+{% if session.user|contains("iamlegend") %}
+{% raw %}
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <div class="input-group date form_datetime-component input-group-sm">
+                                            <input type="text" class="form-control" readonly="" value="{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}">
+                                            
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger date-set modal-pickup-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            <select class="form-control" can-change="pickupTimeSlotChange">
+                                                <option>Pickup timeslot</option>
+                                                {{#each getTimeSlots}}
+                                                <option value="{{@key}}" {{#ifEqual . modalCustomerDetails.data.schedules.pickup.schedule_time}}selected{{/ifEqual}}>{{.}}</option>
+                                                {{/each}}
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary" can-click="savePickupReschedule">Save</button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        
+                                        
+                                    </p>
+                                </a>
+{% endraw %}
+{% else %}
+{% raw %}
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label> <span>{{modalCustomerDetails.data.schedules.pickup.schedule_time}}</span>
+                                    </p>
+                                </a>
+{% endraw %}
+{% endif %}
+{% raw %}
+
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Delivery time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.delivery.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label><span>{{modalCustomerDetails.data.schedules.delivery.schedule_time}}</span>
+                                    </p>
+                                </a>
+                                
+                                
+                            </div>
+                        </section>
+                    </div>
+                    <div class="order-remark col-sm-6">
+                        <div class="summernote"></div>
+                    </div>
+                </div>
+
+                <div id="pickup-modal-others">
+                    <div>
+                        {{! ------------ EDIT BAG NUMS ---------------- }}
+                        <section class="panel">
+                            <div class="panel-heading">
+                                Bags
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Wash &amp; iron</span>
+                                    </div>
+                                    <input type="text" class="bag-laundry">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Dryclean</span>
+                                    </div>
+                                    <input type="text" class="bag-dryclean">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Iron</span>
+                                    </div>
+                                    <input type="text" class="bag-iron">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div>
+                        {{! ------------ STATUS ---------------- }}
+                        <section class="panel col-md-6">
+                            <div class="panel-heading">
+                                Order Status
+                            </div>
+                            <div class="panel-body">
+                                <div class="m-bot15">
+                                    <select class="form-control" can-change="changeOrderStatus">
+                                        <option>Change Status</option>
+                                        {{#each orderStatusHash}}
+                                            <optgroup label="{{#capitalize group_name}}{{/capitalize}}" index="{{group_id}}">
+                                                {{#each status}}
+                                                    <option value="{{name_id}}"
+                                                    {{#ifEqual modalCustomerDetails.data.status name_id}}
+                                                    selected="selected" 
+                                                    {{/ifEqual}}
+                                                    >{{#capitalize formal_name}}{{/capitalize}}</option>
+                                                {{/each}}
+                                            </optgroup>
+                                        {{/each}}
+                                    </select>
+                                    <span></span>
+                                </div>
+                                <div class="m-bot15
+                                {{#ifNotEqual modalCustomerDetails.data.status 'pickup_failed'}}hide{{/ifNotEqual}}
+                                ">
+                                    <select class="form-control" can-change="changePickupFailedReason">
+                                        <option value="">Select reason</option>
+                                        {{#each pickupFailureReasons}}
+                                            <option value="{{str_id}}"
+                                            {{#ifEqual modalCustomerDetails.data.failure_reason.pickup.reason str_id}}
+                                            selected="selected" 
+                                            {{/ifEqual}}
+                                            >
+                                            {{#capitalize reason}}{{/capitalize}}
+                                            </option>
+                                        {{/each}}
+                                    </select>
+                                    <span></span>
+                                </div>
+                                <div class="m-bot15
+                                {{#ifNotEqual modalCustomerDetails.data.status 'pickup_failed'}}hide{{/ifNotEqual}}
+                                ">
+                                    <button type="button" can-click="saveOrderStatus" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="panel-footer">
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endraw %}

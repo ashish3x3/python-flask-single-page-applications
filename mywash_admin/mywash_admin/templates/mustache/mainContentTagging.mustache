@@ -1,0 +1,574 @@
+{% raw %}
+<div class="row no-print" id='tagging-orders'>
+    <div class="col-lg-12">
+        <section class="panel">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        Tagging
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <div class="btn-row tab-buttons">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#tagging-pane-orders"> Orders
+                                </label>
+                                <label class="btn btn-primary btn-sm hide" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#tagging-pane-bundles"> Bundles
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2 col-sm-2">
+                        Total: {{rowCount}}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="panel-body">
+                <div class="btn-row col-lg-6">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-primary" type="button" can-click="taggingPrevday" title="Prev day">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button class="btn btn-danger order-datepicker datepicker-here" type="button" title="Choose day">
+                            <i class="fa fa-calendar"></i>
+                            {{#getFormattedDate orderDate}}{{/getFormattedDate}}
+                        </button>
+                        <button class="btn btn-warning btn-refresh" type="button" can-click="orderRefresh" title="Refresh">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                        <button class="btn btn-primary" type="button" can-click="taggingNextday" title="Next day">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 text-right">
+                    <div class="btn-group" id="tagging-btn-print-tags">
+                        <button class="btn btn-primary" type="button" can-click="openTagsModal">
+                            Print tags
+                        </button>
+                    </div>
+                    <div class="btn-group" id="tagging-btn-add-bundle">
+                        <button class="btn btn-primary" type="button" can-click="openAddBundleModal">
+                            Add bundle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {{! --------------- TAGGING ORDERS PANE ----------------- }}
+            <div id="tagging-pane-orders">
+                <table class="table table-striped table-advance table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button class="btn btn-default btn-xs" can-click="toggleRowCheck"><i class="fa fa-check check-all"></i></button>
+                            </th>
+                            <th><i class="fa fa-user"></i> Name</th>
+                            <th># Order Id</th>
+                            <th><i class="fa fa-briefcase"></i> Bags</th>
+                            <th><i class="fa fa-inr"></i> Quantity</th>
+                            <th><i class=" fa fa-edit"></i> Status</th>
+                            <th><i class=" fa fa-building-o"></i> Hub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {{#each orderData}}
+                        {{#each .}}
+                        <tr index="{{order_id}}" style="cursor: pointer">
+                            <td>
+                                <button class="btn btn-default btn-xs tagging-checkbox" can-click="toggleRowCheck"><i class="fa fa-check"></i></button>
+                            </td>
+                            <td><a href="#" class="openOrderModal">{{#if user_info.name}}{{#capitalize user_info.name }}{{/capitalize}}{{else}}&lt;NO-NAME&gt;{{/if}}</a></td>
+                            <td>
+                                {{#if real_order_id}}
+                                    {{real_order_id}}
+                                {{else}}
+                                    <span style="font-weight:bold; font-size:16px;">-</span>
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{#each bag.laundry}}
+                                    <span class="label label-info label-mini" title="Laundry">{{.}}</span>
+                                {{/each}}
+                                {{#each bag.dryclean}}
+                                    <span class="label label-primary label-mini" title="Dryclean">{{.}}</span>
+                                {{/each}}
+                                {{#each bag.iron}}
+                                    <span class="label label-success label-mini" title="Iron">{{.}}</span>
+                                {{/each}}
+                            </td>
+                            <td>{{total_quantity}}</td>
+                            <td>
+                                <span class="label label-{{status_color}} label-mini">
+                                    {{#capitalize status}}{{/capitalize}}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="label label-primary label-mini" title="{{#if hub}}{{hub.name}}{{else}}Anepalya{{/if}}">
+                                    {{#if hub}}{{hub.short}}{{else}}ANY{{/if}}
+                                </span>
+                                {{#ifEqual service_type "express"}}
+                            <span class="label label-danger label-mini" title="Express">
+                                <i>Express</i>
+                            </span>
+                            {{/ifEqual}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    {{/each}}
+                    {{#isEmpty orderData}}
+                        <tr>
+                            <td colspan="7" style="text-align:center;">Oops... no data found!!!</td>
+                        </tr>
+                    {{/isEmpty}}
+                    </tbody>
+                </table>    
+            </div>
+
+            {{! ------------------------ BUNDLES PANE -------------------------------- }}
+            <div id="tagging-pane-bundles">
+                <div id="tagging-pane-orders">
+                <table class="table table-striped table-advance table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="fa fa-user"></i> Name</th>
+                            <th>Contents</th>
+                            <th>Quantity (Approx)</th>
+                            <th>Vendor</th>
+                            <th>Vendor last changed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {{#each allBundles}}
+                        <tr index="{{@key}}">
+                            <td>
+                                <a href="javascript:void(0)" can-click="editBundleModal">Bundle {{name}}</a>
+                            </td>
+                            <td>
+                                <div>
+                                {{#each contents}}
+                                    <p>
+                                    <span class="label label-danger label-mini" style="margin:0 3px 0 3px;">
+                                       {{@key}}
+                                    </span>
+                                    {{#each bags}}
+                                        {{#ifEqual @key "iron"}}
+                                            {{#each .}}
+                                            <span class="label label-success label-mini" style="margin:0 3px 0 3px;" title="Iron">
+                                                {{.}}
+                                            </span>
+                                            {{/each}}
+                                        {{/ifEqual}}
+                                        {{#ifEqual @key "laundry"}}
+                                            {{#each .}}
+                                            <span class="label label-info label-mini" style="margin:0 3px 0 3px;" title="Laundry">
+                                                {{.}}
+                                            </span>
+                                            {{/each}}
+                                        {{/ifEqual}}
+                                        {{#ifEqual @key "dryclean"}}
+                                            {{#each .}}
+                                            <span class="label label-primary label-mini" style="margin:0 3px 0 3px;" title="Dryclean">
+                                                {{.}}
+                                            </span>
+                                            {{/each}}
+                                        {{/ifEqual}}
+                                    {{/each}}
+                                    </p>    
+                                {{/each}}
+                                </div>
+                            </td>
+                            <td>
+                                {{total_quantity}}
+                            </td>
+                            <td>
+                            {{#if vendor}}
+                                {{vendor}}
+                            {{else}}
+                                <a href="javascript:void(0)" can-click="editBundleModal">Click to assign</a>
+                            {{/if}}
+                            </td>
+                            <td>
+                                {{#getFormattedDateTime vendor_last_modified}}{{/getFormattedDateTime}}
+                            </td>
+                        
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            
+        </section>
+    </div>
+</div>
+
+{{! GENERATE TAGS }}
+<div class="modal fade in tags-print" tabindex="-1" role="dialog" id="tags-list">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row no-print">
+                    <div class="col-lg-6">
+                        Tags
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btn btn-danger btn-sm" can-click="printTags">
+                            <i class="fa fa-print"></i> Print
+                        </button>
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm" type="button">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                {{#each tags}}
+                    {{#each laundryTags}}
+                        <section style="font-size:8px; font-weight:bolder;" class="panel text-center">
+                            <p style="margin:0;">{{name}}/ #{{order_id}}</p>
+                            <p style="font-size: 15px;margin:0;">{{#joinList bag "/"}}{{/joinList}}</p>
+                            <p style="margin:0;">WASH &amp; IRON &nbsp; 
+                                <span style="font-size:12px;">{{#incr @index}}{{/incr}}/{{quantity}}</span>
+                            </p>
+                            <p style="margin:0;">{{#currentDate}}{{/current_date}} | W {{#isNotEmpty drycleanTags}}+ DW{{/isNotEmpty}}{{#isNotEmpty ironTags}} + I{{/isNotEmpty}} = {{totalQuantity}}</p>
+                            <p style="margin:0;">D: {{delivery_date}} ({{delivery_time}})</p>
+                        </section>
+                    {{/each}}
+                    
+                    {{#each drycleanTags}}
+                        <section style="font-size:8px; font-weight:bolder;" class="panel text-center">
+                            <p style="margin:0;">{{name}}/ #{{order_id}}</p>
+                            <p style="font-size: 15px;margin:0;">{{#joinList bag "/"}}{{/joinList}}</p>
+                            <p style="margin:0;">DRYWASH &nbsp;
+                                <span style="font-size:12px;">{{#incr @index}}{{/incr}}/{{quantity}}</span>
+                            </p>
+                            <p style="margin:0;">{{#currentDate}}{{/current_date}} | {{#isNotEmpty laundryTags}}W{{/isNotEmpty}} + DW {{#isNotEmpty ironTags}}+ I{{/isNotEmpty}} = {{totalQuantity}}</p>
+                            <p style="margin:0;">D: {{delivery_date}} ({{delivery_time}})</p>
+                        </section>
+                    {{/each}}
+                    
+                    {{#each ironTags}}
+                        <section style="font-size:8px; font-weight:bolder;" class="panel text-center">
+                            <p style="margin:0;">{{name}}/ #{{order_id}}</p>
+                            <p style="font-size: 15px;margin:0;">{{#joinList bag "/"}}{{/joinList}}</p>
+                            <p style="margin:0;">IRON &nbsp;
+                                <span style="font-size:12px;">{{#incr @index}}{{/incr}}/{{quantity}}</span>
+                            </p>
+                            <p style="margin:0;">{{#currentDate}}{{/current_date}} | {{#isNotEmpty laundryTags}}W{{/isNotEmpty}} {{#isNotEmpty drycleanTags}}+ DW{{/isNotEmpty}} + I = {{totalQuantity}}</p>
+                            <p style="margin:0;">D: {{delivery_date}} ({{delivery_time}})</p>
+                        </section>
+                    {{/each}}
+                {{/each}}
+            </div>
+            <div class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{{! --------------------------- PRICES MODAL --------------------------------- }}
+<div class="modal fade modal-wide" id="tagging-order-details-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h4 class="modal-title">{{#capitalize modalCustomerDetails.data.user.name}}{{/capitalize}}</h4>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-row tab-buttons" align="center">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#tagging-modal-quantity"> Quantity
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#tagging-modal-details"> Details
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" id="option1" href="#tagging-modal-edit">
+                                    <i class="fa fa-cog"></i> Settings
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" align="right">
+                        <button type="button" class="btn btn-primary btn-sm" can-click="saveOrderChanges" data-loading-text="Saving">Save</button>
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm" type="button" can-click="closeModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-body" style="height: 500px;">
+                <div id="tagging-modal-quantity">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Laundry</th>
+                                <th>Dryclean</th>
+                                <th>Iron</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#each cleaningItems}}
+                            <tr item-index="{{@index}}">
+                                <td>{{title}}</td>
+                                <td>
+                                    <div class="input-group input-group-sm laundry-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.laundry}}" min="0" {{#isNum price.laundry}}{{else}}disabled{{/isNum}}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm dryclean-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.dryclean}}" min="0" {{#isNum price.dry_cleaning}}{{else}}disabled{{/isNum}}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm iron-quantity">
+                                        <input type="number" class="form-control" placeholder="0" aria-describedby="sizing-addon3" style="width:50px;padding:0; padding-left:10px;" can-change="quantityChange" can-keyup="quantityChange" value="{{quantity.iron}}" {{#isNum price.iron}}{{else}}disabled{{/isNum}}>
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tagging-modal-details">
+                    <div class="col-sm-6">
+                        <section class="panel">
+                            <div class="list-group">
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Customer details</h4>
+                                    <p class="list-group-item-text" id="modal-customer-name">
+                                        Name- {{modalCustomerDetails.data.user.name}}<br>
+                                        Phone- {{modalCustomerDetails.data.user.phone}}<br>
+                                        Email- {{modalCustomerDetails.data.user.email}}<br>
+                                        Created date- {{#getFormattedDateTime modalCustomerDetails.data.created_date}}{{/getFormattedDateTime}}<br>
+                                        Wash types - 
+                                        {{#each modalCustomerDetails.data.wash_type}}
+                                        <span class="label label-mini
+                                        {{#ifEqual . 'laundry'}}label-info{{/ifEqual}}
+                                        {{#ifEqual . 'dryclean'}}label-primary{{/ifEqual}}
+                                        {{#ifEqual . 'iron'}}label-success{{/ifEqual}}
+                                        ">
+                                            {{#capitalize .}}{{/capitalize}}
+                                        </span>
+                                        {{/each}}
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Address</h4>
+                                    <p class="list-group-item-text">
+                                        {{modalCustomerDetails.data.address.apartment_number}},&nbsp;
+                                        {{modalCustomerDetails.data.address.address_1}}<br>
+                                        {{modalCustomerDetails.data.address.address_2}}<br>
+                                        {{modalCustomerDetails.data.address.city}},&nbsp;
+                                        {{modalCustomerDetails.data.address.state}}<br>
+                                        {{#if modalCustomerDetails.data.address.pincode}}
+                                            PIN- {{modalCustomerDetails.data.address.pincode}}
+                                        {{/if}}
+                                        Locality - {{modalCustomerDetails.data.address.locality.map_string}}
+                                    </p>
+                                </a>
+                                <!--<a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <div class="input-group date form_datetime-component input-group-sm">
+                                            <span class="input-group-addon">Date</span>
+                                            <input type="text" class="form-control" readonly="" value="{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}">
+                                            
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger date-set modal-pickup-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon">Time</span>
+                                            <select class="form-control" can-change="pickupTimeSlotChange">
+                                                <option>Pick timeslot</option>
+                                                {{#each getTimeSlots}}
+                                                <option value="{{@key}}" {{#ifEqual . modalCustomerDetails.data.schedules.pickup.schedule_time}}selected{{/ifEqual}}>{{.}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Delivery time</h4>
+                                    <p class="list-group-item-text">
+                                        <div class="input-group date form_datetime-component input-group-sm">
+                                            <span class="input-group-addon">Date</span>
+                                            <input type="text" class="form-control" readonly="" value="{{#getFormattedDate modalCustomerDetails.data.schedules.delivery.schedule_date}}{{/getFormattedDate}}">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger date-set modal-delivery-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon">Time</span>
+                                            <select class="form-control" can-change="deliveryTimeSlotChange">
+                                                <option>Pick timeslot</option>
+                                                {{#each getTimeSlots}}
+                                                <option value="{{@key}}" {{#ifEqual . modalCustomerDetails.data.schedules.delivery.schedule_time}}selected{{/ifEqual}}>{{.}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </p>
+                                </a>-->
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Pickup time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.pickup.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label> <span>{{modalCustomerDetails.data.schedules.pickup.schedule_time}}</span>
+                                    </p>
+                                </a>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <h4 class="list-group-item-heading">Delivery time</h4>
+                                    <p class="list-group-item-text">
+                                        <label>Date: </label> <span>{{#getFormattedDate modalCustomerDetails.data.schedules.delivery.schedule_date}}{{/getFormattedDate}}</span><br>
+                                        <label>Time: </label><span>{{modalCustomerDetails.data.schedules.delivery.schedule_time}}</span>
+                                    </p>
+                                </a>
+                                
+                            </div>
+                        </section>
+                    </div>
+                    <div class="order-remark col-sm-6">
+                        <div class="summernote"></div>
+                    </div>
+                </div>
+
+                <div id="tagging-modal-edit">
+                    <div>
+                        {{! ------------ EDIT BAG NUMS ---------------- }}
+                        <section class="panel">
+                            <div class="panel-heading">
+                                Bags
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Wash &amp; iron</span>
+                                    </div>
+                                    <input type="text" class="bag-laundry">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Dryclean</span>
+                                    </div>
+                                    <input type="text" class="bag-dryclean">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Iron</span>
+                                    </div>
+                                    <input type="text" class="bag-iron">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div>
+                        {{! ------------ STATUS ---------------- }}
+                        <section class="panel col-md-6">
+                            <div class="panel-heading">
+                                Order Status
+                            </div>
+                            <div class="panel-body">
+                                <select class="form-control" can-change="changeOrderStatus">
+                                    <option>Change Status</option>
+                                    {{#each orderStatusHash}}
+                                        <optgroup label="{{#capitalize group_name}}{{/capitalize}}" index="{{group_id}}">
+                                            {{#each status}}
+                                                <option value="{{name_id}}"
+                                                {{#ifEqual modalCustomerDetails.data.status name_id}}
+                                                selected="selected" 
+                                                {{/ifEqual}}
+                                                >{{#capitalize formal_name}}{{/capitalize}}</option>
+                                            {{/each}}
+                                        </optgroup>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="modal-footer" style="text-align:left">
+                <div class="row">
+                    {{! ------------ TOTAL QUANTITY ---------------- }}
+                    <div class="col-lg-4">
+                        <div class="input-group m-bot15">
+                            <span class="input-group-addon">Quantity</span>
+                            <input type="text" disabled="disabled" class="form-control" value="{{getTotalQuantity}}" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{{! ----------------- ADD BUNDLE MODAL ---------------------- }}
+<div class="modal fade" id="tagging-bundles-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="modal-title">
+                        {{#if selectedBundle.str_id}}
+                            Edit "Bundle {{selectedBundle.name}}"
+                        {{else}}
+                            Add bundle
+                        {{/if}}
+                        </h4>
+                    </div>
+                    <div class="col-lg-6" align="right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm" type="button" can-click="closeBundleModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Bundle</span>
+                        <input type="text" name="name" required class="form-control" name="title" value="{{selectedBundle.name}}" can-change="bundleEditChange">
+                    </div>
+                    <div class="input-group date m-bot15">
+                        <span class="input-group-addon">Date</span>
+                        <input type="text" class="form-control" name="date" readonly="" value="{{#getFormattedDate selectedBundle.date}}{{/getFormattedDate}}" can-change="bundleEditChange">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger date-set add-bundle-datepicker datepicker-here"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    <div class="m-bot15">
+                        <input class="add-bags-input" type="text" name="bags" placeholder="Add multiple bags...">
+                    </div>
+                    <div class="m-bot15">
+                        <select placeholder="Select vendor" class="add-vendor-input" name="vendor"></select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" can-click="saveBundle">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endraw %}

@@ -1,0 +1,418 @@
+{% raw %}
+<div class="row no-print" id='users'>
+    <div class="col-md-12 col-sm-12">
+        <section class="panel">
+            <header class="panel-heading">
+            	<div class="row">
+            		<div class="col-md-6 col-sm-6">
+            			Users
+            		</div>
+            		<div class="col-md-6 col-sm-6 text-right">
+            			Total users: <strong>{{getUserCount}}</strong>
+            		</div>
+            	</div>
+            </header>
+            <div class="panel-body">
+                <div class="col-lg-10" style="font-size:30px; text-align:center;">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-filter"></i> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li can-click="selectSearchOption" data-option="name">
+                                    <a href="javascript:void(0)"><i class="fa fa-user"></i> Name</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="email">
+                                    <a href="javascript:void(0)">@ Email</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="phone">
+                                    <a href="javascript:void(0)"><i class="fa fa-phone"></i> Phone</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" placeholder="Search Here (example- email:xyz or name:xyz)" class="form-control search-input" style="z-index:0" can-keyup="captureEnterKey">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-search-go" can-click="searchUsers"> Go!</button>
+                            <button class="btn btn-warning btn-refresh" type="button" can-click="userRefresh" title="Refresh">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 text-right">
+                    <button class="btn btn-primary" can-click="addUser">Add user</button>
+                </div>
+            </div>
+
+
+            <table class="table table-striped table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <button class="btn btn-default btn-xs" can-click="toggleRowCheck"><i class="fa fa-check check-all"></i></button>
+                        </th>
+                        <th><i class="fa fa-user"></i> Name</th>
+                        <th>Email/ Phone</th>
+                        <th><i class="fa fa-inr"></i> Credits</th>
+                        <th>Orders Stat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each userData}}
+                    <tr index="{{user_data.user_id}}" style="cursor: pointer" array-index="{{@index}}">
+                        <td>
+                            <button class="btn btn-default btn-xs pickup-checkbox" can-click="toggleRowCheck"><i class="fa fa-check"></i></button>
+                        </td>
+                        <td>
+                        	<a href="javascript:void(0)" can-click="editUser">{{#capitalize user_data.name }}{{/capitalize}}</a>
+                            {{#if user_data.phone_is_valid}}
+                                <i class="fa fa-check-circle" style="color: green" title="Valid"></i>
+                            {{/if}}
+                            {{#startsWith user_data.user_id "fb_"}}
+                            <i class="fa fa-facebook-square" style="color: #3b5998" title="Facebook"></i>
+                            {{else}}
+                                {{#startsWith user_data.user_id "g_"}}
+                                <i class="fa fa-google-plus-square" style="color: #dd4b39" title="Google"></i>
+                                {{else}}
+                                <i class="fa fa-maxcdn" style="color: #00b7dc" title="Mywash"></i>
+                                {{/startsWith}}
+                            {{/startsWith}}
+                        </td>
+                        <td>
+                        	<p><a href="#">{{user_data.email}}</a></p>
+	                       	<p><a href="#">{{user_data.phone}}</a></p>
+                        </td>
+                        <td>{{#if user_data.credits}}{{user_data.credits}}{{else}}0{{/if}}</td>
+                        <td>
+                            <p>
+                            	<span class="label label-primary label-mini">Placed {{counts.placed}}</span>
+                            </p>
+                            <p>
+                            	<span class="label label-success label-mini">Completed {{counts.completed}}</span>
+                            </p>
+                            <p>
+                            	<span class="label label-danger label-mini">Cancelled {{counts.cancelled}}</span>
+                            </p>
+                        </td>
+                    </tr>
+                {{/each}}
+                {{#isEmpty userData}}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">Oops... no data found!!!</td>
+                    </tr>
+                {{/isEmpty}}
+                </tbody>
+            </table>
+            <div class="panel-body block-load-more">
+                <div class="row col-lg-12 load-more" style="text-align:center">
+                    <button class="btn btn-primary btn-block" can-click="loadMoreRows" data-loading=""><i class="fa fa-repeat"></i></button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+{{! ----------------- ADD USER MODAL ---------------------- }}
+<div class="modal fade" id="user-data-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="modal-title">
+                        {{#if selectedUser.str_id}}
+                            Edit "{{selectedUser.name}}"
+                        {{else}}
+                            Add User
+                        {{/if}}
+                        </h4>
+                    </div>
+                    <div class="col-lg-6" align="right">
+                        <button class="btn btn-primary btn-sm" type="button" can-click="closeUserAddModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Name</span>
+                        <input type="text" name="name" required class="form-control" value="{{selectedUser.name}}" can-keyup="selectedUserChange">
+                    </div>
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Phone</span>
+                        <input type="text" name="phone" required class="form-control" value="{{selectedUser.phone}}" can-keyup="selectedUserChange">
+                    </div>
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Email</span>
+                        <input type="text" name="email" required class="form-control" value="{{selectedUser.email}}" can-keyup="selectedUserChange">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" can-click="saveUser">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{! EDIT USER MODAL }}
+<div class="modal fade modal-wide" id="user-data-edit-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h4 class="modal-title">
+                            Edit "{{selectedUser.name}}"
+                        </h4>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-row tab-buttons text-center">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" href="#user-modal-order"> Orders
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" href="#user-modal-address"> Address
+                                </label>
+                                <label class="btn btn-primary btn-sm" can-click="tabchange">
+                                    <input type="radio" name="options" href="#user-modal-detail"> Detail
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" align="right">
+                        <button class="btn btn-primary btn-sm" type="button" can-click="closeUserEditModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-body" style="height: 500px;">
+                <div id="user-modal-order">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel">
+                                <div class="panel-heading">History</div>
+                                <div class="panel-body" style="overflow:auto; height: 400px;">
+                                {{#each orderHistory}}
+                                    <div index="{{_id}}" class="row" style="max-height: 100px; border-bottom:1px dotted #dadada;">
+                                        <div class="col-md-4 col-sm-4">
+                                            <p>
+                                                <h5>Pickup</h5>
+                                            </p>
+                                            <p>{{pickup_data.schedule_date}}</p>
+                                            <p>{{pickup_data.schedule_time}}</p>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            <p>
+                                                <h5>Delivery</h5>
+                                            </p>
+                                            <p>{{delivery_data.schedule_date}}</p>
+                                            <p>{{delivery_data.schedule_time}}</p>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            <span class="label label-{{status_color}}">{{status}}</span>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel">
+                                <div class="panel-heading">Add order</div>
+                                <div class="panel-body">
+                                    <form action="" id="add-order-form">
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Service Type</span>
+                                            <select can-change="orderFormChange" class="form-control" name="service">
+                                                <option value="">Select service</option>
+                                                <option value="regular">Regular</option>
+                                                <option value="express">Express</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Location</span>
+                                            <select class="form-control" name="address" can-change="orderFormChange">
+                                                <option value="">Select location</option>
+                                            {{#each addressList}}
+                                                <option value="{{_id}}">{{#capitalize tag}}{{/capitalize}}</option>
+                                            {{/each}}
+                                            </select>
+                                        </div>
+                                        <div class="m-bot15">
+                                            <input type="text" name="service-types" placeholder="Select service types.">
+                                        </div>
+                                        
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Pickup</span>
+                                            <input type="text" class="form-control" name="pickup-date">
+                                            <div class="input-group-btn">
+                                                <select name="pickup-time" class="form-control" can-change="orderFormChange" style="width:auto; margin-left:-1px;">
+                                                    <option value="">Select slot</option>
+                                                {{#each getTimeSlots}}
+                                                    <option value="{{@key}}">{{.}}</option>
+                                                {{/each}}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Delivery</span>
+                                            <input type="text" class="form-control" name="delivery-date">
+                                            <div class="input-group-btn">
+                                                <select name="delivery-time" class="form-control" can-change="orderFormChange" style="width:auto; margin-left:-1px;">
+                                                    <option value="">Select slot</option>
+                                                {{#each getTimeSlots}}
+                                                    <option value="{{@key}}">{{.}}</option>
+                                                {{/each}}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Phone</span>
+                                            <input type="text" name="phone" required class="form-control" value="{{newOrder.phone}}" can-keyup="orderFormChange">
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Coupon</span>
+                                            <input type="text" name="coupon" class="form-control" value="{{newOrder.coupon}}" can-keyup="orderFormChange">
+                                        </div>
+                                        <div class="m-bot15 text-right">
+                                            <button class="btn btn-default" type="button" can-click="cancelOrder">Cancel</button>
+                                            <button class="btn btn-danger" type="button" can-click="saveOrder" data-loading-text="Saving">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="user-modal-address">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    All address
+                                </div>
+                                <div class="panel-body" style="overflow:auto; height: 400px;">
+                                {{#each addressList}}
+                                    <div class="row" index="{{_id}}" style="max-height: 100px; border-bottom:1px dotted #dadada; cursor:pointer;" array-index="{{@index}}" can-click="editAddress">
+                                        <div class="col-md-2 col-sm-2">
+                                            <p>
+                                                <span class="label label-default">{{#capitalize tag}}{{/capitalize}}</span>
+                                            </p>
+                                            {{#if assigned_hub.name}}
+                                            <p>
+                                                <span class="label label-danger" title="{{#capitalize assigned_hub.name}}{{/capitalize}}">
+                                                    {{#capitalize assigned_hub.short}}{{/capitalize}}
+                                                </span>
+                                            </p>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col-md-10 col-sm-10">
+                                            <p>Flat no.- {{apartment_number}}</p>
+                                            <p>{{address_2}}</p>
+                                            <p>{{address_1}}</p>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel">
+                                <div class="panel-heading">{{#if selectedAddress._id}}Edit{{else}}Add{{/if}} address</div>
+                                <div class="panel-body">
+                                    <form action="" method="post">
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Tag</span>
+                                            <input type="text" name="tag" required class="form-control" can-keyup="selectedUserAddressChange" value="{{selectedAddress.tag}}">
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Locality</span>
+                                            <input id="users-locality" type="text" name="locality" required class="form-control" value="{{selectedAddress.locality.map_string}}">
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Flat no.</span>
+                                            <input type="text" name="apartment_number" required class="form-control" value="{{selectedAddress.apartment_number}}" can-keyup="selectedUserAddressChange">
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Landmark</span>
+                                            <input type="text" name="address_2" required class="form-control" value="{{selectedAddress.address_2}}" can-keyup="selectedUserAddressChange">
+                                        </div>
+                                        <div class="m-bot15">
+                                            <textarea class="form-control" placeholder="Address" name="address_1" can-keyup="selectedUserAddressChange" value="{{selectedAddress.address_1}}"></textarea>
+                                        </div>
+                                        <div class="m-bot15 text-right">
+                                            {{#if selectedAddress._id}}
+                                                <button class="btn btn-default" type="button" can-click="cancelAddress">Cancel</button>
+                                            {{/if}}
+                                            <button class="btn btn-danger" type="button" can-click="saveAddress" data-loading-text="Saving">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit  USer Details Modal -->
+                <div id="user-modal-detail">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    {{#if selectedUser.user_id}}Edit {{else}}Add {{/if}}Detail
+                                </div>
+                                <div class="panel-body">
+                                    <form action="" method="post">
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Name</span>
+                                            <input id="edit-users-name" type="text" name="name" required class="form-control" value="{{selectedUser.name}}" can-keyup="selectedUserChange">
+                                        </div>
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Phone</span>
+                                            <input id="edit-users-phone" type="text" name="phone" required class="form-control" value="{{selectedUser.phone}}" can-keyup="selectedUserChange">
+                                        </div>
+{% endraw %}                                        
+                                        {% if session.user|contains("batman") %}
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Credits</span>
+                                            <span class="input-group-addon">Add</span>
+                                            <input id="edit-users-credits-add" type="number" name="credits_add" required class="form-control" value="{% raw %}{{selectedUser.backup_credits_add}}{% endraw %}" min="0" can-keyup="selectedUserChange">
+                                            <span class="input-group-addon">Deduct</span>
+                                            <input id="edit-users-credits-deduct" type="number" name="credits_deduct" required class="form-control" value="{% raw %}{{selectedUser.backup_credits_deduct}}{% endraw %}" min="0" can-keyup="selectedUserChange">
+                                            <span class="input-group-addon"><i class="fa fa-inr">&nbsp;</i>{% raw %}{{selectedUser.credits}}{% endraw %}</span>
+                                        </div>
+                                        {% endif %}
+
+                                        <div class="input-group m-bot15">
+                                            <span class="input-group-addon">Email</span>
+                                            <input id="edit-users-email" type="text" name="email" required class="form-control" value="{% raw %}{{selectedUser.email}}{% endraw %}"
+                                            {% if session.user|contains("batman") %}
+                                            can-keyup="selectedUserChange"
+                                            {% else %}
+                                            disabled="disabled"
+                                            {% endif %}
+                                            >
+                                        </div>
+{% raw %}                                        
+                                        <div class="m-bot15 text-right">
+                                            <button class="btn btn-danger" type="button" can-click="saveUserDetails" data-loading-text="Saving">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endraw %}

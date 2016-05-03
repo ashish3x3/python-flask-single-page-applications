@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Mosaddek">
+        <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+        <link rel="shortcut icon" href="img/favicon.png">
+
+        <title>FlatLab - Flat & Responsive Bootstrap Admin Template</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{{ config['STATIC_URL'] }}core/css/bootstrap.min.css" rel="stylesheet" media="screen, print">
+        <link href="{{ config['STATIC_URL'] }}core/css/bootstrap-reset.css" rel="stylesheet">
+        <!--external css-->
+        <link href="{{ config['STATIC_URL'] }}core/fonts/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+        <!-- Custom styles for this template -->
+        <link href="{{ config['STATIC_URL'] }}core/css/style_000.css" rel="stylesheet">
+        <link href="{{ config['STATIC_URL'] }}core/css/style-responsive.css" rel="stylesheet" />
+
+    </head>
+    <body class="login-body">
+        <div class="container">
+            <div class="form-signin">
+                <h2 class="form-signin-heading"><i class="fa fa-user"></i> Register</h2>
+                <div class="login-wrap">
+                    <input type="text" class="form-control" placeholder="Phone" autofocus="autofocus" name="phone" required maxlength="10">
+                    <select name="hub" class="form-control input-sm m-bot15" required>
+                        <option>Select hub</option>
+                        {% for hub in hubs %}
+                            <option value="{{hub.value}}">{{hub.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-lg btn-login btn-block" id="register-btn">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="{{ config['STATIC_URL'] }}core/js/lib/misc/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $('#register-btn').click(function(){
+                var phone = $('.login-wrap input[name="phone"]').val();
+                var hub = $('.login-wrap select[name="hub"]').val();
+                console.log(phone, hub)
+                if (!(phone && hub)) return;
+
+                $.ajax({
+                    url: '/employee/register',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        phone: phone,
+                        hub: hub
+                    },
+                    success: function(){
+                        location.reload();
+                    }
+                })
+            })
+        })
+        </script>
+    </body>
+</html>

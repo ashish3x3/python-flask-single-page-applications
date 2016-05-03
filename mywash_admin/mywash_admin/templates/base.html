@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="/static/core/img/items/default.png">
+
+    <title>Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ config['STATIC_URL'] }}core/css/bootstrap.min.css" rel="stylesheet" media="screen, print">
+    <link href="{{ config['STATIC_URL'] }}core/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="{{ config['STATIC_URL'] }}core/fonts/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!--right slidebar-->
+    <link href="{{ config['STATIC_URL'] }}core/css/slidebars.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ config['STATIC_URL'] }}core/css/style_000.css" rel="stylesheet">
+    <link href="{{ config['STATIC_URL'] }}core/css/style-responsive.css" rel="stylesheet" />
+    <link href="{{ config['STATIC_URL'] }}core/css/invoice-print.css" rel="stylesheet" media="print" />
+    
+    <link href="{{ config['STATIC_URL'] }}core/js/lib/assets/bootstrap-datepicker/css/bootstrap-datepicker3.standalone.min.css" rel="stylesheet" />
+
+    <link href="{{ config['STATIC_URL'] }}core/js/lib/assets/summernote/dist/summernote.css" rel="stylesheet" />
+    <link href="{{ config['STATIC_URL'] }}core/js/lib/assets/selectize/css/selectize.bs3.min.css" rel="stylesheet" />
+    
+    <link href="{{ config['STATIC_URL'] }}core/js/lib/assets/toastr-master/build/toastr.min.css" rel="stylesheet" />
+
+    
+
+
+    <style type="text/css">
+        .modal.modal-wide .modal-dialog {
+            width: 70%;
+        }
+
+        .modal.modal-medium .modal-dialog {
+            width: 50%;
+        }
+
+        .modal-wide .modal-body, .modal-medium .modal-body {
+            overflow-y: auto;
+        }
+
+        .scroll-table{
+            overflow-y: scroll;
+            height: 200px;
+            width: 100%;
+            position: absolute;
+        }
+
+        #loading-screen{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top:0;
+            left:0;
+            font-size: 20px;
+        }
+
+        input:required:invalid{
+            border-color: #F44949;
+        }
+
+        .pac-container{
+            z-index: 10000 !important;
+        }
+
+    </style>
+
+    
+
+    
+    
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <div id="loading-screen" style="font-size:100px;">
+        <i class="fa fa-spinner fa-spin" style="position:absolute; left:600px; top:200px;"></i>
+    </div>
+
+    <section id="container" class=""></section>
+    <!--header start-->
+    <script id="core-template" type="text/stache">
+        <header class="header white-bg no-print">
+            <div class="sidebar-toggle-box">
+                <div data-original-title="Toggle Navigation" data-placement="right" class="fa fa-bars tooltips"></div>
+            </div>
+            <!--logo start-->
+            <a href="index.html" class="logo" >MY<span>wash</span></a>
+            <!--logo end-->
+            <div class="top-nav ">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="true">
+                            <span class="username">{{session.emp_data.name}}</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout">
+                            <div class="log-arrow-up"></div>
+                            <li>
+                                <a target="blank" href="https://bitbucket.org/wishabhilash/mywash_admin/issues/new"><i class="fa fa-bug"></i> Report issue</a>
+                            </li>
+                            <li><a id="logout-btn" href="javascript:void(0)"><i class="fa fa-power-off"></i> Log Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <!--header end-->
+
+
+        <!--left sidebar-->
+        <left-sidebar>
+            {% include 'mustache/leftSidebar.mustache' %}
+        </left-sidebar>
+
+        <!--main content start-->
+        <section class="main-content" id="main-content-dashboard">
+            <section class="wrapper site-min-height">
+                <!-- page start-->
+                {% include 'mustache/mainContentDashboard.mustache' %}
+                <!-- page end-->
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-all-orders">
+            <section class="wrapper site-min-height">
+                <all-orders-tabs>
+                    {% include 'mustache/mainContentAllOrders.mustache' %}
+                </all-orders-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-pickup">
+            <section class="wrapper site-min-height">
+                <pickup-tabs>
+                    {% include 'mustache/mainContentPickup.mustache' %}
+                </pickup-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-tagging">
+            <section class="wrapper site-min-height">
+                <tagging-tabs>
+                    {% include 'mustache/mainContentTagging.mustache' %}
+                </tagging-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-package">
+            <section class="wrapper site-min-height">
+                <package-tabs>
+                    {% include 'mustache/mainContentPackage.mustache' %}
+                </package-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-delivery">
+            <section class="wrapper site-min-height">
+                <delivery-tabs>
+                    {% include 'mustache/mainContentDelivery.mustache' %}
+                </delivery-tabs>
+            </section>
+        </section>
+        
+        <section class="main-content" id="main-content-ofd">
+            <section class="wrapper site-min-height">
+                <ofd-tabs>
+                    {% include 'mustache/mainContentDeliveryProgress.mustache' %}
+                </ofd-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-cancelled">
+            <section class="wrapper site-min-height">
+                <cancel-tabs>
+                    {% include 'mustache/mainContentCancelled.mustache' %}
+                </cancel-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-completed">
+            <section class="wrapper site-min-height">
+                <completed-tabs>
+                    {% include 'mustache/mainContentCompleted.mustache' %}
+                </completed-tabs>
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-configuration">
+            <section class="wrapper">
+                <!-- page start-->
+                {% include 'mustache/mainContentConfiguration.mustache' %}
+                <!-- page end-->
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-users">
+            <section class="wrapper">
+                <!-- page start-->
+                <users-tab>
+                    {% include 'mustache/mainContentUsers.mustache' %}
+                </users-tab>
+                <!-- page end-->
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-vendors">
+            <section class="wrapper">
+                <!-- page start-->
+                <vendor-tab>
+                    {% include 'mustache/mainContentVendors.mustache' %}
+                </vendor-tab>
+                <!-- page end-->
+            </section>
+        </section>
+
+        <section class="main-content" id="main-content-logistic-staffs">
+            <section class="wrapper">
+                <!-- page start-->
+                <logistic-staffs-tab>
+                    {% include 'mustache/mainContentLogisticStaffs.mustache' %}
+                </logistic-staffs-tab>
+                <!-- page end-->
+            </section>
+        </section>
+
+
+
+        <!--footer start-->
+        <footer class="site-footer no-print">
+            <div class="text-center">
+                &nbsp;
+                <a href="#" class="go-top">
+                    <i class="fa fa-angle-up"></i>
+                </a>
+            </div>
+        </footer>
+        <!--footer end-->
+
+    </script>
+    {% if config.DEBUG and not config.STAGING %}
+        <script type="text/javascript" src="{{ config['STATIC_URL'] }}core/js/lib/requirejs/require.js" data-main="{{ config['STATIC_URL'] }}core/js/main"></script>
+    {% else %}
+    <!-- js placed at the end of the document so the pages load faster -->
+        <script type="text/javascript" src="{{ config['STATIC_URL'] }}core/js/lib/requirejs/require.js" data-main="{{ config['STATIC_URL'] }}dist/main_561a5c4a27e76e15dd556971"></script>
+    {% endif %}
+
+</body>
+</html>

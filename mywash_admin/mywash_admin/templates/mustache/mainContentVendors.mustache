@@ -1,0 +1,162 @@
+{% raw %}
+<div class="row no-print" id='vendors-list'>
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Vendors
+            </header>
+            <div class="panel-body">
+                <div class="col-lg-10" style="font-size:30px; text-align:center;">
+                    <div class="input-group">
+                        <!--<div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-filter"></i> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li can-click="selectSearchOption" data-option="name">
+                                    <a href="javascript:void(0)"><i class="fa fa-user"></i> Name</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="email">
+                                    <a href="javascript:void(0)">@ Email</a>
+                                </li>
+                                <li can-click="selectSearchOption" data-option="phone">
+                                    <a href="javascript:void(0)"><i class="fa fa-phone"></i> Phone</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" placeholder="Search Here (example- email:xyz or name:xyz)" class="form-control search-input" style="z-index:0" can-keyup="captureEnterKey">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-search-go" can-click="searchUsers"> Go!</button>
+                            <button class="btn btn-warning btn-refresh" type="button" can-click="vendorRefresh" title="Refresh">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </span>-->
+                        <button class="btn btn-warning btn-refresh" type="button" can-click="vendorRefresh" title="Refresh">
+                            <i class="fa fa-refresh"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-2 text-right">
+                    <button type="button" class="btn btn-primary" can-click="addVendor">Add vendor</button>
+                </div>
+            </div>
+
+
+            <table class="table table-striped table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th><i class="fa fa-user"></i> Name</th>
+                        <th>Type</th>
+                        <th>Email/ Phone</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each vendorList}}
+                    <tr index="{{str_id}}" style="cursor: pointer">
+                        <td>
+                        	<a href="#" can-click="editVendor">{{#capitalize data.name }}{{/capitalize}}</a>
+                        </td>
+                        <td>
+                            {{#isNotEmpty services}}
+                            	{{#each services}}
+                                    <span class="label label-warning label-mini">{{.}}</span>
+                                {{/each}}
+                            {{else}}
+                                <strong>-</strong>
+                            {{/isNotEmpty}}
+                        </td>
+                        <td>
+                            <p>
+                            {{#each data.email}}
+                                <span class="label label-default label-mini">{{.}}</span>
+                            {{/each}}
+                            </p>
+                            <p>
+                            {{#each data.phone}}
+                                <span class="label label-primary label-mini">{{.}}</span>
+                            {{/each}}
+                            </p>
+                        </td>
+                        <td>{{data.address}}</td>
+                        <td>
+                            {{#if is_active}}
+                            	<span class="label label-success label-mini">Active</span>
+                            {{else}}
+                            	<span class="label label-danger label-mini">Inactive</span>
+                            {{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
+                {{#isEmpty vendorList}}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Oops... no data found!!!</td>
+                    </tr>
+                {{/isEmpty}}
+                </tbody>
+            </table>
+            <div class="panel-body block-load-more">
+                <div class="row col-lg-12 load-more" style="text-align:center">
+                    <button class="btn btn-primary btn-block" can-click="loadMoreRows" data-loading=""><i class="fa fa-repeat"></i></button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{{! ----------------- ADD VENDOR MODAL ---------------------- }}
+<div class="modal fade" id="vendor-data-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="modal-title">
+                        {{#if selectedVendor.str_id}}
+                            Edit "{{selectedVendor.name}}"
+                        {{else}}
+                            Add vendor
+                        {{/if}}
+                        </h4>
+                    </div>
+                    <div class="col-lg-6" align="right">
+                        <button class="btn btn-primary btn-sm" type="button" can-click="closeVendorModal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Name</span>
+                        <input type="text" name="name" required class="form-control" value="{{selectedVendor.name}}" can-keyup="selectedVendorChange">
+                    </div>
+                    <div class="m-bot15">
+                        <input class="add-phone-input" type="text" name="phone" placeholder="Add phone numbers...">
+                    </div>
+                    <div class="m-bot15">
+                        <input class="add-email-input" type="text" name="email" placeholder="Add emails...">
+                    </div>
+                    <div class="m-bot15">
+                        <textarea class="form-control" placeholder="Address" name="address" can-keyup="selectedVendorChange">{{selectedVendor.address}}</textarea>
+                    </div>
+                    <div class="m-bot15">
+                        <input class="add-service-input" type="text" name="service" placeholder="Choose services">
+                    </div>
+                    <div class="input-group m-bot15">
+                        <span class="input-group-addon">Status</span>
+                        <select class="form-control" can-change="selectedVendorChange" name="status">
+                            <option value="active" {{#if selectedVendor.is_active}}selected{{/if}}>Active</option>
+                            <option value="inactive" {{#ifNot selectedVendor.is_active}}selected{{/ifNot}}>Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" can-click="saveVendor">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endraw %}

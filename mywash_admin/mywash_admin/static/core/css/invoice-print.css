@@ -1,0 +1,21 @@
+.no-print {
+    display: none ;
+}
+.header , .site-footer{
+    min-height: 0;
+}
+
+.print-area {
+    margin-left: 0;
+    margin-right:0;
+    width: 100%;
+    margin-top: -50px;
+}
+
+img{
+	height: 50px;
+}
+
+@page{
+	margin: 0;
+}

@@ -1,0 +1,37 @@
+{% raw %}
+<div id="sidebar" class="nav-collapse no-print">
+    <!-- sidebar menu start-->
+    <ul class="sidebar-menu" id="nav-accordion">
+        {{#each sidebarMenuItems}}
+            {{#if submenu}}
+            <li class="sub-menu">
+                <a href="javascript:void(0);">
+                    <i class="fa {{iconClass}}"></i>
+                    <span>{{#capitalize name}}{{/capitalize}}</span>
+                </a>
+                <ul class="sub">
+                    {{#each submenu}}
+                    <li can-click="tabchange">
+                        {{#if pane_href}}
+                            <a href="#main-content-{{#lower pane_href}}{{/lower}}">{{#capitalize name}}{{/capitalize}}</a>
+                        {{else}}
+                            <a href="#main-content-{{#lower name}}{{/lower}}">{{#capitalize name}}{{/capitalize}}</a>
+                        {{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+            {{else}}
+            <li can-click="tabchange">
+                <a href="#main-content-{{#lower name}}{{/lower}}">
+                    <i class="fa {{iconClass}}"></i>
+                    <span>{{#capitalize name}}{{/capitalize}}</span>
+                </a>
+            </li>
+            {{/if}}
+        {{/each}}
+        
+    </ul>
+    <!-- sidebar menu end-->
+</div>
+{% endraw %}
